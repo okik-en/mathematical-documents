@@ -93,17 +93,6 @@
   set list(indent: 0.6em, body-indent: 0.4em, spacing: 0.5em)
   set enum(indent: 0.6em, body-indent: 0.4em, spacing: 0.5em)
 
-  //* MARK: 修正
-
-  // 分数中の分数をskewedに
-  let __inside-fraction__ = state("__inside-fraction__", false)
-  show math.frac.where(style: "vertical"): it => context {
-    let old = __inside-fraction__.get()
-    __inside-fraction__.update(_ => true)
-    set math.frac(style: "skewed")
-    it
-  }
-
   // 本文
   body
 }
