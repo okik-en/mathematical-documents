@@ -1,0 +1,56 @@
+:root {
+  font-family: "New Computer Modern", "Yu Mincho", "Noto Serif JP", serif;
+}
+
+body {
+  text-autospace: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3em 6em;
+}
+
+/* 太字 */
+
+h1, h2, h3, h4, .strong {
+  font-family: "Arial", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+
+.strong {
+  text-decoration: dashed underline;
+  text-underline-offset: 2pt;
+}
+
+/* 著者欄 */
+
+.author {
+  text-align: right;
+  margin-top: -0.5em;
+  margin-bottom: 1em;
+}
+
+/* 数式 */
+
+.inline {
+  vertical-align: middle;
+  margin-inline: .25em;
+}
+
+.display {
+  text-align: center;
+}
+
+/* インデント */
+
+p {
+  text-indent: 1em;
+}
+
+.display + p {
+  text-indent: 0;
+}

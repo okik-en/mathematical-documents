@@ -1,14 +1,6 @@
-#import "typ/templates/okiken.typ": *
-#import "typ/utils/replace.typ": *
-#show: okiken-style
-#show: replace
-
-#set page("a4")
-
-#show heading.where(depth: 1, outlined: true): it => {
-  pagebreak()
-  it
-}
+#import "../templates/template.typ": *
+#import "../templates/html.typ": *
+#show: template
 
 #set list(indent: 2em, spacing: 1em)
 #set terms(indent: 2em, spacing: 1em)
@@ -17,9 +9,12 @@
 #show math.equation: it => math.display(it)
 #set math.accent(size: 111%)
 
-#set document(title: "近似法")
+#set document(title: "近似法", author: okik-en-data.authors.salty-lemon)
+
+#show: html-init
 
 #title()
+#author()
 
 #outline()
 
@@ -59,8 +54,6 @@ $
   vec(b_n, c_n) = mat(2 tilde(N), N - tilde(N)^2; 1, 0) vec(b_(n - 1), c_(n - 1))
 $
 とかけて、例えば$a_0 = 2 tilde(N)$とおけばそれなりの精度の近似値が得られるだろう。
-
-#pagebreak()
 
 == 正則連分数展開
 
