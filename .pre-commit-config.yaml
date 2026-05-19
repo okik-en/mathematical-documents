@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: build-typst-website
         name: Build Typst Website
-        entry: bash build.sh
+        entry: sh build.sh
         language: system
         pass_filenames: false
