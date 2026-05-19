@@ -22,5 +22,3 @@
 )
 
 #walker(src)
-
-#sys.inputs

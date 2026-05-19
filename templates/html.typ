@@ -107,7 +107,9 @@
     let out-path = sys.inputs.at("out-path")
     let css-path = sys.inputs.at("stylesheet-path")
     if type(out-path) == str {
-      out-path.split("/").slice(1).map(_ => "..").join("/") + "/" + css-path
+      let back = out-path.split("/").slice(2).map(_ => "..").join("/")
+      if back == none { back = "." }
+      back + "/" + css-path.replace(regex("^.*/"), "")
     }
   } else {
     none
