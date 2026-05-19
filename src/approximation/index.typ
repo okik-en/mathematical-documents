@@ -1,13 +1,7 @@
-#import "../templates/template.typ": *
-#import "../templates/html.typ": *
+#import "../../templates/template.typ": *
+#import "../../templates/html.typ": *
+#import "../../templates/consts.typ": *
 #show: template
-
-#set list(indent: 2em, spacing: 1em)
-#set terms(indent: 2em, spacing: 1em)
-#set enum(indent: 2em, numbering: "(1-a)", spacing: 1em)
-#set grid(gutter: 2em, align: top)
-#show math.equation: it => math.display(it)
-#set math.accent(size: 111%)
 
 #set document(title: "近似法", author: okik-en-data.authors.salty-lemon)
 
