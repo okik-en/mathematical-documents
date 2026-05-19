@@ -1,5 +1,6 @@
 :root {
   font-family: "New Computer Modern", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 14pt;
 }
 
 body {
@@ -37,12 +38,16 @@ h1, h2, h3, h4, .strong {
 /* 数式 */
 
 .inline {
-  vertical-align: middle;
+  vertical-align: text-top;
   margin-inline: .25em;
 }
 
 .display {
   text-align: center;
+}
+
+use {
+  fill: currentColor;
 }
 
 /* インデント */

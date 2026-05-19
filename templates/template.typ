@@ -1,29 +1,3 @@
-#import "@preview/cjk-spacer:0.2.0": cjk-spacer
-
-#let emoji-regex = regex("[\u{2600}-\u{27BF}\u{1F000}-\u{1FFFF}]")
-
-#let fonts = (
-  serif: "New Computer Modern",
-  serif-cjk: "Yu Mincho",
-  sans: "Arial",
-  sans-cjk: "Yu Gothic",
-  mono: "Fira Code",
-  mono-cjk: "Yu Gothic UI",
-  math: "New Computer Modern Math",
-  emoji: "Noto Emoji",
-)
-
-#let family = (
-  serif: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.serif, covers: "latin-in-cjk"), fonts.serif-cjk),
-  sans: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.sans, covers: "latin-in-cjk"), fonts.sans-cjk),
-  mono: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.mono, covers: "latin-in-cjk"), fonts.mono-cjk),
-  math: (fonts.math, (name: fonts.serif, covers: "latin-in-cjk"), fonts.serif-cjk),
-)
-
-#let okik-en-data = (
-  authors: (salty-lemon: "Salty Lemon " + emoji.lemon),
-)
-
 // = template初期化関数
 // `template()`
 // #parbreak()
@@ -38,23 +12,6 @@
   body,
 ) = {
   set text(lang: "ja")
-
-  //* MARK:フォント関連
-
-  // ベースフォント
-  set text(
-    font: family.serif,
-    cjk-latin-spacing: auto,
-    top-edge: "ascender",
-    bottom-edge: "descender",
-    number-type: "lining",
-    number-width: "tabular",
-  )
-  show title: set text(font: family.sans)
-  show heading: set text(font: family.sans)
-  show strong: set text(font: family.sans)
-  show raw: set text(font: family.mono)
-  show math.equation: set text(font: family.math)
 
   //* MARK:カウンタ関連
 
@@ -90,8 +47,14 @@
   set underline(extent: 1pt, offset: 2pt)
 
   // リスト
-  set list(indent: 0.6em, body-indent: 0.4em, spacing: 0.5em)
-  set enum(indent: 0.6em, body-indent: 0.4em, spacing: 0.5em)
+  set list(indent: 2em, body-indent: 0.4em, spacing: 0.5em)
+  set enum(indent: 2em, body-indent: 0.4em, spacing: 0.5em)
+  set terms(indent: 2em, spacing: 0.5em)
+  set grid(gutter: 2em, align: top)
+
+  // 数式
+  show math.equation: it => math.display(it)
+  set math.accent(size: 111%)
 
   // 本文
   body

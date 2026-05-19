@@ -1,5 +1,43 @@
+#let emoji-regex = regex("[\u{2600}-\u{27BF}\u{1F000}-\u{1FFFF}]")
+
+#let fonts = (
+  serif: "New Computer Modern",
+  serif-cjk: "Yu Mincho",
+  sans: "Arial",
+  sans-cjk: "Yu Gothic",
+  mono: "Fira Code",
+  mono-cjk: "Yu Gothic UI",
+  math: "New Computer Modern Math",
+  emoji: "Noto Emoji",
+)
+
+#let family = (
+  serif: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.serif, covers: "latin-in-cjk"), fonts.serif-cjk),
+  sans: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.sans, covers: "latin-in-cjk"), fonts.sans-cjk),
+  mono: ((name: fonts.emoji, covers: emoji-regex), (name: fonts.mono, covers: "latin-in-cjk"), fonts.mono-cjk),
+  math: (fonts.math, (name: fonts.serif, covers: "latin-in-cjk"), fonts.serif-cjk),
+)
+
 #let html-init(body) = context {
   let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
+
+  //* MARK: フォントの調整
+
+  // ベースフォント
+  set text(
+    font: family.serif,
+    cjk-latin-spacing: auto,
+    top-edge: "ascender",
+    bottom-edge: "descender",
+    number-type: "lining",
+    number-width: "tabular",
+    size: if is-html { 14pt } else { 11pt },
+  )
+  show title: set text(font: family.sans)
+  show heading: set text(font: family.sans)
+  show strong: set text(font: family.sans)
+  show raw: set text(font: family.mono)
+  show math.equation: set text(font: family.math)
 
   //* MARK: 数式の調整
 
@@ -7,7 +45,11 @@
   show math.equation.where(block: false): it => if is-html {
     html.elem(
       "span",
-      attrs: (class: "inline", role: "math", alt: if it.alt == none { repr(it.body) } else { it.alt }),
+      attrs: (
+        class: "inline",
+        role: "math",
+        alt: if it.alt == none { repr(it.body).replace(regex("\n\s*"), _ => "") } else { it.alt },
+      ),
       html.frame(it),
     )
   } else { it }
@@ -15,7 +57,11 @@
   show math.equation.where(block: true): it => if is-html {
     html.elem(
       "div",
-      attrs: (class: "display", role: "math", alt: if it.alt == none { repr(it.body) } else { it.alt }),
+      attrs: (
+        class: "display",
+        role: "math",
+        alt: if it.alt == none { repr(it.body).replace(regex("\n\s*"), _ => "") } else { it.alt },
+      ),
       html.frame(it),
     )
   } else { it }
@@ -57,6 +103,15 @@
 
   //* MARK: HTMLエクスポート
 
+  let css-relative-path = if "out-path" in sys.inputs and "stylesheet-path" in sys.inputs {
+    let out-path = sys.inputs.at("out-path")
+    let css-path = sys.inputs.at("stylesheet-path")
+    if type(out-path) == str {
+      out-path.split("/").slice(1).map(_ => "..").join("/") + "/" + css-path
+    }
+  } else {
+    none
+  }
   if is-html {
     html.html(lang: "ja", {
       // <head> ~ </head>
@@ -71,8 +126,7 @@
         // html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
 
         // html.script(src: "script.js")
-        let css-path = sys.inputs.at("css-path", default: "../style.css")
-        html.link(rel: "stylesheet", href: css-path)
+        html.link(rel: "stylesheet", href: css-relative-path)
       })
       // <body> ~ </body>
       html.body({
@@ -88,8 +142,8 @@
 #let author() = context {
   let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
   if is-html {
-    html.div(class: "author", document.author.join(", "))
+    html.div(class: "author", "Authored by: " + document.author.join(", "))
   } else {
-    align(right, document.author.join(", "))
+    align(right, "Authored by: " + document.author.join(", "))
   }
 }
