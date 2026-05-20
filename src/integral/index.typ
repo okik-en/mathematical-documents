@@ -31,7 +31,7 @@ $
 
 置換の両辺を微分することにより
 $
-  dif t = 1/2 frac(dif theta, cos^2 theta/2) ==> 2 (1 + t^2) dif t = dif theta
+  dif t = 1/2 frac(dif theta, cos^2 theta/2) ==> frac(2, 1 + t^2) dif t = dif theta
 $
 を得ることができる。また
 $
@@ -43,7 +43,7 @@ $
 $
 であるから
 $
-  I(theta) = 2 integral f(frac(2 t, 1 - t^2), frac(1 + t^2, 1 - t^2), frac(2 t, 1 + t^2)) dot (1 + t^2) dif t
+  I(theta) = 2 integral f(frac(2 t, 1 - t^2), frac(1 + t^2, 1 - t^2), frac(2 t, 1 + t^2)) frac(dif t, 1 + t^2)
 $
 という有理関数の積分に帰着できる。
 
