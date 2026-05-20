@@ -20,6 +20,7 @@ body {
     margin: 0 auto;
     padding: 3em;
     font-size: 14pt;
+    line-height: 1.5;
   }
 }
 
@@ -31,9 +32,10 @@ body {
     margin: 0;
     padding: 1em;
     font-size: 12pt;
+    line-height: 2;
   }
 
-  :not(p, .no-indent) {
+  .display, img, table, pre {
     overflow-y: auto;
   }
 }
@@ -58,6 +60,10 @@ h1, h2, h3, h4, .strong {
 }
 
 /* ツリー */
+
+.tree, .tree * {
+  overflow: visible;
+}
 
 .tree ul {
   list-style: none;
@@ -101,7 +107,7 @@ h1, h2, h3, h4, .strong {
 /* 数式 */
 
 .inline {
-  vertical-align: text-top;
+  vertical-align: middle;
   margin-inline: .25em;
 }
 
