@@ -81,14 +81,14 @@ $ b_(n + 1)/c_(n + 1) = 1/2 (b_n/c_n + N (c_n/b_n)) = frac(b_n^2 + N c_n^2, 2 b_
 とも書ける。
 
 Newton法の誤差を解析する。
-いま$f$が$alpha$の近傍で$C^infinity$級であればテイラー展開により
+いま$f$が$alpha$の近傍で$C^infinity$級であればTaylor展開により
 $
   f(a_n) &= f(alpha + epsilon_n) = overbracket(f(alpha), 0) + f'(alpha) epsilon_n + 1/2 f''(alpha) epsilon_n^2 + 1/6 f'''(alpha) epsilon_n^3 + O(epsilon_n^4) \
   f'(a_n) &= f'(alpha + epsilon_n) = f'(alpha) + f''(alpha) epsilon_n + 1/2 f'''(alpha) epsilon_n^2 + O(epsilon_n^3)
 $
 と表される。
 
-いま、$f'(alpha) != 0$を仮定する。ニュートン法の公式により$beta = frac(f''(alpha), f'(alpha))$、$gamma = frac(f'''(alpha), f'(alpha))$とおくと
+いま、$f'(alpha) != 0$を仮定する。Newton法の公式により$beta = frac(f''(alpha), f'(alpha))$、$gamma = frac(f'''(alpha), f'(alpha))$とおくと
 $
   epsilon_(n + 1) & = epsilon_n - frac(f(alpha + epsilon_n), f'(alpha + epsilon_n)) \
   & = epsilon_n - frac(f'(alpha) epsilon_n + 1/2 f''(alpha) epsilon_n^2 + 1/6 f'''(alpha) epsilon_n^3 + O(epsilon_n^4), f'(alpha) + f''(alpha) epsilon_n + 1/2 f'''(alpha) epsilon_n^2 + O(epsilon_n^3)) \
@@ -100,7 +100,7 @@ $
   &= epsilon_n - [epsilon_n - 1/2 beta epsilon_n^2 - (1/2 beta^2 + 1/3 gamma) epsilon_n^3 + O(epsilon_n^4)] \
   &= 1/2 beta epsilon_n^2 + (1/2 beta^2 + 1/3 gamma) epsilon_n^3 + O(epsilon_n^4)
 $
-とかけるため、とくに$f'(alpha) != 0$かつ$f''(alpha) != 0$であるとき、Newton法は$2$次収束する。また$f'(alpha) != 0$かつ$f''(alpha) = 0$であるとき、Newton法は$3$次収束する。
+とかけるため、とくに$f'(alpha) != 0$を仮定すると、Newton法は$f''(alpha) != 0$であるとき$2$次収束し、$f''(alpha) = 0$であるとき$3$次収束する。
 
 == Aitkenの$delta^2$加速法
 

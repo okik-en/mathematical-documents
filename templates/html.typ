@@ -114,6 +114,19 @@
   } else {
     none
   }
+
+  show par: it => context {
+    if is-html {
+      if it.first-line-indent.amount == 0em {
+        html.div(class: "no-indent", it)
+      } else {
+        it
+      }
+    } else {
+      it
+    }
+  }
+
   if is-html {
     html.html(lang: "ja", {
       // <head> ~ </head>
@@ -147,5 +160,14 @@
     html.div(class: "author", "Authored by: " + document.author.join(", "))
   } else {
     align(right, "Authored by: " + document.author.join(", "))
+  }
+}
+
+#let tree(body) = context {
+  let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
+  if is-html {
+    html.div(class: "tree", body)
+  } else {
+    body
   }
 }

@@ -1,16 +1,31 @@
 #!/bin/bash
 
-echo $PATH
-pwd
-
-# Resolve
+# Resolve Typst
 if [ -n "$LOCALAPPDATA" ]; then
   WINGET_TYPST_PATH=$(cygpath -u "$LOCALAPPDATA/Microsoft/WinGet/Packages/Typst.Typst_Microsoft.Winget.Source_8wekyb3d8bbwe/typst-x86_64-pc-windows-msvc")
   export PATH="$PATH:$WINGET_TYPST_PATH"
 fi
 export PATH="$PATH:/c/Program Files/Typst:/c/Program Files (x86)/Typst"
 
-# path
+# Resolve Python
+PYTHON=""
+for cmd in python3 python; do
+  path=$(command -v "$cmd" 2>/dev/null || true)
+  if [ -n "$path" ] && ! echo "$path" | grep -qi "WindowsApps"; then
+    PYTHON="$cmd"
+    break
+  fi
+done
+
+if [ -z "$PYTHON" ]; then
+  if command -v py >/dev/null 2>&1; then
+    PYTHON="py -3"
+  elif [ -x "/c/Windows/py.exe" ]; then
+    PYTHON="/c/Windows/py.exe -3"
+  fi
+fi
+
+# Path
 SOURCE_DIR="src"
 PUBLIC_DIR="public"
 OUT_DIR="docs"
@@ -23,7 +38,7 @@ rm -rf "$OUT_DIR"/*
 
 # Create appendix
 echo "Creating appendix file..."
-python tools/generate_appendix.py --source "$SOURCE_DIR" --out "$APPENDIX_PATH"
+$PYTHON tools/generate_appendix.py --source "$SOURCE_DIR" --out "$APPENDIX_PATH"
 
 # Copy public files to output directory
 echo "Copying public files from $PUBLIC_DIR to $OUT_DIR..."
