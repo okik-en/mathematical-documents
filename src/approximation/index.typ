@@ -3,7 +3,11 @@
 #import "../../templates/consts.typ": *
 #show: template
 
+#set table(stroke: none)
+
 #set document(title: "近似法", author: okik-en-data.authors.salty-lemon)
+
+#let fr(num, denom) = math.display(cramped: true, math.frac(num, denom))
 
 #show: html-init
 
@@ -54,9 +58,9 @@ $
 あるいは以下のアルゴリズムで*正則な*連分数に展開できる。
 
 / 基底: $x_0 = sqrt(N)$とおく。
-/ 帰納: $n_k = floor(x_k)$により$x_k = n_k + (x_k - n_k) = n_k + frac(bold(1), (frac(x_k + n_k, x_k^2 - n_k^2))) = n_k + bold(1) / x_(k + 1)$とかける。
+/ 帰納: $n_k = floor(x_k)$により$x_k = n_k + (x_k - n_k) = n_k + frac(1, (frac(x_k + n_k, x_k^2 - n_k^2)))$とかける。
 
-  すなわち$x_(k + 1) = frac(x_k + n_k, x_k^2 - n_k^2)$とおく。
+  すなわち$x_(k + 1) = frac(x_k + n_k, x_k^2 - n_k^2)$とおくと、$x_k = n_k + 1/x_(k + 1)$
 
 ここで$r in NN$について$0 <= (x_r - n_r) < 1$であることに注意すれば、これを$0$あるいは$1$とおいて挟むことで、帰納的に$x_0 = sqrt(N)$の近似値が正則連分数の形で求まる。
 
@@ -118,8 +122,9 @@ $ hat(a)_n = frac(a_(n + 1) - gamma a_n, 1 - gamma) $
 $ a_n - alpha = C gamma^n + epsilon_n $
 であるとすれば
 $
-  hat(a)_n - alpha &= frac((alpha + C gamma^(n + 1) + epsilon_(n + 1)) - gamma (alpha + C gamma^n + epsilon_n), 1 - gamma) - alpha \
-  &= frac(epsilon_(n + 1) - gamma epsilon_n, 1 - gamma) = frac(epsilon_(n + 1) - epsilon_n, 1 - gamma) + epsilon_n
+  hat(a)_n - alpha & = frac((alpha + C gamma^(n + 1) + epsilon_(n + 1)) - gamma (alpha + C gamma^n + epsilon_n), 1 - gamma) - alpha \
+  & = frac(epsilon_(n + 1) - gamma epsilon_n, 1 - gamma) \
+  & = frac(epsilon_(n + 1) - epsilon_n, 1 - gamma) + epsilon_n
 $
 となり、$epsilon_(n + 1) - epsilon_n$は十分に小さいと考えられるので、この数列$(hat(a)_n)$はもとの数列$(a_n)$より$alpha$に近く、より速く収束するといえる。
 
@@ -129,7 +134,9 @@ $ gamma_((n)) approx frac(a_(n + 2) - a_(n + 1), a_(n + 1) - a_n) $
 
 実際にこれを代入して
 $
-  hat(a)_n &= frac(a_(n + 1) - gamma_((n)) a_n, 1 - gamma_((n))) = frac(a_(n + 1) - frac(a_(n + 2) - a_(n + 1), a_(n + 1) - a_n) a_n, 1 - frac(a_(n + 2) - a_(n + 1), a_(n + 1) - a_n)) = frac(a_(n + 2) a_n - a_(n + 1)^2, a_(n + 2) - 2 a_(n + 1) + a_n) \
+  hat(a)_n &= frac(a_(n + 1) - gamma_((n)) a_n, 1 - gamma_((n))) \
+  &= frac(a_(n + 1) - frac(a_(n + 2) - a_(n + 1), a_(n + 1) - a_n) a_n, 1 - frac(a_(n + 2) - a_(n + 1), a_(n + 1) - a_n)) \
+  &= frac(a_(n + 2) a_n - a_(n + 1)^2, a_(n + 2) - 2 a_(n + 1) + a_n) \
   &= frac(a_(n + 2) a_n + (- 2 a_(n + 1) + a_n) a_n - a_(n + 1)^2 - (- 2 a_(n + 1) + a_n) a_n, a_(n + 2) - 2 a_(n + 1) + a_n) \
   &= frac((a_(n + 2) - 2 a_(n + 1) + a_n) a_n - (a_(n + 1)^2 - 2 a_(n + 1) a_n + a_n^2), a_(n + 2) - 2 a_(n + 1) + a_n) \
   &= a_n - frac((a_(n + 1) - a_n)^2, a_(n + 2) - 2 a_(n + 1) + a_n)
@@ -154,11 +161,12 @@ $
 $
 より加速列として
 $
-  hat(a)_n = a_n - frac(delta a_n^2, delta^2 a_n) & = a_n - (a_n - N / a_n)^cancel(2) (a_n + N / a_n) cancel((a_n - N / a_n)^(-1)) (a_n + 3 N / a_n)^(-1) \
-  & = [a_n (a_n + 3 N / a_n) - (a_n - N / a_n) (a_n + N / a_n)](a_n + 3 N / a_n)^(-1) \
-  & = [(cancel(a_n^2) + 3 N) - (cancel(a_n^2) - N^2/a_n^2)](a_n + 3 N / a_n)^(-1) \
-  & = (3 N + N^2 / a_n^2) (a_n + 3 N / a_n)^(-1) \
-  & = N / a_n (3 a_n + N / a_n) (a_n + 3 N / a_n)^(-1)
+  hat(a)_n & = a_n - frac(delta a_n^2, delta^2 a_n) \
+           & = a_n - (a_n - N / a_n)^cancel(2) (a_n + N / a_n) cancel((a_n - N / a_n)^(-1)) (a_n + 3 N / a_n)^(-1) \
+           & = [a_n (a_n + 3 N / a_n) - (a_n - N / a_n) (a_n + N / a_n)](a_n + 3 N / a_n)^(-1) \
+           & = [(cancel(a_n^2) + 3 N) - (cancel(a_n^2) - N^2/a_n^2)](a_n + 3 N / a_n)^(-1) \
+           & = (3 N + N^2 / a_n^2) (a_n + 3 N / a_n)^(-1) \
+           & = N / a_n (3 a_n + N / a_n) (a_n + 3 N / a_n)^(-1)
 $
 が得られる。
 
@@ -167,3 +175,49 @@ $
 $
   tilde(a)_(n + 1) = (N / tilde(a)_n) frac(3 tilde(a)_n + (N / tilde(a)_n), tilde(a)_n + 3 (N / tilde(a)_n))
 $
+
+= ネイピア数および冪乗の近似
+
+== 連分数展開
+
+一般に次が知られている。
+
+#eqref(
+  <efrac>,
+  $
+    e^frac(2 x, y, style: "horizontal") = 1 + fr(2 x, (y - x) + fr(x^2, 3 y + fr(x^2, 5 y + fr(x^2, 7 y + fr(x^2, 9 y + dots.down)))))
+  $,
+)
+
+=== $e$の近似
+
+$x = 1$、$y = 2$として#[@efrac]に代入すると
+$
+  e = 1 + fr(2, 1 + fr(1, 6 + fr(1, 10 + cancel(cross: #true, fr(1, 14 + dots.down))))) approx 1 + fr(2, 1 + fr(1, 6 + fr(1, 10))) = fr(193, 71)
+$
+
+実際に、$e = underline(2.718)28 dots$かつ$frac(193, 71) = underline(2.718)30 dots$である。
+
+=== $root(n, e)$の近似
+
+#[@efrac]に$x = 1$、$y = 2n$を代入して以下のように打ち切る。
+$
+  root(n, e) = 1 + fr(2, 2n - 1 + fr(1, 6n + cancel(cross: #true, fr(1, 10n + dots.down)))) approx 1 + fr(2, 2n - 1 + fr(1, 6n)) = frac(12n^2 + 6n + 1, 12n^2 - 6n + 1) eq.delta f(n)
+$
+
+これを用いて計算を行うと、以下のように高精度の近似が得られる。
+
+#figure(
+  caption: [$n$と$f(n)$の対応],
+  table(
+    align: center + horizon,
+    columns: (8em,) + (3em,) * 7,
+    rows: (2em, 3em),
+    table.vline(x: 1),
+    table.hline(),
+    $n$, $0$, $1$, $2$, $3$, $4$, $5$, $6$,
+    table.hline(),
+    $f(n) approx root(n, e)$, $1$, $19/7$, $61/37$, $127/91$, $217/169$, $331/271$, $469/397$,
+    table.hline(),
+  ),
+)
