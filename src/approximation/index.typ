@@ -221,3 +221,27 @@ $
     table.hline(),
   ),
 )
+
+== $e^n$の近似
+
+#[@efrac]に$x = n$、$y = 2$を代入する。
+$
+  e^n = 1 + fr(2 n, 2 - n + fr(n^2, 6 + fr(n^2, 10 + fr(n^2, 14 + fr(n^2, 18 + fr(n^2, 22 + dots.down))))))
+$
+
+精度の高い近似を行うには、指数$n$に対して最低でも$4 n + 6$の項までを残す必要がある。
+
+#figure(
+  caption: [$n$と$f_(4n + 6) (n)$の対応],
+  table(
+    align: center + horizon,
+    columns: (8em,) + (3em,) * 4,
+    rows: (2em, 3em),
+    table.vline(x: 1),
+    table.hline(),
+    $n$, $0$, $1$, $2$, $3$,
+    table.hline(),
+    $f_(4n + 6) (n) approx e^n$, $1$, $193/71$, $133/18$, $4439/221$,
+    table.hline(),
+  ),
+)
