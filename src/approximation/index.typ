@@ -245,3 +245,81 @@ $
     table.hline(),
   ),
 )
+
+== Maclaurin展開
+
+$f(x) = e^x$について$f = f^((1)) = f^((2)) = dots.c$であるから、そのMaclaurin展開は
+$
+  f(x) = sum_(n = 0)^(infinity) frac(x^n, n!)
+$
+とかけて、しかもd#{ sym.acute }Alembertの公式によりその収束半径$r$は
+$
+  r = lim_(n -> infinity) abs(frac(a_n, a_(n + 1))) = lim_(n -> infinity) frac((n + 1)!, n!) = lim_(n -> infinity) (n + 1) = infinity
+$
+であるから、$x in RR$に対してこの展開は絶対収束する。
+
+例えばこれを打ち切って
+$
+  f_n (x) = sum_(k = 0)^n frac(x^k, k!)
+$
+とおけば、$lim_(n -> infinity) f_n (x) = e^x$である一方で、有限の$n$に対してもある程度の近似が得られる。
+
+ただし、最良近似ではない。
+
+#figure(
+  caption: [$n$と$f_n (1)$の対応],
+  table(
+    align: center + horizon,
+    columns: (6em,) + (3.5em,) * 10,
+    rows: (2em, 3em, 2em),
+    table.vline(x: 1),
+    table.hline(),
+    $n$, $0$, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$, $9$,
+    table.hline(),
+    $f_n (1)$, $1$, $2$, $5/2$, $8/3$, $65/24$, $163/60$, $1957/720$, $685/252$, $109601/40320$, $98641/36288$,
+    $e - f_n (1)$, $1.72$, $0.72$, $0.22$, $0.05$, $10^(-2)$, $10^(-3)$, $10^(-4)$, $10^(-5)$, $10^(-6)$, $10^(-7)$,
+    table.hline(),
+  ),
+)
+
+#figure(
+  caption: [$n$と$f_n (2)$の対応],
+  table(
+    align: center + horizon,
+    columns: (6em,) + (3.5em,) * 10,
+    rows: (2em, 3em, 2em),
+    table.vline(x: 1),
+    table.hline(),
+    $n$, $0$, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$, $9$,
+    table.hline(),
+    $f_n (2)$, $1$, $3$, $5$, $19/3$, $7$, $109/15$, $331/45$, $155/21$, $2327/315$, $20947/2835$,
+    $e^2 - f_n (2)$, $6.39$, $4.39$, $2.39$, $1.06$, $0.39$, $0.12$, $0.03$, $10^(-2)$, $10^(-3)$, $10^(-4)$,
+    table.hline(),
+  ),
+)
+
+#figure(
+  caption: [$n$と$f_n (frac(1, 2, style: "horizontal"))$の対応],
+  table(
+    align: center + horizon,
+    columns: (8em,) + (3.5em,) * 7,
+    rows: (2em, 3em, 3em),
+    table.vline(x: 1),
+    table.hline(),
+    $n$, $0$, $1$, $2$, $3$, $4$, $5$, $6$,
+    table.hline(),
+    $f_n (frac(1, 2, style: "horizontal"))$, $1$, $3/2$, $13/8$, $79/48$, $211/128$, $6331/3840$, $75973/46080$,
+    $e^(1/2) - f_n (frac(1, 2, style: "horizontal"))$,
+    $0.65$,
+    $0.15$,
+    $0.02$,
+    $10^(-3)$,
+    $10^(-4)$,
+    $10^(-5)$,
+    $10^(-6)$,
+    table.hline(),
+  ),
+)
+
+とくに$x$が大きくなると、$f_n (x)$は$e^x$に近づくのが遅くなることがわかる。
+ゆえに特に大きい$x$に対しては向いていない。
