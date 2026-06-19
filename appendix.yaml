@@ -1,4 +1,5 @@
 - src:
   - approximation
+  - determinant
   - integral
   - sqrt-n

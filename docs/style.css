@@ -59,6 +59,12 @@ h1, h2, h3, h4, .strong {
   margin-bottom: 1em;
 }
 
+/* 図式 */
+
+figure {
+  place-items: center;
+}
+
 /* ツリー */
 
 .tree, .tree * {
@@ -105,17 +111,6 @@ h1, h2, h3, h4, .strong {
 }
 
 /* 数式 */
-
-.inline {
-  vertical-align: middle;
-  margin-inline: .25em;
-  overflow-x: auto;
-}
-
-.display {
-  text-align: center;
-}
-
 use {
   fill: currentColor;
 }
