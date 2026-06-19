@@ -1,5 +1,7 @@
 #import "fonts.typ": *
 
+#let __in-frame__ = state("__in-frame__", false)
+
 #let html-init(body) = context {
   let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
 
@@ -24,26 +26,18 @@
   //* MARK: 数式の調整
 
   // インライン数式
-  show math.equation.where(block: false): it => if is-html {
-    html.elem(
-      "span",
-      attrs: (
-        class: "inline",
-        role: "math",
-        alt: if it.alt == none { repr(it.body).replace(regex("\n\s*"), _ => "") } else { it.alt },
-      ),
+  show math.equation.where(block: false): it => if is-html and not __in-frame__.get() {
+    html.span(
+      style: "display:inline-table;margin-inline:.25em;overflow-x:auto;vertical-align:middle;",
+      role: "math",
       html.frame(it),
     )
   } else { it }
   // ブロック数式
-  show math.equation.where(block: true): it => if is-html {
-    html.elem(
-      "div",
-      attrs: (
-        class: "display",
-        role: "math",
-        alt: if it.alt == none { repr(it.body).replace(regex("\n\s*"), _ => "") } else { it.alt },
-      ),
+  show math.equation.where(block: true): it => if is-html and not __in-frame__.get() {
+    html.div(
+      style: "display:block;place-items:center;",
+      role: "math",
       html.frame(it),
     )
   } else { it }
@@ -151,5 +145,16 @@
     html.div(class: "tree", body)
   } else {
     body
+  }
+}
+
+#let frame-it(it) = context {
+  let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
+  if is-html {
+    __in-frame__.update(true)
+    html.frame(it)
+    __in-frame__.update(false)
+  } else {
+    it
   }
 }
