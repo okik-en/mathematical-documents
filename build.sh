@@ -31,6 +31,7 @@ PUBLIC_DIR="public"
 OUT_DIR="docs"
 APPENDIX_PATH="appendix.yaml"
 STYLESHEET_PATH="docs/style.css"
+PAGES_URL="https://okik-en.github.io/mathematical-documents/"
 
 # Clean output directory
 echo "Cleaning output directory $OUT_DIR..."
@@ -50,7 +51,8 @@ for file in "$SOURCE_DIR"/**/*.typ; do
   [ -e "$file" ] || continue
   relative_path="${file#${SOURCE_DIR}/}"
   out_path="$OUT_DIR/${relative_path%.typ}.html"
+  url="$PAGES_URL${relative_path%.typ}.html"
   mkdir -p "$(dirname -- "$out_path")"
-  typst compile --input out-path="$out_path" --input stylesheet-path="$STYLESHEET_PATH" --features html --format html --root "$PWD" "$file" "$out_path"
+  typst compile --input url="$url" --input rel="$relative_path" --input out-path="$out_path" --input stylesheet-path="$STYLESHEET_PATH" --features html --format html --root "$PWD" "$file" "$out_path"
 done
 shopt -u globstar

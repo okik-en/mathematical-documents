@@ -125,7 +125,7 @@ $
 
 = 外冪と行列式
 
-$(RR^n)^r$について、そのテンソル積空間
+$RR^n$におけるテンソル積空間
 $
   frak(P)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n chevron.r)
 $
@@ -133,27 +133,30 @@ $
 $
   frak(R)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_i times.o dots.c times.o a_j times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n \; i != j and a_i = a_j chevron.r) subset.eq frak(P)_r
 $
-による商空間$frak(P)_r slash frak(R)_r$を、$RR^n$の$r$次*外冪*といい、$Lambda^r RR^n$と表す。
+による商空間$frak(P)_r slash frak(R)_r$を、$RR^n$の$r$次*外冪*といって、$Lambda^r RR^n$と表す。
 
 ここで$a_0 times.o dots.c times.o a_(r - 1)$の像を$a_0 and dots.c and a_(r - 1)$と書き表す。
 
 いま、$n = r = 2$として考えると、
-$
-  x times.o x in frak(R)_2 wide therefore x and x = 0
-$
-であり、$x = e_0 + e_1$とすることで
+#eqref(
+  <eq0>,
+  $
+    x times.o x in frak(R)_2 wide therefore x and x = 0
+  $,
+)
+であり、#[@eq0]において$x = e_0 + e_1$とすることで
 $
   (e_0 + e_1) and (e_0 + e_1) = e_0 and e_0 + e_0 and e_1 + e_1 and e_0 + e_1 and e_1 = 0
 $
-となり、ここで
+が得られる。同時に#[@eq0]において$x = e_0$あるいは$x = e_1$とすることで得られる
 $
   e_0 and e_0 = e_1 and e_1 = 0
 $
-に注意して
+を利用して
 $
   e_0 and e_1 = - e_1 and e_0
 $
-を得る。ゆえに
+を得る。ゆえに一般の$RR^2$上の元$a e_0 + c e_1$および$b e_0 + d e_1$について
 #eqref(
   <ad-bc>,
   $
@@ -162,7 +165,7 @@ $
                                         & = (a d - b c) (e_0 and e_1)
   $,
 )
-が得られる。
+と計算できることがわかる。
 
 一般に、$dim Lambda^n RR^n = 1$であることが知られており、しかもその基底は$e_0 and dots.c and e_(n-1)$である。ゆえに$a_0, dots, a_(n - 1)$に対して、ある実数$det (a_0, dots, a_(n - 1)) in RR$が存在して
 $
