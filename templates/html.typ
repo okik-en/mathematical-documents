@@ -28,7 +28,7 @@
   // インライン数式
   show math.equation.where(block: false): it => if is-html and not __in-frame__.get() {
     html.span(
-      style: "display:inline-table;margin-inline:.25em;overflow-x:auto;vertical-align:middle;",
+      style: "display:inline-table;margin-inline:.25em;vertical-align:middle;overflow-x:auto;",
       role: "math",
       html.frame(it),
     )
@@ -36,9 +36,12 @@
   // ブロック数式
   show math.equation.where(block: true): it => if is-html and not __in-frame__.get() {
     html.div(
-      style: "display:block;place-items:center;",
+      style: "display:block;overflow-x:auto;text-align:center;",
       role: "math",
-      html.frame(it),
+      html.div(
+        style: "display:inline-block;",
+        html.frame(it),
+      ),
     )
   } else { it }
 
