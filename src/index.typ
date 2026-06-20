@@ -3,7 +3,7 @@
 
 #show: template
 
-#set document(title: "目次")
+#set document(title: "目次", description: "数学的読み物の目次。")
 
 #show: html-init
 

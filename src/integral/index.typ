@@ -3,7 +3,11 @@
 #import "../../templates/consts.typ": *
 #show: template
 
-#set document(title: "積分に関するTIPS", author: okik-en-data.authors.salty-lemon)
+#set document(
+  title: "積分に関するTIPS",
+  description: "積分に関して知っておいた方がよい知識をまとめたページ。",
+  author: okik-en-data.authors.salty-lemon,
+)
 
 #show: html-init
 

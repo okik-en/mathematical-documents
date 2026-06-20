@@ -5,7 +5,11 @@
 
 #set table(stroke: none)
 
-#set document(title: "近似法", author: okik-en-data.authors.salty-lemon)
+#set document(
+  title: "近似法",
+  description: "数値解析における近似法についての解説ページ。Aitkenのdelta^2加速法や指数関数の近似を含む。",
+  author: okik-en-data.authors.salty-lemon,
+)
 
 #let fr(num, denom) = math.display(cramped: true, math.frac(num, denom))
 

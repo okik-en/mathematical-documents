@@ -3,7 +3,11 @@
 #import "../../templates/consts.typ": *
 #show: template
 
-#set document(title: "平方根表", author: okik-en-data.authors.salty-lemon)
+#set document(
+  title: "平方根表",
+  description: "主要な自然数の平方根の値と覚え方をまとめた表。",
+  author: okik-en-data.authors.salty-lemon,
+)
 
 #show: html-init
 
