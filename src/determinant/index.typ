@@ -4,7 +4,11 @@
 #import "../../templates/consts.typ": *
 #show: template
 
-#set document(title: "行列式の定義", author: okik-en-data.authors.salty-lemon)
+#set document(
+  title: "行列式の定義",
+  description: "行列式の最高次外冪による定義を説明したページ。",
+  author: okik-en-data.authors.salty-lemon,
+)
 
 #show: html-init
 

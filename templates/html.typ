@@ -36,7 +36,7 @@
   // ブロック数式
   show math.equation.where(block: true): it => if is-html and not __in-frame__.get() {
     html.div(
-      style: "display:block;overflow-x:auto;text-align:center;",
+      style: "display:block;overflow-x:auto;overflow-y:visible;text-align:center;",
       role: "math",
       html.div(
         style: "display:inline-block;",
@@ -107,13 +107,24 @@
   }
 
   assert.ne(document.title, none, message: "Document title must be specified")
+  assert.ne(document.description, none, message: "Document description must be specified")
 
   if is-html {
-    let title = (
-      if document.title == none { "無題" } else {
-        repr(document.title).slice(1, -1)
-      }
-    )
+    let title = repr(document.title).slice(1, -1)
+    let description = repr(document.description).slice(1, -1)
+    let author = if type(document.author) == str {
+      document.author
+    } else if type(document.author) == array and document.author.len() > 0 {
+      document.author.join(", ")
+    } else { none }
+    let keywords = if document.keywords != none {
+      if type(document.keywords) == str {
+        document.keywords
+      } else if type(document.keywords) == array and document.keywords.len() > 0 {
+        document.keywords.join(", ")
+      } else { none }
+    } else { none }
+
     let doc-type = if sys.inputs.at("rel", default: none) != "index.typ" { "article" } else { "website" }
     html.html(lang: "ja", {
       // <head> ~ </head>
@@ -122,14 +133,23 @@
         html.meta(name: "viewport", content: "width=device-width, initial-scale=1")
         html.title(title)
         html.elem("meta", attrs: (property: "og:title", content: title))
-        if document.description != none {
-          html.meta(name: "description", content: document.description)
-          html.elem("meta", attrs: (property: "og:description", content: document.description))
+        html.meta(name: "description", content: description)
+        html.elem("meta", attrs: (property: "og:description", content: description))
+        if author != none {
+          html.meta(name: "author", content: author)
+          html.elem("meta", attrs: (property: "og:author", content: author))
+        }
+        if keywords != none {
+          if type(keywords) == array and len(keywords) > 0 {
+            html.meta(name: "keywords", content: keywords)
+          } else if type(keywords) == str {
+            html.meta(name: "keywords", content: keywords)
+          }
         }
         html.elem("meta", attrs: (property: "og:url", content: sys.inputs.at("url", default: "")))
         html.elem("meta", attrs: (
           property: "og:image",
-          content: "https://avatars.githubusercontent.com/u/258426464",
+          content: "https://github.com/okik-en/mathematical-documents/blob/master/okik-en.png",
         ))
         html.elem("meta", attrs: (property: "og:type", content: doc-type))
         html.elem("meta", attrs: (
@@ -180,7 +200,7 @@
   let is-html = not sys.inputs.keys().contains("x-preview") and target() == "html"
   if is-html {
     __in-frame__.update(true)
-    html.frame(it)
+    html.span(style: "display:inline-block;overflow-y:visible;", html.frame(it))
     __in-frame__.update(false)
   } else {
     it

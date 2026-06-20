@@ -62,7 +62,9 @@ h1, h2, h3, h4, .strong {
 /* 図式 */
 
 figure {
-  place-items: center;
+  display: block;
+  overflow-x: auto;
+  text-align: center;
 }
 
 /* ツリー */
