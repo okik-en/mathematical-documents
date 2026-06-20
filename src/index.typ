@@ -2,9 +2,12 @@
 #import "../templates/html.typ": *
 
 #show: template
+
+#set document(title: "目次")
+
 #show: html-init
 
-#title("数学的読み物置き場")
+#title()
 
 #let src = yaml("../appendix.yaml")
 
