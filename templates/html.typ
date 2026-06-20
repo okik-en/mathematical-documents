@@ -149,7 +149,7 @@
         html.elem("meta", attrs: (property: "og:url", content: sys.inputs.at("url", default: "")))
         html.elem("meta", attrs: (
           property: "og:image",
-          content: "https://github.com/okik-en/mathematical-documents/blob/master/okik-en.png",
+          content: "https://raw.githubusercontent.com/okik-en/mathematical-documents/refs/heads/master/okik-en.png",
         ))
         html.elem("meta", attrs: (property: "og:type", content: doc-type))
         html.elem("meta", attrs: (
