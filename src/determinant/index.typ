@@ -32,14 +32,14 @@
 $a in RR^n$と$b in RR^n$の内積$RR^n times RR^n -> RR$を次で定義する。
 $ ip(a, b) = sum_(i = 0)^(n - 1) a_i b_i $
 
-これは双線形写像として扱うことが*できない*し、さらに一般に、双線形写像の条件を満たすような写像$f: RR^m times RR^n -> RR$は存在しない。
+これは双線形写像として扱うことができる。しかし一般に、双線形写像の条件を満たすような写像$f: RR^n times RR^n -> RR^n times RR^n$は存在しない。
 なぜならば、そのような写像$f$があるならば
 $
   f(0, a) = f(0 + 0, a) = f(0, a) + f(0, a)
 $
-より、$f(0, a) = 0$でなければならず、これは線形写像の性質と矛盾する。
+より、$f(0, a) = 0$でなければならず、同様に$a != b$たる$b$をとっても、$f(0, b) = 0$となり矛盾する。
 
-そこで、$RR$上ではなく、新たな線形空間$RR^n times.o RR^n$への双線形写像を考える。
+そこで、$RR^n times RR^n$上ではなく、新たな線形空間$RR^n times.o RR^n$への双線形写像を考える。
 
 = 双線形写像とテンソル積
 
@@ -121,19 +121,19 @@ $
   })),
 )
 
-ある全射たる線形写像$p: V -> V'$と始域の部分空間$W subset.eq V$が与えられたとき、$"Ker" p = {x in V mid(|) p(x) = 0} = W$となるように$V$の部分空間$V' subset.eq V$をとることができ、しかもその取り方は一意的である。この線形空間$V'$を*商空間*$V slash W$という。
+ある全射たる線形写像$p: V -> V'$と始域の部分空間$W subset.eq V$が与えられたとき、$"Ker" p = {x in V mid(|) p(x) = 0} = W$となるように空間$V'$をとることができ、しかもその取り方は一意的である。この線形空間$V'$を*商空間*$V slash W$という。
 
 = 外冪と行列式
 
 $(RR^n)^r$について、そのテンソル積空間
 $
-  frak(V)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n chevron.r)
+  frak(P)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n chevron.r)
 $
 について、その部分（線形）空間
 $
-  frak(R)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_i times.o dots.c times.o a_j times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n \; i != j and a_i = a_j chevron.r) subset.eq frak(V)_r
+  frak(R)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_i times.o dots.c times.o a_j times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n \; i != j and a_i = a_j chevron.r) subset.eq frak(P)_r
 $
-による商空間$frak(V)_r slash frak(R)_r$を、$RR^n$の$r$次*外冪*といい、$Lambda^r RR^n$と表す。
+による商空間$frak(P)_r slash frak(R)_r$を、$RR^n$の$r$次*外冪*といい、$Lambda^r RR^n$と表す。
 
 ここで$a_0 times.o dots.c times.o a_(r - 1)$の像を$a_0 and dots.c and a_(r - 1)$と書き表す。
 
@@ -154,11 +154,14 @@ $
   e_0 and e_1 = - e_1 and e_0
 $
 を得る。ゆえに
-$
-  (a e_0 + c e_1) and (b e_0 + d e_1) & = a b (e_0 and e_0) + a d (e_0 and e_1) + c b (e_1 and e_0) + c d (e_1 and e_1) \
-                                      & = a b 0 + a d (e_0 and e_1) + c b (- e_0 and e_1) + c d 0 \
-                                      & = (a d - b c) (e_0 and e_1)
-$
+#eqref(
+  <ad-bc>,
+  $
+    (a e_0 + c e_1) and (b e_0 + d e_1) & = a b (e_0 and e_0) + a d (e_0 and e_1) + c b (e_1 and e_0) + c d (e_1 and e_1) \
+                                        & = a b 0 + a d (e_0 and e_1) + c b (- e_0 and e_1) + c d 0 \
+                                        & = (a d - b c) (e_0 and e_1)
+  $,
+)
 が得られる。
 
 一般に、$dim Lambda^n RR^n = 1$であることが知られており、しかもその基底は$e_0 and dots.c and e_(n-1)$である。ゆえに$a_0, dots, a_(n - 1)$に対して、ある実数$det (a_0, dots, a_(n - 1)) in RR$が存在して
@@ -167,7 +170,7 @@ $
 $
 とかける。これを行列$(a_0, dots, a_(n - 1))$の*行列式*という。
 
-例えば、
+例えば、#[@ad-bc]によれば
 $
   det mat(a, b; c, d) = a d - b c
 $
