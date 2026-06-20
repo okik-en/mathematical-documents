@@ -106,10 +106,14 @@
     }
   }
 
+  assert.ne(document.title, none, message: "Document title must be specified")
+
   if is-html {
-    let title = if document.title == none { "okik-en/mathematical-documents" } else {
-      repr(document.title).slice(1, -1)
-    }
+    let title = (
+      if document.title == none { "無題" } else {
+        repr(document.title).slice(1, -1)
+      }
+    )
     let doc-type = if sys.inputs.at("rel", default: none) != "index.typ" { "article" } else { "website" }
     html.html(lang: "ja", {
       // <head> ~ </head>
@@ -128,8 +132,14 @@
           content: "https://avatars.githubusercontent.com/u/258426464",
         ))
         html.elem("meta", attrs: (property: "og:type", content: doc-type))
-        html.elem("meta", attrs: (property: "og:site_name", content: "okik-en/mathematical-documents"))
-        html.elem("meta", attrs: (content: sys.inputs.at("rel", default: "")))
+        html.elem("meta", attrs: (
+          property: "og:site_name",
+          content: "数学的読み物置き場",
+        ))
+        html.elem("meta", attrs: (
+          property: "og:locale",
+          content: "ja_JP",
+        ))
 
         // html.link(rel: "preconnect", href: "https://fonts.googleapis.com")
         // html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
