@@ -107,15 +107,30 @@
   }
 
   if is-html {
+    let title = if document.title == none { "okik-en/mathematical-documents" } else {
+      repr(document.title).slice(1, -1)
+    }
+    let doc-type = if sys.inputs.at("rel", default: none) != "index.typ" { "article" } else { "website" }
     html.html(lang: "ja", {
       // <head> ~ </head>
       html.head({
         html.meta(charset: "utf-8")
         html.meta(name: "viewport", content: "width=device-width, initial-scale=1")
-        html.title(document.title)
+        html.title(title)
+        html.elem("meta", attrs: (property: "og:title", content: title))
         if document.description != none {
           html.meta(name: "description", content: document.description)
+          html.elem("meta", attrs: (property: "og:description", content: document.description))
         }
+        html.elem("meta", attrs: (property: "og:url", content: sys.inputs.at("url", default: "")))
+        html.elem("meta", attrs: (
+          property: "og:image",
+          content: "https://avatars.githubusercontent.com/u/258426464",
+        ))
+        html.elem("meta", attrs: (property: "og:type", content: doc-type))
+        html.elem("meta", attrs: (property: "og:site_name", content: "okik-en/mathematical-documents"))
+        html.elem("meta", attrs: (content: sys.inputs.at("rel", default: "")))
+
         // html.link(rel: "preconnect", href: "https://fonts.googleapis.com")
         // html.link(rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous")
 
