@@ -45,7 +45,7 @@ $
 
 そこで、$RR^n times RR^n$上ではなく、新たな線形空間$RR^n times.o RR^n$への双線形写像を考える。
 
-= 双線形写像とテンソル積
+= Tensor積
 
 今、$RR^n$の標準基底$cal(E) = {e_0, e_1, dots, e_(n - 1)}$について、形式的な記号$times.o$により${e_i times.o e_j}$を基底とする線形空間を$RR^n times.o RR^n = {sum_(i, j) lambda_(i, j) (e_i times.o e_j) mid(|) lambda_(i, j) in RR}$とする。
 
@@ -54,8 +54,8 @@ $
   (sum_i lambda_i e_i) times.o (sum_j mu_j e_j) = sum_(i, j) lambda_i mu_j (e_i times.o e_j)
 $
 
-ここで演算$times.o$は*テンソル積*といわれる。
-ここでテンソル積は双線形写像である。
+ここで演算$times.o$は*Tensor積*といわれる。
+ここでTensor積は双線形写像である。
 
 #figure(
   caption: [内積],
@@ -129,7 +129,7 @@ $
 
 = 外冪と行列式
 
-$RR^n$におけるテンソル積空間
+$RR^n$におけるTensor積空間
 $
   frak(P)_r colon.eq lr(chevron.l a_0 times.o dots.c times.o a_(r - 1) mid(|) a_0, dots, a_(r - 1) in RR^n chevron.r)
 $
