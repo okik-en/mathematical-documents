@@ -1,0 +1,15 @@
+ouj:
+    type: Web
+    title: 問題解決の数理
+    author: 大西 仁
+    organization: 放送大学教養学部
+    url:
+        value: https://info.ouj.ac.jp/~maps17/11/
+        date: 2026-06-29
+corona:
+    type: Book
+    title: 待ち行列理論
+    publisher: コロナ社
+    author: 大石進一
+    page-total: 143
+    date: 2007-08-20
