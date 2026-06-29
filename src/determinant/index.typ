@@ -1,7 +1,7 @@
 #import "@preview/cetz:0.5.2"
-#import "../../templates/template.typ": *
-#import "../../templates/html.typ": *
-#import "../../templates/consts.typ": *
+#import "/templates/template.typ": *
+#import "/templates/html.typ": *
+#import "/templates/consts.typ": *
 #show: template
 
 #set document(
