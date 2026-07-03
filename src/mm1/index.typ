@@ -147,11 +147,11 @@ $
 
 ここで定常状態における系内の平均客数は
 $
-  L = EE[n] = sum_(n = 0)^infinity P_n n = (1 - rho) sum_(n = 0)^infinity n rho^n = text(#red, rho/(1 - rho))
+  L = EE[n] = sum_(n = 0)^infinity P_n n = (1 - rho) sum_(n = 0)^infinity n rho^n = rho/(1 - rho)
 $
 であり、平均占有時間（スループットタイム）は、自分自身の処理を含めて
 $
-  W = EE[frac(n + 1, mu)] = sum_(n = 0)^infinity P_n frac(n + 1, mu) = frac(L + 1, mu) = text(#red, 1/mu dot frac(1, 1 - rho))
+  W = EE[frac(n + 1, mu)] = sum_(n = 0)^infinity P_n frac(n + 1, mu) = frac(L + 1, mu) = 1/mu dot frac(1, 1 - rho)
 $
 と求まる。
 

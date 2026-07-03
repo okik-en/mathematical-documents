@@ -1,5 +1,6 @@
 - src:
   - approximation
+  - confidence-interval
   - determinant
   - integral
   - mm1

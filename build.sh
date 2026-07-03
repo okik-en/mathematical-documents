@@ -56,3 +56,5 @@ for file in "$SOURCE_DIR"/**/*.typ; do
   typst compile --input url="$url" --input rel="$relative_path" --input out-path="$out_path" --input stylesheet-path="$STYLESHEET_PATH" --features html --format html --root "$PWD" "$file" "$out_path"
 done
 shopt -u globstar
+
+git add .
