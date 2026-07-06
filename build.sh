@@ -57,4 +57,6 @@ for file in "$SOURCE_DIR"/**/*.typ; do
 done
 shopt -u globstar
 
+touch "$OUT_DIR/.nojekyll"
+
 git add .
