@@ -18,6 +18,7 @@
 )
 
 #let ip(a, b) = $lr(chevron.l #a, #b chevron.r)$
+#let Var = math.op("Var")
 
 #title()
 #author()
@@ -34,7 +35,7 @@ $X$の$100(1 - alpha)%$両側信頼区間を求めよう。
 このとき、期待値および分散の性質より
 $
   0 = EE[Z] = EE[a X + b] = a EE[X] + b = a mu + b \
-  1 = VV[Z] = VV[a X + b] = a^2 VV[X] = a^2 sigma^2
+  1 = Var[Z] = Var[a X + b] = a^2 Var[X] = a^2 sigma^2
 $
 がいえる。
 
