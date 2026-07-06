@@ -2,6 +2,8 @@
   - approximation
   - confidence-interval
   - determinant
+  - finite-population-correction
   - integral
   - mm1
   - sqrt-n
+  - unbiased-variance
