@@ -54,7 +54,7 @@
 
   // 数式
   show math.equation: it => math.display(it)
-  set math.accent(size: 111%)
+  set math.accent(size: 150%)
 
   // 本文
   body
