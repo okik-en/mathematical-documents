@@ -917,81 +917,31 @@
       </math>
       <p>がいえる。</p>
       <p>ゆえに最良の回帰直線は</p>
-      <math display="block">
-        <mover accent="true">
-          <msub>
-            <mi>𝑦</mi>
-            <mi>𝑖</mi>
-          </msub>
-          <mo>̂</mo>
-        </mover>
-        <mo>=</mo>
-        <mfrac>
-          <msub>
-            <mi>𝜎</mi>
-            <mrow>
-              <mi>𝑥</mi>
-              <mi>𝑦</mi>
-            </mrow>
-          </msub>
-          <msubsup>
-            <mi>𝜎</mi>
-            <mi>𝑥</mi>
-            <mn>2</mn>
-          </msubsup>
-        </mfrac>
-        <mrow>
-          <mo>(</mo>
-          <mrow>
-            <msub>
-              <mi>𝑥</mi>
-              <mi>𝑖</mi>
-            </msub>
-            <mo>−</mo>
-            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
-              <mi>𝑥</mi>
-            </mstyle>
-          </mrow>
-          <mo>)</mo>
-        </mrow>
-        <mo>+</mo>
-        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
-          <mi>𝑦</mi>
-        </mstyle>
-      </math>
-      <p>となる。あるいは相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi></mrow></msub></math>を用いて</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
         <div style="flex: 1;">
-          <math id="hat-y" display="block">
-            <mrow>
-              <mo>(</mo>
-              <mrow>
-                <mover accent="true">
-                  <msub>
-                    <mi>𝑦</mi>
-                    <mi>𝑖</mi>
-                  </msub>
-                  <mo>̂</mo>
-                </mover>
-                <mo>−</mo>
-                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
-                  <mi>𝑦</mi>
-                </mstyle>
-              </mrow>
-              <mo>)</mo>
-            </mrow>
-            <msub>
-              <mi>𝜎</mi>
-              <mi>𝑥</mi>
-            </msub>
-            <mo>=</mo>
-            <msub>
-              <mi>𝜌</mi>
-              <mrow>
-                <mi>𝑥</mi>
+          <math id="line" display="block">
+            <mover accent="true">
+              <msub>
                 <mi>𝑦</mi>
-              </mrow>
-            </msub>
+                <mi>𝑖</mi>
+              </msub>
+              <mo>̂</mo>
+            </mover>
+            <mo>=</mo>
+            <mfrac>
+              <msub>
+                <mi>𝜎</mi>
+                <mrow>
+                  <mi>𝑥</mi>
+                  <mi>𝑦</mi>
+                </mrow>
+              </msub>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mi>𝑥</mi>
+                <mn>2</mn>
+              </msubsup>
+            </mfrac>
             <mrow>
               <mo>(</mo>
               <mrow>
@@ -1006,20 +956,71 @@
               </mrow>
               <mo>)</mo>
             </mrow>
-            <msub>
-              <mi>𝜎</mi>
+            <mo>+</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
               <mi>𝑦</mi>
-            </msub>
+            </mstyle>
           </math>
         </div>
         <div style="min-width: 2em;">[4]</div>
+      </div>
+      <p>となる。あるいは相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi></mrow></msub></math>を用いて</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
+        <div style="flex: 1;">
+          <math id="hat-y" display="block">
+            <mfrac>
+              <mrow>
+                <mover accent="true">
+                  <msub>
+                    <mi>𝑦</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>̂</mo>
+                </mover>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑦</mi>
+                </mstyle>
+              </mrow>
+              <msub>
+                <mi>𝜎</mi>
+                <mi>𝑦</mi>
+              </msub>
+            </mfrac>
+            <mo>=</mo>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑦</mi>
+              </mrow>
+            </msub>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>𝑥</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑥</mi>
+                </mstyle>
+              </mrow>
+              <msub>
+                <mi>𝜎</mi>
+                <mi>𝑥</mi>
+              </msub>
+            </mfrac>
+          </math>
+        </div>
+        <div style="min-width: 2em;">[5]</div>
       </div>
       <p>ともかける。</p>
       <h3 id="loc-3">1.2. 回帰直線の性質</h3>
       <ol>
         <li><a href="#beta-eq">式 [3]</a>より、予測値<math><mover accent="true" displaystyle="true"><msub><mi>𝑦</mi><mi>𝑖</mi></msub><mo>̂</mo></mover></math>の平均は観測値<math><msub displaystyle="true"><mi>𝑦</mi><mi>𝑖</mi></msub></math>の平均と等しい</li>
         <li>すなわち、残差<math><msub displaystyle="true"><mi>𝜀</mi><mi>𝑖</mi></msub></math>の平均は<math><mn displaystyle="true">0</mn></math>となる</li>
-        <li><a href="#hat-y">式 [4]</a>より、回帰直線は点<math><mrow displaystyle="true"><mo>(</mo><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑥</mi></mstyle><mo>,</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑦</mi></mstyle></mrow><mo>)</mo></mrow></math>を通る</li>
+        <li><a href="#hat-y">式 [5]</a>より、回帰直線は点<math><mrow displaystyle="true"><mo>(</mo><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑥</mi></mstyle><mo>,</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑦</mi></mstyle></mrow><mo>)</mo></mrow></math>を通る</li>
         <li>
           予測値<math>
             <mover accent="true" displaystyle="true">
@@ -1292,7 +1293,7 @@
                 </mtable>
               </math>
             </div>
-            <div style="min-width: 2em;">[5]</div>
+            <div style="min-width: 2em;">[6]</div>
           </div>
         </li>
         <li>
@@ -1478,7 +1479,7 @@
                         <mo>(</mo>
                         <mrow>
                           <mo form="infix" lspace="0em">∵</mo>
-                          <a href="#rel">式 [5]</a>
+                          <a href="#rel">式 [6]</a>
                         </mrow>
                         <mo>)</mo>
                       </mrow>
@@ -1487,12 +1488,12 @@
                 </mtable>
               </math>
             </div>
-            <div style="min-width: 2em;">[6]</div>
+            <div style="min-width: 2em;">[7]</div>
           </div>
         </li>
       </ol>
       <h2 id="loc-4">2. 決定係数</h2>
-      <p>応答変数の偏差平方和を、回帰による平方和と残差平方和に分解したとき、その比率を<strong><strong>決定係数</strong></strong>あるいは寄与率という。<a href="#hat-y">式 [4]</a>より決定係数は</p>
+      <p>応答変数の偏差平方和を、回帰による平方和と残差平方和に分解したとき、その比率を<strong><strong>決定係数</strong></strong>あるいは寄与率という。<a href="#hat-y">式 [5]</a>より決定係数は</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
         <div style="flex: 1;">
           <math id="decide" display="block">
@@ -1660,10 +1661,10 @@
             </msubsup>
           </math>
         </div>
-        <div style="min-width: 2em;">[7]</div>
+        <div style="min-width: 2em;">[8]</div>
       </div>
       <p>とかけて、すなわち決定係数は相関係数の2乗である。</p>
-      <p>とくに<a href="#decide">式 [7]</a>より<a href="#comp">式 [6]</a>を変形すると</p>
+      <p>とくに<a href="#decide">式 [8]</a>より<a href="#comp">式 [7]</a>を変形すると</p>
       <math display="block">
         <munder>
           <mo lspace="0em">∑</mo>
@@ -1718,54 +1719,744 @@
       <p>いま、3つの変量<math><mi displaystyle="true">𝑥</mi></math>、<math><mi displaystyle="true">𝑦</mi></math>、<math><mi displaystyle="true">𝑧</mi></math>があり、<math><mi displaystyle="true">𝑥</mi></math>と<math><mi displaystyle="true">𝑦</mi></math>の相関係数を求めたいとする。しかし<math><mi displaystyle="true">𝑥</mi></math>と<math><mi displaystyle="true">𝑦</mi></math>の間には変量<math><mi displaystyle="true">𝑧</mi></math>の影響があり、それが本当に<math><mi displaystyle="true">𝑥</mi></math>と<math><mi displaystyle="true">𝑦</mi></math>の相関を反映しているとは限らない。そこでその影響が<math><mi displaystyle="true">𝑧</mi></math>による回帰式</p>
       <math display="block">
         <mover accent="true">
-          <mi>𝑥</mi>
+          <msub>
+            <mi>𝑥</mi>
+            <mi>𝑖</mi>
+          </msub>
           <mo>̂</mo>
         </mover>
         <mo>=</mo>
         <mi>𝑎</mi>
-        <mi>𝑧</mi>
+        <msub>
+          <mi>𝑧</mi>
+          <mi>𝑖</mi>
+        </msub>
         <mo>+</mo>
         <mi>𝑏</mi>
         <mo rspace="0em">,</mo>
         <mspace width="1em"/>
         <mover accent="true">
-          <mi>𝑦</mi>
+          <msub>
+            <mi>𝑦</mi>
+            <mi>𝑖</mi>
+          </msub>
           <mo>̂</mo>
         </mover>
         <mo>=</mo>
         <mi>𝑐</mi>
-        <mi>𝑧</mi>
+        <msub>
+          <mi>𝑧</mi>
+          <mi>𝑖</mi>
+        </msub>
         <mo>+</mo>
         <mi>𝑑</mi>
       </math>
       <p>で説明できるものと仮定し、その影響を除いた変量</p>
       <math display="block">
-        <msup>
+        <msubsup>
           <mi>𝑥</mi>
+          <mi>𝑖</mi>
           <mo>′</mo>
-        </msup>
+        </msubsup>
         <mo>≔</mo>
-        <mi>𝑥</mi>
+        <msub>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+        </msub>
         <mo>−</mo>
         <mover accent="true">
-          <mi>𝑥</mi>
+          <msub>
+            <mi>𝑥</mi>
+            <mi>𝑖</mi>
+          </msub>
           <mo>̂</mo>
         </mover>
         <mo rspace="0em">,</mo>
         <mspace width="1em"/>
-        <msup>
+        <msubsup>
           <mi>𝑦</mi>
+          <mi>𝑖</mi>
           <mo>′</mo>
-        </msup>
+        </msubsup>
         <mo>≔</mo>
-        <mi>𝑦</mi>
+        <msub>
+          <mi>𝑦</mi>
+          <mi>𝑖</mi>
+        </msub>
         <mo>−</mo>
         <mover accent="true">
-          <mi>𝑦</mi>
+          <msub>
+            <mi>𝑦</mi>
+            <mi>𝑖</mi>
+          </msub>
           <mo>̂</mo>
         </mover>
       </math>
-      <p>による相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><msup><mi>𝑥</mi><mo>′</mo></msup><msup><mi>𝑦</mi><mo>′</mo></msup></mrow></msub></math>を考える。これを<strong><strong>偏相関係数</strong></strong>といって<math><msub displaystyle="true"><mi>𝑟</mi><mrow><mi>𝑥</mi><mi>𝑦</mi><mo lspace="0em" rspace="0em">∙</mo><mi>𝑧</mi></mrow></msub></math>と表すものとする。</p>
+      <p>による相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><msup><mi>𝑥</mi><mo>′</mo></msup><msup><mi>𝑦</mi><mo>′</mo></msup></mrow></msub></math>を考える。これを<strong><strong>偏相関係数</strong></strong>といって<math><msub displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi><mo lspace="0em" rspace="0em">∙</mo><mi>𝑧</mi></mrow></msub></math>と表すものとする。</p>
+      <p><a href="#line">式 [4]</a>と同様にして</p>
+      <math display="block">
+        <msubsup>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+          <mo>′</mo>
+        </msubsup>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mo>−</mo>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑥</mi>
+        </mstyle>
+        <mo>−</mo>
+        <mfrac>
+          <msub>
+            <mi>𝜎</mi>
+            <mrow>
+              <mi>𝑥</mi>
+              <mi>𝑧</mi>
+            </mrow>
+          </msub>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mi>𝑧</mi>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑧</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>−</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑧</mi>
+            </mstyle>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo rspace="0em">,</mo>
+        <mspace width="1em"/>
+        <msubsup>
+          <mi>𝑦</mi>
+          <mi>𝑖</mi>
+          <mo>′</mo>
+        </msubsup>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑦</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mo>−</mo>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑦</mi>
+        </mstyle>
+        <mo>−</mo>
+        <mfrac>
+          <msub>
+            <mi>𝜎</mi>
+            <mrow>
+              <mi>𝑦</mi>
+              <mi>𝑧</mi>
+            </mrow>
+          </msub>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mi>𝑧</mi>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑧</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>−</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑧</mi>
+            </mstyle>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>により、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><msup><mi>𝑥</mi><mo>′</mo></msup></mstyle><mo displaystyle="true">=</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><msup><mi>𝑦</mi><mo>′</mo></msup></mstyle><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>に注意して</p>
+      <math display="block">
+        <msubsup>
+          <mi>𝜎</mi>
+          <msup>
+            <mi>𝑥</mi>
+            <mo>′</mo>
+          </msup>
+          <mn>2</mn>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msubsup>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+          <mrow>
+            <mo form="postfix">′</mo>
+            <mn>2</mn>
+          </mrow>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msup>
+          <mrow>
+            <mo>[</mo>
+            <mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑥</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>−</mo>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑥</mi>
+                  </mstyle>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo>−</mo>
+              <mfrac>
+                <msub>
+                  <mi>𝜎</mi>
+                  <mrow>
+                    <mi>𝑥</mi>
+                    <mi>𝑧</mi>
+                  </mrow>
+                </msub>
+                <msubsup>
+                  <mi>𝜎</mi>
+                  <mi>𝑧</mi>
+                  <mn>2</mn>
+                </msubsup>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑧</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>−</mo>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑧</mi>
+                  </mstyle>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>]</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <msubsup>
+          <mi>𝜎</mi>
+          <mi>𝑥</mi>
+          <mn>2</mn>
+        </msubsup>
+        <mo>−</mo>
+        <mfrac>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mrow>
+              <mi>𝑥</mi>
+              <mi>𝑧</mi>
+            </mrow>
+            <mn>2</mn>
+          </msubsup>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mi>𝑧</mi>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+        <mo>=</mo>
+        <msubsup>
+          <mi>𝜎</mi>
+          <mi>𝑥</mi>
+          <mn>2</mn>
+        </msubsup>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <msubsup>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑧</mi>
+              </mrow>
+              <mn>2</mn>
+            </msubsup>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <math display="block">
+        <msubsup>
+          <mi>𝜎</mi>
+          <msup>
+            <mi>𝑦</mi>
+            <mo>′</mo>
+          </msup>
+          <mn>2</mn>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msubsup>
+          <mi>𝑦</mi>
+          <mi>𝑖</mi>
+          <mrow>
+            <mo form="postfix">′</mo>
+            <mn>2</mn>
+          </mrow>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msup>
+          <mrow>
+            <mo>[</mo>
+            <mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑦</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>−</mo>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑦</mi>
+                  </mstyle>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo>−</mo>
+              <mfrac>
+                <msub>
+                  <mi>𝜎</mi>
+                  <mrow>
+                    <mi>𝑦</mi>
+                    <mi>𝑧</mi>
+                  </mrow>
+                </msub>
+                <msubsup>
+                  <mi>𝜎</mi>
+                  <mi>𝑧</mi>
+                  <mn>2</mn>
+                </msubsup>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑧</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>−</mo>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑧</mi>
+                  </mstyle>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>]</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <msubsup>
+          <mi>𝜎</mi>
+          <mi>𝑦</mi>
+          <mn>2</mn>
+        </msubsup>
+        <mo>−</mo>
+        <mfrac>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mrow>
+              <mi>𝑦</mi>
+              <mi>𝑧</mi>
+            </mrow>
+            <mn>2</mn>
+          </msubsup>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mi>𝑧</mi>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+        <mo>=</mo>
+        <msubsup>
+          <mi>𝜎</mi>
+          <mi>𝑦</mi>
+          <mn>2</mn>
+        </msubsup>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <msubsup>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑦</mi>
+                <mi>𝑧</mi>
+              </mrow>
+              <mn>2</mn>
+            </msubsup>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <math display="block">
+        <msub>
+          <mi>𝜎</mi>
+          <mrow>
+            <msup>
+              <mi>𝑥</mi>
+              <mo>′</mo>
+            </msup>
+            <msup>
+              <mi>𝑦</mi>
+              <mo>′</mo>
+            </msup>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msubsup>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+          <mo>′</mo>
+        </msubsup>
+        <msubsup>
+          <mi>𝑦</mi>
+          <mi>𝑖</mi>
+          <mo>′</mo>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munder>
+          <mo form="prefix" rspace="0em">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑥</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑥</mi>
+                </mstyle>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo>−</mo>
+            <mfrac>
+              <msub>
+                <mi>𝜎</mi>
+                <mrow>
+                  <mi>𝑥</mi>
+                  <mi>𝑧</mi>
+                </mrow>
+              </msub>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mi>𝑧</mi>
+                <mn>2</mn>
+              </msubsup>
+            </mfrac>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑧</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑧</mi>
+                </mstyle>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑦</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑦</mi>
+                </mstyle>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo>−</mo>
+            <mfrac>
+              <msub>
+                <mi>𝜎</mi>
+                <mrow>
+                  <mi>𝑦</mi>
+                  <mi>𝑧</mi>
+                </mrow>
+              </msub>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mi>𝑧</mi>
+                <mn>2</mn>
+              </msubsup>
+            </mfrac>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑧</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑧</mi>
+                </mstyle>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+        <mo>=</mo>
+        <msub>
+          <mi>𝜎</mi>
+          <mrow>
+            <mi>𝑥</mi>
+            <mi>𝑦</mi>
+          </mrow>
+        </msub>
+        <mo>−</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝜎</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+            <msub>
+              <mi>𝜎</mi>
+              <mrow>
+                <mi>𝑦</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+          </mrow>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mi>𝑧</mi>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+        <mo>=</mo>
+        <msub>
+          <mi>𝜎</mi>
+          <mi>𝑥</mi>
+        </msub>
+        <msub>
+          <mi>𝜎</mi>
+          <mi>𝑦</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑦</mi>
+              </mrow>
+            </msub>
+            <mo>−</mo>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑦</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>であるから、偏相関係数は</p>
+      <math display="block">
+        <msub>
+          <mi>𝜌</mi>
+          <mrow>
+            <mi>𝑥</mi>
+            <mi>𝑦</mi>
+            <mo lspace="0em" rspace="0em">∙</mo>
+            <mi>𝑧</mi>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <msub>
+            <mi>𝜎</mi>
+            <mrow>
+              <msup>
+                <mi>𝑥</mi>
+                <mo>′</mo>
+              </msup>
+              <msup>
+                <mi>𝑦</mi>
+                <mo>′</mo>
+              </msup>
+            </mrow>
+          </msub>
+          <mrow>
+            <msub>
+              <mi>𝜎</mi>
+              <msup>
+                <mi>𝑥</mi>
+                <mo>′</mo>
+              </msup>
+            </msub>
+            <msub>
+              <mi>𝜎</mi>
+              <msup>
+                <mi>𝑦</mi>
+                <mo>′</mo>
+              </msup>
+            </msub>
+          </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑦</mi>
+              </mrow>
+            </msub>
+            <mo>−</mo>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑥</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+            <msub>
+              <mi>𝜌</mi>
+              <mrow>
+                <mi>𝑦</mi>
+                <mi>𝑧</mi>
+              </mrow>
+            </msub>
+          </mrow>
+          <mrow>
+            <msqrt>
+              <mn>1</mn>
+              <mo>−</mo>
+              <msubsup>
+                <mi>𝜌</mi>
+                <mrow>
+                  <mi>𝑥</mi>
+                  <mi>𝑧</mi>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+            </msqrt>
+            <msqrt>
+              <mn>1</mn>
+              <mo>−</mo>
+              <msubsup>
+                <mi>𝜌</mi>
+                <mrow>
+                  <mi>𝑦</mi>
+                  <mi>𝑧</mi>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+            </msqrt>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>と表される。</p>
     </main>
   </body>
 </html>
