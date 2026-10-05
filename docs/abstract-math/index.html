@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>目次</title>
-    <meta property="og:title" content="目次">
+    <title>abstract-math</title>
+    <meta property="og:title" content="abstract-math">
     <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="数学的読み物">
@@ -36,17 +36,11 @@
   </head>
   <body>
     <main>
-      <h1>目次</h1>
+      <nav><code>mdocs:<a href="../">~</a>/abstract-math></code></nav>
+      <h1>abstract-math</h1>
       <ul>
-        <li><a href="./abstract-math">abstract-math</a></li>
-        <li><a href="./probability-and-statistics">probability-and-statistics</a></li>
-        <li><a href="./utils">utils</a></li>
+        <li><a href="./determinant">determinant</a></li>
       </ul>
-      <hr>
-      <p><small>Report any errors/issues on <a href="https://github.com/okik-en/mathematical-documents/issues">our repository</a>.<span style="white-space: pre-wrap">&#x20;</span><span id="last_updated"></span></small></p>
-      <script>
-(async () => document.getElementById('last_updated').textContent = await fetch('https://api.github.com/repos/okik-en/mathematical-documents/deployments').then(x => x.json()).then(x => `This site was last updated at ${new Date(Date.parse(x[0].updated_at)).toLocaleString()}.`))();
-      </script>
     </main>
   </body>
 </html>

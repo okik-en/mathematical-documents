@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>行列式の定義</title>
+    <meta property="og:title" content="行列式の定義">
+    <meta name="description" content="行列式の最高次外冪による定義を説明したページ。">
+    <meta property="og:description" content="行列式の最高次外冪による定義を説明したページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">abstract-math</a>/determinant></code></nav>
+      <h1>行列式の定義</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 双線形写像</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 内積</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> Tensor積</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> 商空間</a></li>
+          <li><a href="#loc-5"><span class="prefix">5.</span> 外冪と行列式</a></li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. 双線形写像</h2>
+      <p>次を満たす写像<math><mi displaystyle="true">𝑓</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">𝑉</mi></math>を<strong><strong>双線形写像</strong></strong>という。</p>
+      <ol>
+        <li><math><mo displaystyle="true">∀</mo><mi displaystyle="true">𝑎</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑏</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑐</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>+</mo><mi>𝑏</mi><mo>,</mo><mi>𝑐</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝑐</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">+</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑏</mi><mo>,</mo><mi>𝑐</mi></mrow><mo>)</mo></mrow></math></li>
+        <li><math><mo displaystyle="true">∀</mo><mi displaystyle="true">𝑎</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑏</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑐</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝑏</mi><mo>+</mo><mi>𝑐</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝑏</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">+</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝑐</mi></mrow><mo>)</mo></mrow></math></li>
+        <li><math><mo displaystyle="true">∀</mo><mi displaystyle="true">𝑎</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑏</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo displaystyle="true">,</mo><mo form="prefix" displaystyle="true">∀</mo><mi displaystyle="true">𝜆</mi><mo displaystyle="true">∈</mo><mi displaystyle="true">ℝ</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜆</mi><mi>𝑎</mi><mo>,</mo><mi>𝑏</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝜆</mi><mi>𝑏</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝜆</mi><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑎</mi><mo>,</mo><mi>𝑏</mi></mrow><mo>)</mo></mrow></math></li>
+      </ol>
+      <h2 id="loc-2">2. 内積</h2>
+      <p><math><mi displaystyle="true">𝑎</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>と<math><mi displaystyle="true">𝑏</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>の内積<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">ℝ</mi></math>を次で定義する。</p>
+      <math display="block">
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo>,</mo>
+            <mi>𝑏</mi>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </munderover>
+        <msub>
+          <mi>𝑎</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <msub>
+          <mi>𝑏</mi>
+          <mi>𝑖</mi>
+        </msub>
+      </math>
+      <p>これは双線形写像として扱うことができる。しかし一般に、双線形写像の条件を満たすような写像<math><mi displaystyle="true">𝑓</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">→</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>は存在しない。 なぜならば、そのような写像<math><mi displaystyle="true">𝑓</mi></math>があるならば</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mi>𝑎</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>0</mn>
+            <mo>+</mo>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mi>𝑎</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mi>𝑎</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>+</mo>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mi>𝑎</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>より、<math><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mi>𝑎</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>でなければならず、同様に<math><mi displaystyle="true">𝑎</mi><mo displaystyle="true">≠</mo><mi displaystyle="true">𝑏</mi></math>たる<math><mi displaystyle="true">𝑏</mi></math>をとっても、<math><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mi>𝑏</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>となり矛盾する。</p>
+      <p>そこで、<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>上ではなく、新たな線形空間<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>への双線形写像を考える。</p>
+      <h2 id="loc-3">3. Tensor積</h2>
+      <p>今、<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>の標準基底<math><mi displaystyle="true">ℰ︀</mi><mo displaystyle="true">=</mo><mrow displaystyle="true"><mo>{</mo><mrow><msub><mi>𝑒</mi><mn>0</mn></msub><mo>,</mo><msub><mi>𝑒</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>𝑒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></mrow><mo>}</mo></mrow></math>について、形式的な記号<math><mo lspace="0em" rspace="0em" displaystyle="true">⊗</mo></math>により<math><mrow displaystyle="true"><mo>{</mo><mrow><msub><mi>𝑒</mi><mi>𝑖</mi></msub><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo><msub><mi>𝑒</mi><mi>𝑗</mi></msub></mrow><mo>}</mo></mrow></math>を基底とする線形空間を<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo displaystyle="true">=</mo><mrow displaystyle="true"><mo>{</mo><mrow><munder><mo lspace="0em">∑</mo><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi></mrow></munder><msub><mi>𝜆</mi><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi></mrow></msub><mrow><mo>(</mo><mrow><msub><mi>𝑒</mi><mi>𝑖</mi></msub><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo><msub><mi>𝑒</mi><mi>𝑗</mi></msub></mrow><mo>)</mo></mrow><mo fence="false" stretchy="true" symmetric="true">|</mo><msub><mi>𝜆</mi><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi></mrow></msub><mo>∈</mo><mi>ℝ</mi></mrow><mo>}</mo></mrow></math>とする。</p>
+      <p>いま、演算<math><mo form="infix" lspace="0em" rspace="0em" displaystyle="true">⊗</mo><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">→</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>を次で定義する。</p>
+      <math display="block">
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <munder>
+              <mo lspace="0em">∑</mo>
+              <mi>𝑖</mi>
+            </munder>
+            <msub>
+              <mi>𝜆</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑖</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <munder>
+              <mo lspace="0em">∑</mo>
+              <mi>𝑗</mi>
+            </munder>
+            <msub>
+              <mi>𝜇</mi>
+              <mi>𝑗</mi>
+            </msub>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <munder>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </munder>
+        <msub>
+          <mi>𝜆</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <msub>
+          <mi>𝜇</mi>
+          <mi>𝑗</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>ここで演算<math><mo lspace="0em" rspace="0em" displaystyle="true">⊗</mo></math>は<strong><strong>Tensor積</strong></strong>といわれる。 ここでTensor積は双線形写像である。</p>
+      <figure>
+        <div style="width: fit-content; background-color: white; margin: .5em; padding: .5em; overflow-x: auto; display: inline-block;">
+          <svg style="overflow: visible; width: 13.166097383em; height: 7.277446671em; display: block" viewBox="0 0 144.827071216 80.051913386" width="144.827071216pt" height="80.051913386pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
+            <g>
+              <path fill="none" transform="translate(1.452)" d="M 0 0h 44.124488889v 15.854h -44.124488889v -15.854Z "/>
+              <g transform="translate(1.451999909 -1.6e-8)">
+                <g transform="matrix(1 0 0 -1 4 11.854)">
+                  <use xlink:href="#gF639CFD53BAE307DE1CB6FFC91476199" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 11.854 7.564)">
+                  <use xlink:href="#gFE96D91B599632956020A2A5CD9337DD" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 18.916244444 11.854)">
+                  <use xlink:href="#g80E4DD6A4E9C9084A3405E42108D84" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 27.652688889 11.854)">
+                  <use xlink:href="#gF639CFD53BAE307DE1CB6FFC91476199" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 35.506688889 7.564)">
+                  <use xlink:href="#gFE96D91B599632956020A2A5CD9337DD" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" transform="translate(0 56.203413386)" d="M 0 0h 47.028488889v 16.833h -47.028488889v -16.833Z "/>
+              <g transform="translate(-1.38e-7 56.203413291)">
+                <g transform="matrix(1 0 0 -1 4 11.854)">
+                  <use xlink:href="#gF639CFD53BAE307DE1CB6FFC91476199" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 11.854 7.564)">
+                  <use xlink:href="#gFE96D91B599632956020A2A5CD9337DD" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 18.916244444 11.854)">
+                  <use xlink:href="#gFCA682B520E945943A49F6930EE0993C" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 30.556688889 11.854)">
+                  <use xlink:href="#gF639CFD53BAE307DE1CB6FFC91476199" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 38.410688889 7.564)">
+                  <use xlink:href="#gFE96D91B599632956020A2A5CD9337DD" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" transform="translate(128.973071216 56.692913386)" d="M 0 0h 15.854v 15.854h -15.854v -15.854Z "/>
+              <g transform="translate(128.9730712 56.69291337)">
+                <g transform="matrix(1 0 0 -1 4 11.854)">
+                  <use xlink:href="#gF639CFD53BAE307DE1CB6FFC91476199" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(23.514244444 15.854)" d="M 0 0v 34.888783465"/>
+              <path fill="#000000" fill-rule="nonzero" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="" transform="translate(21.388260192 50.034122046)" d="M 0 0m 2.125984252 5.669291339c 0.354330709 -1.25984252 1.062992126 -3.149606299 2.125984252 -5.669291339c -1.417322835 0.94488189 -2.834645669 0.94488189 -4.251968504 0c 1.062992126 2.519685039 1.771653543 4.409448819 2.125984252 5.669291339Z "/>
+              <path fill="none" transform="translate(6.318244444 27.612206693)" d="M 0 0h 17.196v 16.833h -17.196v -16.833Z "/>
+              <g transform="translate(6.318244397 27.612206598)">
+                <g transform="matrix(1 0 0 -1 4 11.854)">
+                  <use xlink:href="#gFCA682B520E945943A49F6930EE0993C" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="2 1" transform="translate(47.028488889 64.619913386)" d="M 0 0h 76.483952406"/>
+              <path fill="#000000" fill-rule="nonzero" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="" transform="translate(122.803779878 62.493929134)" d="M 0 0m 5.669291339 2.125984252c -1.25984252 -0.354330709 -3.149606299 -1.062992126 -5.669291339 -2.125984252c 0.94488189 1.417322835 0.94488189 2.834645669 0 4.251968504c 2.519685039 -1.062992126 4.409448819 -1.771653543 5.669291339 -2.125984252Z "/>
+              <path fill="none" transform="translate(72.53382182 46.125913386)" d="M 0 0h 14.545v 18.494h -14.545v -18.494Z "/>
+              <g transform="translate(72.533821788 46.125913276)">
+                <g transform="matrix(1 0 0 -1 4 11.854)">
+                  <use xlink:href="#g2F04766A6E29D19B4973E12846ABFE17" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" transform="translate(53.10232182 64.619913386)" d="M 0 0h 53.408v 15.432h -53.408v -15.432Z "/>
+              <g transform="translate(53.102321757 64.619913339)">
+                <g transform="matrix(1 0 0 -1 4 9.864)">
+                  <use xlink:href="#g5E3134C2F5B1D3A0CAF52AEC2F2B2B60" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  <use xlink:href="#gB592BC1F05E3C5B14B993579E6678345" x="2.704" y="0" fill="#000000" fill-rule="nonzero"/>
+                  <use xlink:href="#g9145D5B47B5C2BCBF144B88B6D0D4EE" x="10.704" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 22.704 9.864)">
+                  <use xlink:href="#gE1A71F730C71FA64A66F4430C7D112EB" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 30.704 9.864)">
+                  <use xlink:href="#g975253E7C15D1E3A54747EDFCB891512" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  <use xlink:href="#g2EDBA7BE00D0B2A9643DA2B4D0840D46" x="8" y="0" fill="#000000" fill-rule="nonzero"/>
+                  <use xlink:href="#gA6A8703A3EB92899033BC1BE22AFCFF0" x="16" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(39.368244444 15.854)" d="M 0 0l 84.72069089 42.360345445"/>
+              <path fill="#000000" fill-rule="nonzero" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="" transform="translate(122.504320235 55.995884303)" d="M 0 0m 6.021537388 4.436922286c -0.968375896 -0.880341723 -2.341708984 -2.359315819 -4.119999266 -4.436922286c 0.211282014 1.690256109 -0.422564027 2.957948191 -1.901538123 3.803076245c 2.729059343 0.176068345 4.736238472 0.387350358 6.021537388 0.633846041Z "/>
+              <path fill="none" transform="translate(84.17065783 21.268206693)" d="M 0 0h 30v 16.987h -30v -16.987Z "/>
+              <g transform="translate(84.170657736 21.268206567)">
+                <g transform="matrix(1 0 0 -1 4 12.063)">
+                  <use xlink:href="#gCAA63ED651B9B9788E31624B71A5A714" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  <use xlink:href="#g18C3CAF07DB53A348081A948B0BEF964" x="11" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+            </g>
+            <defs>
+              <symbol id="gF639CFD53BAE307DE1CB6FFC91476199" overflow="visible">
+                <path d="M 0 0m 1.067 0v 7.854h 2.849q 1.408 0 2.068 -0.5445q 0.66 -0.5445 0.66 -1.5455q 0 -0.726 -0.3685 -1.2375q -0.3685 -0.5115 -1.0395 -0.7645l 2.453 -3.762h -2.145l -2.101 3.487h -0.473v -3.487h -1.903Z m 0.583 0.583h 0.737v 6.688h -0.737v -6.688Z m 1.32 3.487h 1.529v 3.201h -1.529v -3.201Z m 2.123 0.187q 0.396 0.187 0.6545 0.517q 0.2585 0.33 0.2585 0.99q 0 0.605 -0.231 0.9185q -0.231 0.3135 -0.682 0.4565v -2.882Z m 0.748 -3.685h 0.814l -1.925 3.025q -0.33 -0.066 -0.671 -0.088l 1.782 -2.937Z "/>
+              </symbol>
+              <symbol id="gFE96D91B599632956020A2A5CD9337DD" overflow="visible">
+                <path d="M 0 0m 0.2244 0l 0.759 3.5904h 0.6732l -0.066 -0.66h 0.0198q 0.198 0.297 0.4818 0.5115q 0.2838 0.2145 0.6732 0.2145q 0.4554 0 0.6897 -0.2673q 0.2343 -0.2673 0.2343 -0.7227q 0 -0.132 -0.0198 -0.2838q -0.0198 -0.1518 -0.0528 -0.297l -0.4422 -2.0856h -0.8646l 0.4554 2.145q 0.0264 0.1188 0.0396 0.2178q 0.0132 0.099 0.0132 0.1782q 0 0.4026 -0.3828 0.4026q -0.33 0 -0.6039 -0.3894q -0.2739 -0.3894 -0.4257 -1.056l -0.3168 -1.4982h -0.8646Z "/>
+              </symbol>
+              <symbol id="g80E4DD6A4E9C9084A3405E42108D84" overflow="visible">
+                <path d="M 0 0m 1.298 0.627l -0.572 0.561l 1.859 1.87l -1.87 1.859l 0.572 0.572l 1.859 -1.881l 1.881 1.881l 0.55 -0.561l -1.87 -1.87l 1.859 -1.87l -0.55 -0.561l -1.881 1.859l -1.837 -1.859Z "/>
+              </symbol>
+              <symbol id="gFCA682B520E945943A49F6930EE0993C" overflow="visible">
+                <path d="M 0 0m 4.598 -0.979q -0.836 0 -1.5675 0.3135q -0.7315 0.3135 -1.287 0.869q -0.5555 0.5555 -0.869 1.287q -0.3135 0.7315 -0.3135 1.5675q 0 0.836 0.3135 1.5675q 0.3135 0.7315 0.869 1.287q 0.5555 0.5555 1.287 0.869q 0.7315 0.3135 1.5675 0.3135q 0.836 0 1.5675 -0.3135q 0.7315 -0.3135 1.287 -0.869q 0.5555 -0.5555 0.869 -1.287q 0.3135 -0.7315 0.3135 -1.5675q 0 -0.836 -0.3135 -1.5675q -0.3135 -0.7315 -0.8745 -1.287q -0.561 -0.5555 -1.2925 -0.869q -0.7315 -0.3135 -1.5565 -0.3135Z m 0 7.282q -0.572 0 -1.089 -0.187q -0.517 -0.187 -0.935 -0.517l 2.035 -2.035l 2.013 2.024q -0.407 0.341 -0.9295 0.528q -0.5225 0.187 -1.0945 0.187Z m -3.245 -3.245q 0 -0.583 0.1925 -1.1q 0.1925 -0.517 0.5225 -0.935l 2.035 2.046l -2.024 2.024q -0.341 -0.418 -0.5335 -0.935q -0.1925 -0.517 -0.1925 -1.1Z m 6.49 0q 0 0.583 -0.1925 1.1q -0.1925 0.517 -0.5225 0.935l -2.024 -2.024l 2.024 -2.035q 0.341 0.418 0.528 0.935q 0.187 0.517 0.187 1.089Z m -3.245 -3.245q 0.583 0 1.1 0.1925q 0.517 0.1925 0.935 0.5225l -2.024 2.035l -2.035 -2.035q 0.407 -0.341 0.9295 -0.528q 0.5225 -0.187 1.0945 -0.187Z "/>
+              </symbol>
+              <symbol id="g2F04766A6E29D19B4973E12846ABFE17" overflow="visible">
+                <path d="M 0 0m 0.924 -2.64q -0.209 0 -0.385 0.033q -0.176 0.033 -0.319 0.077v 0.814q 0.154 -0.044 0.297 -0.0825q 0.143 -0.0385 0.319 -0.0385q 0.396 0 0.616 0.3245q 0.22 0.3245 0.352 0.9295l 1.21 5.742h -1.023l 0.077 0.407l 1.1 0.363l 0.121 0.528q 0.176 0.759 0.4345 1.1825q 0.2585 0.4235 0.6435 0.5995q 0.385 0.176 0.924 0.176q 0.275 0 0.5665 -0.0605q 0.2915 -0.0605 0.4675 -0.1485l -0.253 -0.737q -0.154 0.055 -0.3355 0.1045q -0.1815 0.0495 -0.4015 0.0495q -0.429 0 -0.6765 -0.242q -0.2475 -0.242 -0.4015 -0.924l -0.132 -0.561h 1.265l -0.143 -0.737h -1.265l -1.232 -5.852q -0.187 -0.913 -0.6105 -1.43q -0.4235 -0.517 -1.2155 -0.517Z "/>
+              </symbol>
+              <symbol id="g5E3134C2F5B1D3A0CAF52AEC2F2B2B60" overflow="visible">
+                <path d="M 0 0m 1.914558594 -1.571681641q -0.551600586 0.900081055 -0.865160645 1.889241699q -0.313560059 0.989160645 -0.313560059 2.167881348q 0 1.178720703 0.313560059 2.170321289q 0.313560059 0.991600586 0.865160645 1.891681641l 0.448810547 -0.21184375q -0.515519531 -0.85384082 -0.767918945 -1.842720703q -0.252399414 -0.988879883 -0.252399414 -2.007438477q 0 -1.021678711 0.252399414 -2.008998535q 0.252399414 -0.987319824 0.767918945 -1.841160645l -0.448810547 -0.206963867Z "/>
+              </symbol>
+              <symbol id="gB592BC1F05E3C5B14B993579E6678345" overflow="visible">
+                <path d="M 0 0m 0.353198242 3.449447266h 7.324243164v -0.657134766h -7.324243164v 0.657134766Z "/>
+              </symbol>
+              <symbol id="g9145D5B47B5C2BCBF144B88B6D0D4EE" overflow="visible">
+                <path d="M 0 0m 2.059768555 2.061204102h 3.923583008v 0.542552734h -3.923583008v -0.542552734Z m 0 0.941678711h 3.923583008v 0.532792969h -3.923583008v -0.532792969Z m 4.519276367 0.942639648v -2.297285156h -5.093128906v 2.297285156h 5.093128906Z m -0.662639648 1.688636719q -0.128 -0.25015918 -0.259719238 -0.477597656q -0.131719238 -0.227438477 -0.245878418 -0.40599707l -0.531131836 0.139681641q 0.107918945 0.189279297 0.22891748 0.440037598q 0.120998535 0.250758301 0.192037598 0.443557129l 0.615774414 -0.139681641Z m -3.223276367 0.129921875q 0.125678711 -0.200798828 0.232037598 -0.443357422q 0.106358887 -0.242558594 0.152998535 -0.417597656l -0.572092773 -0.152162109q -0.040399414 0.187918945 -0.136318359 0.437597656q -0.095918945 0.249678711 -0.218477539 0.448717773l 0.541852539 0.126801758Z m 1.594958008 0.958801758v -0.874483398h -0.601933594v 0.874483398h 0.601933594Z m 3.171994141 -1.886714844v -0.487849609h -6.879762695v 0.487849609h 6.879762695Z m -0.412480469 1.352798828v -0.492729492h -6.106321289v 0.492729492h 6.106321289Z m -5.072636719 -5.12552832q -0.169759766 -0.434720703 -0.44615918 -0.845641113q -0.276399414 -0.41092041 -0.721678711 -0.677641113l -0.46969043 0.323207031q 0.415438477 0.232 0.701397949 0.611519531q 0.285959473 0.379519531 0.433479004 0.774639648l 0.502651367 -0.186083984Z m 4.277204102 0.254165039q 0.271039063 -0.198240234 0.549198242 -0.446040527q 0.27815918 -0.247800293 0.513878418 -0.500480469q 0.235719238 -0.252680176 0.370358887 -0.470040527l -0.489771484 -0.308005859q -0.128399414 0.216 -0.356998535 0.473360352q -0.228599121 0.257360352 -0.499638184 0.51384082q -0.271039063 0.256480469 -0.546958008 0.460960938l 0.459930664 0.276405273Z m -2.690483398 0.342240234q 0.228879883 -0.11415918 0.48 -0.263438477q 0.251120117 -0.149279297 0.474240234 -0.297678711q 0.223120117 -0.148399414 0.365360352 -0.27815918l -0.3516875 -0.3596875q -0.140879883 0.129759766 -0.358439941 0.285279297q -0.217560059 0.155519531 -0.465560059 0.312798828q -0.248 0.157279297 -0.476879883 0.282558594l 0.332966797 0.318327148Z m -0.596955078 -1.500555664q 0 -0.143600586 0.090639648 -0.182040527q 0.090639648 -0.038439941 0.400318359 -0.038439941q 0.070639648 0 0.258958008 0q 0.188318359 0 0.42015625 0q 0.231837891 0 0.434596191 0q 0.202758301 0 0.299157715 0q 0.175039063 0 0.257678711 0.052199707q 0.082639648 0.052199707 0.118639648 0.224998535q 0.036 0.172798828 0.052 0.525036133q 0.099681641 -0.063201172 0.25260498 -0.118402344q 0.15292334 -0.055201172 0.274445801 -0.080561523q -0.031600586 -0.451120117 -0.121241699 -0.690240234q -0.089641113 -0.239120117 -0.270202637 -0.330240234q -0.180561523 -0.091120117 -0.510483398 -0.091120117q -0.052480469 0 -0.206639648 0q -0.15415918 0 -0.352717773 0q -0.198558594 0 -0.397117188 0q -0.198558594 0 -0.352717773 0q -0.15415918 0 -0.203519531 0q -0.408723633 0 -0.630645508 0.061641113q -0.221921875 0.061641113 -0.308642578 0.22092334q -0.086720703 0.159282227 -0.086720703 0.444885742v 1.033672852h 0.581453125v -1.0323125Z "/>
+              </symbol>
+              <symbol id="gE1A71F730C71FA64A66F4430C7D112EB" overflow="visible">
+                <path d="M 0 0m 3.646477539 5.401447266q 0.328561523 -0.052879883 0.766402344 -0.077759766q 0.43784082 -0.024879883 0.90476123 -0.021759766q 0.46692041 0.003120117 0.89384082 0.032q 0.42692041 0.028879883 0.723881348 0.070639648v -0.647774414q -0.318801758 -0.032 -0.747282227 -0.052q -0.428480469 -0.02 -0.887600586 -0.02q -0.459120117 0 -0.891600586 0.02q -0.432480469 0.02 -0.759282227 0.052l -0.003120117 0.644654297Z m 0.311612305 -3.260005859q -0.054639648 -0.216399414 -0.084399414 -0.392118652q -0.029759766 -0.175719238 -0.029759766 -0.340599121q 0 -0.137759766 0.059120117 -0.267918945q 0.059120117 -0.13015918 0.207519531 -0.232518066q 0.148399414 -0.102358887 0.410477539 -0.162078125q 0.262078125 -0.059719238 0.671114258 -0.059719238q 0.540879883 0 1.02107959 0.052q 0.480199707 0.052 0.96076123 0.159120117l 0.014240234 -0.672735352q -0.372480469 -0.076879883 -0.872480469 -0.121759766q -0.5 -0.044879883 -1.124162109 -0.044879883q -1.004081055 0 -1.471962402 0.319201172q -0.467881348 0.319201172 -0.467881348 0.881123047q 0 0.197441406 0.033560059 0.424842285q 0.033560059 0.227400879 0.095800293 0.515001465l 0.576972656 -0.056960938Z m -1.834321289 3.874882813q -0.022240234 -0.063600586 -0.050720703 -0.163282227q -0.028480469 -0.099681641 -0.05384082 -0.198683105q -0.025360352 -0.099001465 -0.041360352 -0.171001465q -0.043519531 -0.225597656 -0.098839355 -0.518196777q -0.055319824 -0.292599121 -0.107319824 -0.624599121q -0.052 -0.332 -0.095120117 -0.672680176q -0.043120117 -0.340680176 -0.070240234 -0.661560059q -0.027120117 -0.320879883 -0.027120117 -0.593678711q 0 -0.289273438 0.01707959 -0.554028809q 0.01707959 -0.264755371 0.054358887 -0.562028809q 0.070639648 0.180318359 0.151918945 0.388555664q 0.081279297 0.208237305 0.162558594 0.413154785q 0.081279297 0.20491748 0.143918945 0.365716309l 0.335125977 -0.259044922q -0.100480469 -0.281921875 -0.21892041 -0.627562988q -0.118439941 -0.345641113 -0.213759766 -0.660361816q -0.095319824 -0.314720703 -0.133560059 -0.504561523q -0.016 -0.083120117 -0.029560059 -0.186040527q -0.013560059 -0.10292041 -0.008680176 -0.173560059q 0.004879883 -0.059120117 0.009759766 -0.137160645q 0.004879883 -0.078040527 0.012879883 -0.139881348l -0.573453125 -0.042720703q -0.12 0.429279297 -0.207800293 1.095800293q -0.087800293 0.666520996 -0.087800293 1.477641113q 0 0.441360352 0.040879883 0.900480469q 0.040879883 0.459120117 0.102639648 0.894439941q 0.061759766 0.435319824 0.12107959 0.798839355q 0.059319824 0.363519531 0.096199707 0.611918945q 0.019120117 0.140081055 0.036480469 0.288043457q 0.017360352 0.147962402 0.020480469 0.279244629l 0.712735352 -0.063201172Z "/>
+              </symbol>
+              <symbol id="g975253E7C15D1E3A54747EDFCB891512" overflow="visible">
+                <path d="M 0 0m 2.682083984 2.127762695h 4.976237305v -0.562732422h -4.976237305v 0.562732422Z m 0.679837891 2.071837891h 3.295750977v -0.552011719h -3.295750977v 0.552011719Z m 1.560474609 -1.328960938h 0.605053711v -2.799750977q 0 -0.264723633 -0.070040527 -0.405565918q -0.070040527 -0.140842285 -0.27508252 -0.210283691q -0.197041992 -0.069441406 -0.538202637 -0.081241699q -0.341160645 -0.011800293 -0.858839355 -0.011800293q -0.022240234 0.129123047 -0.073641113 0.287406738q -0.051400879 0.158283691 -0.116361816 0.286046387q 0.270477539 -0.008 0.504836426 -0.011120117q 0.234358887 -0.003120117 0.406558594 -0.000680176q 0.172199707 0.002439941 0.242839355 0.002439941q 0.105759766 0.008 0.139319824 0.039319824q 0.033560059 0.031319824 0.033560059 0.11307959v 2.792150391Z m 1.577273438 1.328960938h 0.146483398l 0.122882813 0.02984082l 0.383288086 -0.291207031q -0.230240234 -0.272 -0.532 -0.547600586q -0.301759766 -0.275600586 -0.624399414 -0.522321289q -0.322639648 -0.246720703 -0.631519531 -0.433441406q -0.060081055 0.083681641 -0.160243164 0.187644043q -0.100162109 0.103962402 -0.174483398 0.167163574q 0.271438477 0.158240234 0.550876953 0.38292041q 0.279438477 0.224680176 0.524437012 0.465560059q 0.244998535 0.240879883 0.394677246 0.443039063v 0.118402344Z m -5.998952148 1.473522461h 7.007924805v -0.575212891h -7.007924805v 0.575212891Z m 2.581117188 1.048l 0.630014648 -0.154483398q -0.279600586 -0.917041992 -0.707881348 -1.816723633q -0.428280762 -0.899681641 -1.028162109 -1.680442871q -0.599881348 -0.78076123 -1.403163574 -1.356361816q -0.031600586 0.080162109 -0.087681641 0.182364746q -0.056081055 0.102202637 -0.117722168 0.206845215q -0.061641113 0.104642578 -0.113722168 0.170564453q 0.544 0.383039063 0.990439941 0.892118652q 0.446439941 0.50907959 0.800199707 1.096399414q 0.353759766 0.587319824 0.612399414 1.213759766q 0.258639648 0.626439941 0.425279297 1.245959473Z m -1.57384082 -3.266882813h 0.600173828v -4.074483398h -0.600173828v 4.074483398Z "/>
+              </symbol>
+              <symbol id="g2EDBA7BE00D0B2A9643DA2B4D0840D46" overflow="visible">
+                <path d="M 0 0m 0.500717773 5.482807617h 7.007924805v -0.580092773h -7.007924805v 0.580092773Z m 2.479924805 -2.536162109h 4.21815918v -0.559612305h -4.21815918v 0.559612305Z m -0.313759766 -2.831675781h 4.840798828v -0.564492188h -4.840798828v 0.564492188Z m 2.11815332 4.376387695h 0.600173828v -4.680874023h -0.600173828v 4.680874023Z m -1.654402344 2.229765625l 0.620654297 -0.151363281q -0.279600586 -0.913921875 -0.707881348 -1.810483398q -0.428280762 -0.896561523 -1.026602051 -1.674202637q -0.598321289 -0.777641113 -1.398483398 -1.350121582q -0.031600586 0.080162109 -0.087681641 0.180804688q -0.056081055 0.100642578 -0.116162109 0.202165039q -0.060081055 0.101522461 -0.109041992 0.167444336q 0.544 0.379918945 0.988879883 0.887438477q 0.444879883 0.507519531 0.796199707 1.094839355q 0.351319824 0.587319824 0.612399414 1.210639648q 0.26107959 0.623319824 0.427719238 1.242839355Z m -1.583600586 -3.296162109h 0.600173828v -4.035444336h -0.600173828v 4.035444336Z "/>
+              </symbol>
+              <symbol id="gA6A8703A3EB92899033BC1BE22AFCFF0" overflow="visible">
+                <path d="M 0 0m 0.792573242 -1.571681641l -0.45369043 0.206963867q 0.515519531 0.85384082 0.770358887 1.841160645q 0.254839355 0.987319824 0.254839355 2.008998535q 0 1.018558594 -0.254839355 2.007438477q -0.254839355 0.988879883 -0.770358887 1.842720703l 0.45369043 0.21184375q 0.556480469 -0.900081055 0.867600586 -1.891681641q 0.311120117 -0.991600586 0.311120117 -2.170321289q 0 -1.178720703 -0.311120117 -2.167881348q -0.311120117 -0.989160645 -0.867600586 -1.889241699Z "/>
+              </symbol>
+              <symbol id="gCAA63ED651B9B9788E31624B71A5A714" overflow="visible">
+                <path d="M 0 0m 4.969683716 4.777947754l 0.617114502 0.443860474q 0.417227905 -0.361678711 0.878181213 -0.785067261q 0.460953308 -0.42338855 0.902986938 -0.856567261q 0.44203363 -0.433178711 0.824502502 -0.836437744q 0.382468872 -0.403259033 0.647018066 -0.72038855l -0.68014563 -0.537471924q -0.244968872 0.323839355 -0.615502502 0.734743469q -0.37053363 0.410904114 -0.806132019 0.859372986q -0.435598389 0.448468872 -0.891051697 0.882582825q -0.455453308 0.434113953 -0.876971375 0.815372986Z m 0.118906616 4.466016113h 0.844819336v -2.156788208q 0 -0.527450806 -0.060225403 -1.112595886q -0.060225403 -0.585145081 -0.233805725 -1.192564758q -0.173580322 -0.607419678 -0.520354919 -1.208678711q -0.346774597 -0.601259033 -0.918937744 -1.164292664q -0.572163147 -0.56303363 -1.419489441 -1.061551697q -0.056321289 0.088772095 -0.159173706 0.203559753q -0.102852417 0.114787659 -0.215494995 0.230785156q -0.112642578 0.115997498 -0.216704834 0.18518927q 0.823455811 0.446486938 1.361958313 0.95534436q 0.538502502 0.508857422 0.850681213 1.051650085q 0.312178711 0.542792664 0.458808228 1.084100891q 0.146629517 0.541308228 0.187274597 1.058196777q 0.040645081 0.51688855 0.040645081 0.975147583v 2.152498047Z m -4.001134521 -1.884518066h 8.407518066v -0.810498047h -7.586569214v -7.448201782h -0.820948853v 8.258699829Z m 8.036590332 0h 0.81236853v -7.149554199q 0 -0.403704834 -0.109450806 -0.619362976q -0.109450806 -0.215658142 -0.393803223 -0.322140076q -0.286772095 -0.099772095 -0.798932739 -0.120287659q -0.512160645 -0.020515564 -1.255870483 -0.020515564q -0.015290161 0.119352417 -0.060886047 0.269945801q -0.045595886 0.150593384 -0.101917175 0.303606445q -0.056321289 0.153013062 -0.119352417 0.268075317q 0.393357422 -0.011 0.750471375 -0.018645081q 0.357113953 -0.007645081 0.62688855 -0.004290161q 0.269774597 0.003354919 0.375484436 0.003354919q 0.160709839 0.011 0.217854919 0.067209839q 0.057145081 0.056209839 0.057145081 0.199209839v 7.143393555Z "/>
+              </symbol>
+              <symbol id="g18C3CAF07DB53A348081A948B0BEF964" overflow="visible">
+                <path d="M 0 0m 2.253559204 8.329419678h 0.799498047v -9.186544189h -0.799498047v 9.186544189Z m -1.699491943 -2.146973877h 3.748254028v -0.77375708h -3.748254028v 0.77375708Z m 1.755264038 -0.339249023l 0.517119507 -0.212414673q -0.167419678 -0.580580322 -0.403259033 -1.210660645q -0.235839355 -0.630080322 -0.51688855 -1.239095886q -0.281049194 -0.609015564 -0.592678711 -1.139821289q -0.311629517 -0.530805725 -0.623919678 -0.908546692q -0.069740967 0.170834351 -0.193658142 0.389409668q -0.123917175 0.218575317 -0.230399109 0.365539185q 0.299419678 0.33 0.596968872 0.794694275q 0.297549194 0.464694275 0.574308228 1.002372986q 0.276759033 0.537678711 0.500663147 1.093341858q 0.223904114 0.555663147 0.371743469 1.065181213Z m 1.565740967 3.238958862l 0.572891602 -0.634824341q -0.489062256 -0.195580322 -1.117658142 -0.355080322q -0.628595886 -0.1595 -1.297176208 -0.274064758q -0.668580322 -0.114564758 -1.293160645 -0.193984436q -0.023870483 0.1322229 -0.098836853 0.31741217q -0.07496637 0.18518927 -0.148997498 0.319831848q 0.600709839 0.094709839 1.231613953 0.219064758q 0.630904114 0.124354919 1.19553363 0.278354919q 0.564629517 0.154 0.955790161 0.323290161Z m -0.896046143 -4.296383545q 0.105709839 -0.090419678 0.320484436 -0.305194275q 0.214774597 -0.214774597 0.467113953 -0.465904114q 0.252339355 -0.251129517 0.457323792 -0.469259033q 0.204984436 -0.218129517 0.288694275 -0.319549194l -0.492699829 -0.650114502q -0.099 0.166321289 -0.282259033 0.422401611q -0.183259033 0.256080322 -0.401937744 0.537515564q -0.218678711 0.281435242 -0.415082825 0.528660645q -0.196404114 0.247225403 -0.328404114 0.387256531l 0.38676709 0.334186768Z m 3.968787109 4.451481934h 0.816658691v -3.337186768h -0.816658691v 3.337186768Z m -2.363782104 -0.605326294h 5.696352417v -0.565958862h -5.696352417v 0.565958862Z m 0.252227905 -1.125191772h 5.159445801v -0.548798218h -5.159445801v 0.548798218Z m -0.584098389 -1.130580322h 6.300031128v -0.578829346h -6.300031128v 0.578829346Z m 1.486114502 -2.940860474v -0.719170654h 3.406672607v 0.719170654h -3.406672607Z m 0 -1.256968872v -0.725880493h 3.406672607v 0.725880493h -3.406672607Z m 0 2.496227905v -0.701460815h 3.406672607v 0.701460815h -3.406672607Z m -0.752306274 0.570249023h 4.941316284v -4.362606445h -4.941316284v 4.362606445Z m 2.98484436 -4.855186768l 0.566181763 0.410088379q 0.372129517 -0.202290161 0.759274597 -0.434225403q 0.387145081 -0.231935242 0.741290161 -0.452870483q 0.354145081 -0.220935242 0.609564758 -0.399354919l -0.728435791 -0.408217896q -0.224839355 0.171709839 -0.545323792 0.3905q -0.320484436 0.218790161 -0.680678711 0.454080322q -0.360194275 0.235290161 -0.721872986 0.44Z m -1.743714844 0.442539185l 0.700052246 -0.415699829q -0.327580322 -0.259709839 -0.770660645 -0.518209839q -0.443080322 -0.2585 -0.925870483 -0.469645081q -0.482790161 -0.211145081 -0.933790161 -0.354145081q -0.095481934 0.119352417 -0.255204834 0.275720398q -0.1597229 0.156367981 -0.283365479 0.264720398q 0.453419678 0.134419678 0.925484436 0.335774597q 0.472064758 0.201354919 0.879064758 0.430209839q 0.407 0.228854919 0.664290161 0.451274597Z "/>
+              </symbol>
+            </defs>
+          </svg>
+        </div>
+        <figcaption>図 1: 内積</figcaption>
+      </figure>
+      <p>さらに、例えば<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>上の内積<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">⟶</mo><mi displaystyle="true">ℝ</mi></math>について、写像<math><mi displaystyle="true">𝑓</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">ℝ</mi></math>を任意の標準基底<math><msub displaystyle="true"><mi>𝑒</mi><mi>𝑖</mi></msub></math>、<math><msub displaystyle="true"><mi>𝑒</mi><mi>𝑗</mi></msub></math>に対して</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>,</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+      </math>
+      <p>を満たす線形写像として定めると、任意の<math><mi displaystyle="true">𝑎</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑏</mi><mo displaystyle="true">∈</mo><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>に対して</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>𝑏</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo>,</mo>
+            <mi>𝑏</mi>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+      </math>
+      <p>が成り立ち、しかも<math><mi displaystyle="true">𝑓</mi></math>は一意的である（ことが示される）。</p>
+      <p>とくに具体的な計算を行うと</p>
+      <math display="block">
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mtable>
+                <mtr>
+                  <mtd>
+                    <msub>
+                      <mi>𝑎</mi>
+                      <mn>0</mn>
+                    </msub>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mi>⋮</mi>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <msub>
+                      <mi>𝑎</mi>
+                      <mrow>
+                        <mi>𝑛</mi>
+                        <mo lspace="0em" rspace="0em">−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </msub>
+                  </mtd>
+                </mtr>
+              </mtable>
+              <mo>)</mo>
+            </mrow>
+            <mo>,</mo>
+            <mrow>
+              <mo>(</mo>
+              <mtable>
+                <mtr>
+                  <mtd>
+                    <msub>
+                      <mi>𝑏</mi>
+                      <mn>0</mn>
+                    </msub>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mi>⋮</mi>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <msub>
+                      <mi>𝑏</mi>
+                      <mrow>
+                        <mi>𝑛</mi>
+                        <mo lspace="0em" rspace="0em">−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </msub>
+                  </mtd>
+                </mtr>
+              </mtable>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </munderover>
+        <msub>
+          <mi>𝑎</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <msub>
+          <mi>𝑏</mi>
+          <mi>𝑖</mi>
+        </msub>
+      </math>
+      <p>であるから、<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>の標準基底について</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msub>
+          <mi>𝛿</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+      </math>
+      <p>が示される。ゆえに線形写像<math><mi displaystyle="true">𝑓</mi></math>は</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <munder>
+              <mo lspace="0em">∑</mo>
+              <mrow>
+                <mi>𝑖</mi>
+                <mo rspace="0em">,</mo>
+                <mi>𝑗</mi>
+              </mrow>
+            </munder>
+            <msub>
+              <mi>𝜆</mi>
+              <mrow>
+                <mi>𝑖</mi>
+                <mo rspace="0em">,</mo>
+                <mi>𝑗</mi>
+              </mrow>
+            </msub>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑒</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+                <msub>
+                  <mi>𝑒</mi>
+                  <mi>𝑗</mi>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <munder>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </munder>
+        <msub>
+          <mi>𝜆</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+        <msub>
+          <mi>𝛿</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <munder>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mi>𝑖</mi>
+        </munder>
+        <msub>
+          <mi>𝜆</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑖</mi>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">tr</mo>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝜆</mi>
+            <mrow>
+              <mi>𝑖</mi>
+              <mo rspace="0em">,</mo>
+              <mi>𝑗</mi>
+            </mrow>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>であることがわかる。</p>
+      <h2 id="loc-4">4. 商空間</h2>
+      <figure>
+        <div style="width: fit-content; background-color: white; margin: .5em; padding: .5em; overflow-x: auto; display: inline-block;">
+          <svg style="overflow: visible; width: 12.884753042em; height: 6.389537581em; display: block" viewBox="0 0 141.732283465 70.284913386" width="141.732283465pt" height="70.284913386pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
+            <g>
+              <path fill="none" transform="translate(63.300141732 1.738)" d="M 0 0h 15.132v 11.854h -15.132v -11.854Z "/>
+              <g transform="translate(63.300141638 1.737999969)">
+                <g transform="matrix(1 0 0 -1 2 9.854)">
+                  <use xlink:href="#g8F0FD84FD509947518700986D4AB314A" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 5.3484 1.967)">
+                  <use xlink:href="#gD2825B05F3C5F3252BB09598ED2B9C11" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="#000000" fill-rule="nonzero" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(112.818897638 32.867590551)" d="M 0 0m 0.566929134 0c -0.312822425 0 -0.566929134 0.254106709 -0.566929134 0.566929134c 0 0.312822425 0.254106709 0.566929134 0.566929134 0.566929134c 0.312822425 0 0.566929134 -0.254106709 0.566929134 -0.566929134c 0 -0.312822425 -0.254106709 -0.566929134 -0.566929134 -0.566929134Z "/>
+              <path fill="none" transform="translate(113.259320765 21.470519685)" d="M 0 0h 10.292v 11.964h -10.292v -11.964Z "/>
+              <g transform="translate(113.25932075 21.470519591)">
+                <g transform="matrix(1 0 0 -1 2 9.854)">
+                  <use xlink:href="#gFB668297C5849E0BE075E07AC5A2C5F8" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="#808080" fill-rule="nonzero" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="3 2" transform="translate(0 47.607748031)" d="M 0 0v 22.677165354h 56.692913386v -22.677165354h -56.692913386Z "/>
+              <path fill="none" transform="translate(21.049956693 53.019330709)" d="M 0 0h 14.593v 11.854h -14.593v -11.854Z "/>
+              <g transform="translate(21.049956567 53.019330677)">
+                <g transform="matrix(1 0 0 -1 2 9.854)">
+                  <use xlink:href="#gC214BFDCD705B7E242635DC992FFD480" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="#d8d8d8" fill-rule="nonzero" stroke="#000000" stroke-width="0.5" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="2 1" transform="translate(56.692913386 33.743455407)" d="M 0 0m 0 13.864292625v 22.677165354l 56.21762766 -36.541457979l -56.21762766 13.864292625Z "/>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(0 13.592)" d="M 0 0v 56.692913386h 56.692913386v -56.692913386h -56.692913386Z "/>
+              <path fill="none" transform="translate(22.694456693 1.738)" d="M 0 0h 11.304v 11.854h -11.304v -11.854Z "/>
+              <g transform="translate(22.694456693 1.737999969)">
+                <g transform="matrix(1 0 0 -1 2 9.854)">
+                  <use xlink:href="#g60C2E3D990F40CC80C1D5FA53C7597A1" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(85.039370079 13.592)" d="M 0 0v 28.346456693h 56.692913386v -28.346456693h -56.692913386Z "/>
+              <path fill="none" transform="translate(99.923826772)" d="M 0 0h 26.924v 13.592h -26.924v -13.592Z "/>
+              <g transform="translate(99.923826756 -6.3e-8)">
+                <g transform="matrix(1 0 0 -1 2 9.854)">
+                  <use xlink:href="#g60C2E3D990F40CC80C1D5FA53C7597A1" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 9.304 9.854)">
+                  <use xlink:href="#g42D090BEC0228A574EFD5A33BDE1BCF3" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+                <g transform="matrix(1 0 0 -1 14.331 9.854)">
+                  <use xlink:href="#gC214BFDCD705B7E242635DC992FFD480" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="3 2" transform="translate(56.692913386 13.592)" d="M 0 0h 28.346456693"/>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" stroke-dashoffset="0" stroke-dasharray="3 2" transform="translate(56.692913386 41.938456693)" d="M 0 0m 0 28.346456693l 28.346456693 -28.346456693"/>
+            </g>
+            <defs>
+              <symbol id="g8F0FD84FD509947518700986D4AB314A" overflow="visible">
+                <path d="M 0 0m 8.151 0.913h -0.627q 0.539 1.177 1.056 1.76h -8.019v 0.781h 8.019q -0.528 0.583 -1.056 1.749h 0.627q 0.583 -0.671 1.188 -1.1715q 0.605 -0.5005 1.232 -0.8195v -0.308q -0.627 -0.319 -1.232 -0.814q -0.605 -0.495 -1.188 -1.177Z "/>
+              </symbol>
+              <symbol id="gD2825B05F3C5F3252BB09598ED2B9C11" overflow="visible">
+                <path d="M 0 0m 0.1848 -1.584l 1.0956 5.1678h 0.6666l -0.066 -0.5808h 0.0264q 0.1914 0.2508 0.4521 0.4488q 0.2607 0.198 0.6237 0.198q 0.2706 0 0.495 -0.132q 0.2244 -0.132 0.363 -0.4158q 0.1386 -0.2838 0.1386 -0.7392q 0 -0.4554 -0.1188 -0.8877q -0.1188 -0.4323 -0.3399 -0.7788q -0.2211 -0.3465 -0.5313 -0.5544q -0.3102 -0.2079 -0.6996 -0.2079q -0.3366 0 -0.528 0.1617q -0.1914 0.1617 -0.3168 0.3861h -0.0264q -0.0396 -0.4224 -0.1188 -0.8382l -0.264 -1.2276h -0.8514Z m 1.98 2.211q 0.2046 0 0.3762 0.1485q 0.1716 0.1485 0.3003 0.396q 0.1287 0.2475 0.2013 0.5544q 0.0726 0.3069 0.0726 0.6171q 0 0.6072 -0.4686 0.6072q -0.231 0 -0.4158 -0.1683q -0.1848 -0.1683 -0.3168 -0.4323q -0.132 -0.264 -0.2013 -0.5577q -0.0693 -0.2937 -0.0693 -0.5511q 0 -0.2772 0.1353 -0.4455q 0.1353 -0.1683 0.3861 -0.1683Z "/>
+              </symbol>
+              <symbol id="gFB668297C5849E0BE075E07AC5A2C5F8" overflow="visible">
+                <path d="M 0 0m 3.135 -0.11q -1.331 0 -1.9635 1.0725q -0.6325 1.0725 -0.6325 2.9755q 0 1.276 0.2585 2.178q 0.2585 0.902 0.8305 1.3805q 0.572 0.4785 1.507 0.4785q 1.32 0 1.969 -1.0615q 0.649 -1.0615 0.649 -2.9755q 0 -1.265 -0.264 -2.1725q -0.264 -0.9075 -0.836 -1.3915q -0.572 -0.484 -1.518 -0.484Z m 0 0.825q 0.88 0 1.2595 0.7975q 0.3795 0.7975 0.3795 2.4255q 0 1.606 -0.3795 2.409q -0.3795 0.803 -1.2595 0.803q -0.891 0 -1.2595 -0.803q -0.3685 -0.803 -0.3685 -2.409q 0 -1.617 0.3685 -2.42q 0.3685 -0.803 1.2595 -0.803Z "/>
+              </symbol>
+              <symbol id="gC214BFDCD705B7E242635DC992FFD480" overflow="visible">
+                <path d="M 0 0m 1.507 0l -0.33 7.854h 0.968l 0.154 -4.785q 0.022 -0.451 0 -0.935q -0.022 -0.484 -0.044 -0.924h 0.033q 0.154 0.429 0.374 0.9845q 0.22 0.5555 0.451 1.0395l 2.156 4.62h 1.001l 0.22 -4.598q 0.022 -0.517 0.0385 -1.078q 0.0165 -0.561 0.0055 -0.968h 0.033q 0.143 0.418 0.319 0.913q 0.176 0.495 0.385 0.979l 2.057 4.752h 1.045l -3.564 -7.854h -1.001l -0.242 5.06q -0.011 0.363 -0.0275 0.7755q -0.0165 0.4125 -0.0165 0.7535h -0.033q -0.11 -0.33 -0.253 -0.671q -0.143 -0.341 -0.396 -0.891l -2.321 -5.027h -1.012Z "/>
+              </symbol>
+              <symbol id="g60C2E3D990F40CC80C1D5FA53C7597A1" overflow="visible">
+                <path d="M 0 0m 1.859 0l -0.847 7.854h 0.968l 0.495 -4.972q 0.044 -0.451 0.0715 -0.913q 0.0275 -0.462 0.0275 -0.858h 0.022q 0.165 0.396 0.374 0.8305q 0.209 0.4345 0.473 0.9515l 2.552 4.961h 1.089l -4.18 -7.854h -1.045Z "/>
+              </symbol>
+              <symbol id="g42D090BEC0228A574EFD5A33BDE1BCF3" overflow="visible">
+                <path d="M 0 0m 0.11 -1.738l 3.861 10.362h 0.946l -3.861 -10.362h -0.946Z "/>
+              </symbol>
+            </defs>
+          </svg>
+        </div>
+        <figcaption>図 2: 商空間</figcaption>
+      </figure>
+      <p>ある全射たる線形写像<math><mi displaystyle="true">𝑝</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><mi displaystyle="true">𝑉</mi><mo stretchy="false" displaystyle="true">→</mo><msup displaystyle="true"><mi>𝑉</mi><mo>′</mo></msup></math>と始域の部分空間<math><mi displaystyle="true">𝑊</mi><mo displaystyle="true">⊆</mo><mi displaystyle="true">𝑉</mi></math>が与えられたとき、<math><mtext displaystyle="true">Ker</mtext><mspace width="0.2222em"/><mi displaystyle="true">𝑝</mi><mo displaystyle="true">=</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑥</mi><mo>∈</mo><mi>𝑉</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑝</mi><mrow><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow><mo>=</mo><mn>0</mn></mrow><mo>}</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑊</mi></math>となるように空間<math><msup displaystyle="true"><mi>𝑉</mi><mo>′</mo></msup></math>をとることができ、しかもその取り方は一意的である。この線形空間<math><msup displaystyle="true"><mi>𝑉</mi><mo>′</mo></msup></math>を<strong><strong>商空間</strong></strong><math><mi displaystyle="true">𝑉</mi><mi displaystyle="true">/</mi><mi displaystyle="true">𝑊</mi></math>という。</p>
+      <h2 id="loc-5">5. 外冪と行列式</h2>
+      <p><math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>におけるTensor積空間</p>
+      <math display="block">
+        <msub>
+          <mi>𝔓</mi>
+          <mi>𝑟</mi>
+        </msub>
+        <mo>≔</mo>
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>⋯</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑟</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+            <mo fence="false" stretchy="true" symmetric="true">|</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑟</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+            <mo>∈</mo>
+            <msup>
+              <mi>ℝ</mi>
+              <mi>𝑛</mi>
+            </msup>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+      </math>
+      <p>について、その部分（線形）空間</p>
+      <math display="block">
+        <msub>
+          <mi>ℜ</mi>
+          <mi>𝑟</mi>
+        </msub>
+        <mo>≔</mo>
+        <mrow>
+          <mo>⟨</mo>
+          <mrow>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>⋯</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>⋯</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mi>𝑗</mi>
+            </msub>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>⋯</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑟</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+            <mo fence="false" stretchy="true" symmetric="true">|</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑟</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+            <mo>∈</mo>
+            <msup>
+              <mi>ℝ</mi>
+              <mi>𝑛</mi>
+            </msup>
+            <mo>;</mo>
+            <mi>𝑖</mi>
+            <mo>≠</mo>
+            <mi>𝑗</mi>
+            <mo>∧</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>=</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>⟩</mo>
+        </mrow>
+        <mo>⊆</mo>
+        <msub>
+          <mi>𝔓</mi>
+          <mi>𝑟</mi>
+        </msub>
+      </math>
+      <p>による商空間<math><msub displaystyle="true"><mi>𝔓</mi><mi>𝑟</mi></msub><mi displaystyle="true">/</mi><msub displaystyle="true"><mi>ℜ</mi><mi>𝑟</mi></msub></math>を、<math><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>の<math><mi displaystyle="true">𝑟</mi></math>次<strong><strong>外冪</strong></strong>といって、<math><msup displaystyle="true"><mi mathvariant="normal">Λ</mi><mi>𝑟</mi></msup><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup></math>と表す。</p>
+      <p>ここで<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><mi displaystyle="true">⋯</mi><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑟</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>の像を<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo displaystyle="true">∧</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">∧</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑟</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>と書き表す。</p>
+      <p>いま、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑟</mi><mo displaystyle="true">=</mo><mn displaystyle="true">2</mn></math>として考えると、</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
+        <div style="flex: 1;">
+          <math id="eq0" display="block">
+            <mi>𝑥</mi>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+            <mi>𝑥</mi>
+            <mo>∈</mo>
+            <msub>
+              <mi>ℜ</mi>
+              <mn>2</mn>
+            </msub>
+            <mspace width="2em"/>
+            <mo rspace="0.2777777777777778em">∴</mo>
+            <mi>𝑥</mi>
+            <mo>∧</mo>
+            <mi>𝑥</mi>
+            <mo>=</mo>
+            <mn>0</mn>
+          </math>
+        </div>
+        <div style="min-width: 2em;">[1]</div>
+      </div>
+      <p>であり、<a href="#eq0">式 [1]</a>において<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>とすることで</p>
+      <math display="block">
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>+</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mn>1</mn>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>∧</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>+</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mn>1</mn>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <mn>0</mn>
+      </math>
+      <p>が得られる。同時に<a href="#eq0">式 [1]</a>において<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub></math>あるいは<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>とすることで得られる</p>
+      <math display="block">
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <mn>0</mn>
+      </math>
+      <p>を利用して</p>
+      <math display="block">
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <mo form="prefix">−</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑒</mi>
+          <mn>0</mn>
+        </msub>
+      </math>
+      <p>を得る。ゆえに一般の<math><msup displaystyle="true"><mi>ℝ</mi><mn>2</mn></msup></math>上の元<math><mi displaystyle="true">𝑎</mi><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><mi displaystyle="true">𝑐</mi><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>および<math><mi displaystyle="true">𝑏</mi><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><mi displaystyle="true">𝑑</mi><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>について</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
+        <div style="flex: 1;">
+          <math id="ad-bc" display="block">
+            <mtable class="multiline-equation aligned">
+              <mtr>
+                <mtd>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑎</mi>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>+</mo>
+                      <mi>𝑐</mi>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>∧</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑏</mi>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>+</mo>
+                      <mi>𝑑</mi>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mtd>
+                <mtd>
+                  <mo form="infix">=</mo>
+                  <mi>𝑎</mi>
+                  <mi>𝑏</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>+</mo>
+                  <mi>𝑎</mi>
+                  <mi>𝑑</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>+</mo>
+                  <mi>𝑐</mi>
+                  <mi>𝑏</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>+</mo>
+                  <mi>𝑐</mi>
+                  <mi>𝑑</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>
+                  <mo form="infix">=</mo>
+                  <mi>𝑎</mi>
+                  <mi>𝑏</mi>
+                  <mn>0</mn>
+                  <mo>+</mo>
+                  <mi>𝑎</mi>
+                  <mi>𝑑</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>+</mo>
+                  <mi>𝑐</mi>
+                  <mi>𝑏</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mo>−</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>+</mo>
+                  <mi>𝑐</mi>
+                  <mi>𝑑</mi>
+                  <mn>0</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd></mtd>
+                <mtd>
+                  <mo form="infix">=</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑎</mi>
+                      <mi>𝑑</mi>
+                      <mo>−</mo>
+                      <mi>𝑏</mi>
+                      <mi>𝑐</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>0</mn>
+                      </msub>
+                      <mo>∧</mo>
+                      <msub>
+                        <mi>𝑒</mi>
+                        <mn>1</mn>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mtd>
+              </mtr>
+            </mtable>
+          </math>
+        </div>
+        <div style="min-width: 2em;">[2]</div>
+      </div>
+      <p>と計算できることがわかる。</p>
+      <p>一般に、<math><mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true">dim</mo><msup displaystyle="true"><mi mathvariant="normal">Λ</mi><mi>𝑛</mi></msup><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>であることが知られており、しかもその基底は<math><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">∧</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">∧</mo><msub displaystyle="true"><mi>𝑒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>である。ゆえに<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>に対して、ある実数<math><mo lspace="0em" rspace="0em" displaystyle="true">det</mo><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝑎</mi><mn>0</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>𝑎</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow><mo displaystyle="true">∈</mo><mi displaystyle="true">ℝ</mi></math>が存在して</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">det</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝑎</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>∧</mo>
+            <mi>⋯</mi>
+            <mo>∧</mo>
+            <msub>
+              <mi>𝑎</mi>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+          </mrow>
+          <mrow>
+            <msub>
+              <mi>𝑒</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>∧</mo>
+            <mi>⋯</mi>
+            <mo>∧</mo>
+            <msub>
+              <mi>𝑒</mi>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </msub>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>とかける。これを行列<math><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝑎</mi><mn>0</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>𝑎</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow></math>の<strong><strong>行列式</strong></strong>という。</p>
+      <p>例えば、<a href="#ad-bc">式 [2]</a>によれば</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">det</mo>
+        <mrow>
+          <mo>(</mo>
+          <mtable>
+            <mtr>
+              <mtd>
+                <mi>𝑎</mi>
+              </mtd>
+              <mtd>
+                <mi>𝑏</mi>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mi>𝑐</mi>
+              </mtd>
+              <mtd>
+                <mi>𝑑</mi>
+              </mtd>
+            </mtr>
+          </mtable>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝑎</mi>
+        <mi>𝑑</mi>
+        <mo>−</mo>
+        <mi>𝑏</mi>
+        <mi>𝑐</mi>
+      </math>
+      <p>である。</p>
+    </main>
+  </body>
+</html>

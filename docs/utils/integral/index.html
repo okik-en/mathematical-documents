@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>積分に関するTIPS</title>
+    <meta property="og:title" content="積分に関するTIPS">
+    <meta name="description" content="積分に関して知っておいた方がよい知識をまとめたページ。">
+    <meta property="og:description" content="積分に関して知っておいた方がよい知識をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">utils</a>/integral></code></nav>
+      <h1>積分に関するTIPS</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 双曲線関数</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> Euler置換</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> Weierstrass置換</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> 部分分数分解による積分</a></li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. 双曲線関数</h2>
+      <p>双曲線関数について考える。</p>
+      <math display="block">
+        <mrow>
+          <mo>{</mo>
+          <mtable class="cases">
+            <mtr>
+              <mtd>
+                <mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">sinh</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mi>𝜃</mi>
+                    </msup>
+                    <mo>−</mo>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mrow>
+                        <mo>−</mo>
+                        <mi>𝜃</mi>
+                      </mrow>
+                    </msup>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">cosh</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mi>𝜃</mi>
+                    </msup>
+                    <mo>+</mo>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mrow>
+                        <mo>−</mo>
+                        <mi>𝜃</mi>
+                      </mrow>
+                    </msup>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mrow>
+      </math>
+      <p>双曲線関数について、定義より</p>
+      <math display="block">
+        <msup>
+          <mo lspace="0em" rspace="0.16666666666666666em">cosh</mo>
+          <mn>2</mn>
+        </msup>
+        <mi>𝜃</mi>
+        <mo>−</mo>
+        <msup>
+          <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">sinh</mo>
+          <mn>2</mn>
+        </msup>
+        <mi>𝜃</mi>
+        <mo>=</mo>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mrow>
+                <msup>
+                  <mi>𝑒</mi>
+                  <mi>𝜃</mi>
+                </msup>
+                <mo>+</mo>
+                <msup>
+                  <mi>𝑒</mi>
+                  <mrow>
+                    <mo>−</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                </msup>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <mo>−</mo>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mrow>
+                <msup>
+                  <mi>𝑒</mi>
+                  <mi>𝜃</mi>
+                </msup>
+                <mo>−</mo>
+                <msup>
+                  <mi>𝑒</mi>
+                  <mrow>
+                    <mo>−</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                </msup>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mn>1</mn>
+      </math>
+      <p>がいえる。</p>
+      <p>あるいは微分すると</p>
+      <math display="block">
+        <mrow>
+          <mo>{</mo>
+          <mtable class="cases">
+            <mtr>
+              <mtd>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mo lspace="0em" rspace="0.16666666666666666em">sinh</mo>
+                      <mi>𝜃</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>′</mo>
+                </msup>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <mi>𝑒</mi>
+                          <mi>𝜃</mi>
+                        </msup>
+                        <mo>−</mo>
+                        <msup>
+                          <mi>𝑒</mi>
+                          <mrow>
+                            <mo>−</mo>
+                            <mi>𝜃</mi>
+                          </mrow>
+                        </msup>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>′</mo>
+                </msup>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mi>𝜃</mi>
+                    </msup>
+                    <mo>+</mo>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mrow>
+                        <mo>−</mo>
+                        <mi>𝜃</mi>
+                      </mrow>
+                    </msup>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mo form="prefix" lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">cosh</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mo lspace="0em" rspace="0.16666666666666666em">cosh</mo>
+                      <mi>𝜃</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>′</mo>
+                </msup>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <mi>𝑒</mi>
+                          <mi>𝜃</mi>
+                        </msup>
+                        <mo>+</mo>
+                        <msup>
+                          <mi>𝑒</mi>
+                          <mrow>
+                            <mo>−</mo>
+                            <mi>𝜃</mi>
+                          </mrow>
+                        </msup>
+                      </mrow>
+                      <mn>2</mn>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>′</mo>
+                </msup>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mi>𝜃</mi>
+                    </msup>
+                    <mo>−</mo>
+                    <msup>
+                      <mi>𝑒</mi>
+                      <mrow>
+                        <mo>−</mo>
+                        <mi>𝜃</mi>
+                      </mrow>
+                    </msup>
+                  </mrow>
+                  <mn>2</mn>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mo form="prefix" lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">sinh</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mrow>
+      </math>
+      <p>を得る。</p>
+      <p>以上によれば、次の積分</p>
+      <math display="block">
+        <mo lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑥</mi>
+          </mrow>
+          <msqrt>
+            <msup>
+              <mi>𝑥</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mi>𝑎</mi>
+              <mn>2</mn>
+            </msup>
+          </msqrt>
+        </mfrac>
+        <mspace width="2em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo>></mo>
+            <mn>0</mn>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>は<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑎</mi><mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em" displaystyle="true">sinh</mo><mi displaystyle="true">𝜃</mi><mspace width="0.2778em"/><mrow displaystyle="true"><mo>(</mo><mrow><mo form="infix" lspace="0em" stretchy="false">⇒</mo><mi>𝑑</mi><mi>𝑥</mi><mo>=</mo><mi>𝑎</mi><mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">cosh</mo><mi>𝜃</mi><mi>𝑑</mi><mi>𝜃</mi></mrow><mo>)</mo></mrow></math>とおくことにより<math><msqrt displaystyle="true"><msup><mi>𝑥</mi><mn>2</mn></msup><mo>+</mo><msup><mi>𝑎</mi><mn>2</mn></msup></msqrt><mo displaystyle="true">=</mo><mi displaystyle="true">𝑎</mi><mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em" displaystyle="true">cosh</mo><mi displaystyle="true">𝜃</mi></math>がいえて</p>
+      <math display="block">
+        <mo lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑥</mi>
+          </mrow>
+          <msqrt>
+            <msup>
+              <mi>𝑥</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mi>𝑎</mi>
+              <mn>2</mn>
+            </msup>
+          </msqrt>
+        </mfrac>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">cosh</mo>
+            <mi>𝜃</mi>
+            <mi>𝑑</mi>
+            <mi>𝜃</mi>
+          </mrow>
+          <mrow>
+            <mi>𝑎</mi>
+            <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">cosh</mo>
+            <mi>𝜃</mi>
+          </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em">∫</mo>
+        <mi>𝑑</mi>
+        <mi>𝜃</mi>
+        <mo>=</mo>
+        <msup>
+          <mo form="prefix" lspace="0em" rspace="0em">sinh</mo>
+          <mrow>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msup>
+        <mrow>
+          <mo>(</mo>
+          <mfrac>
+            <mi>𝑥</mi>
+            <mi>𝑎</mi>
+          </mfrac>
+          <mo>)</mo>
+        </mrow>
+        <mo>+</mo>
+        <msup>
+          <mi>𝐶</mi>
+          <mo>′</mo>
+        </msup>
+      </math>
+      <p>を得る。</p>
+      <p>ここで逆関数は解の公式などにより</p>
+      <math display="block">
+        <mrow>
+          <mo>{</mo>
+          <mtable class="cases">
+            <mtr>
+              <mtd>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mo lspace="0em" rspace="0.16666666666666666em">sinh</mo>
+                  <mrow>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msup>
+                <mi displaystyle="true" style="math-shift: normal">𝑢</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mo form="prefix" lspace="0em" rspace="0em" displaystyle="true" style="math-shift: normal">log</mo>
+                <mrow displaystyle="true" style="math-shift: normal">
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑢</mi>
+                    <mo>+</mo>
+                    <msqrt>
+                      <msup>
+                        <mi>𝑢</mi>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>+</mo>
+                      <mn>1</mn>
+                    </msqrt>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mo lspace="0em" rspace="0.16666666666666666em">cosh</mo>
+                  <mrow>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msup>
+                <mi displaystyle="true" style="math-shift: normal">𝑢</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mo form="prefix" lspace="0em" rspace="0em" displaystyle="true" style="math-shift: normal">log</mo>
+                <mrow displaystyle="true" style="math-shift: normal">
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑢</mi>
+                    <mo>+</mo>
+                    <msqrt>
+                      <msup>
+                        <mi>𝑢</mi>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </msqrt>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mrow>
+      </math>
+      <p>と得られることを踏まえて</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
+        <div style="flex: 1;">
+          <math id="x2a2" display="block">
+            <mo lspace="0em">∫</mo>
+            <mfrac>
+              <mrow>
+                <mi>𝑑</mi>
+                <mi>𝑥</mi>
+              </mrow>
+              <msqrt>
+                <msup>
+                  <mi>𝑥</mi>
+                  <mn>2</mn>
+                </msup>
+                <mo>+</mo>
+                <msup>
+                  <mi>𝑎</mi>
+                  <mn>2</mn>
+                </msup>
+              </msqrt>
+            </mfrac>
+            <mo>=</mo>
+            <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">log</mo>
+            <mi>𝑎</mi>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑥</mi>
+                <mo>+</mo>
+                <msqrt>
+                  <msup>
+                    <mi>𝑥</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <msup>
+                    <mi>𝑎</mi>
+                    <mn>2</mn>
+                  </msup>
+                </msqrt>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo>+</mo>
+            <msup>
+              <mi>𝐶</mi>
+              <mo>′</mo>
+            </msup>
+            <mo>=</mo>
+            <mo form="prefix" lspace="0em" rspace="0em">log</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑥</mi>
+                <mo>+</mo>
+                <msqrt>
+                  <msup>
+                    <mi>𝑥</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <msup>
+                    <mi>𝑎</mi>
+                    <mn>2</mn>
+                  </msup>
+                </msqrt>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo>+</mo>
+            <mi>𝐶</mi>
+          </math>
+        </div>
+        <div style="min-width: 2em;">[1]</div>
+      </div>
+      <p>とわかる。</p>
+      <h2 id="loc-2">2. Euler置換</h2>
+      <p><a href="#x2a2">式 [1]</a>の積分を、<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">=</mo><msup displaystyle="true"><mi>𝑎</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo form="prefix" lspace="0.16666666666666666em" rspace="0em" displaystyle="true">exp</mo><mrow displaystyle="true"><mo>(</mo><mrow><msup><mo lspace="0em" rspace="0em">sinh</mo><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo>(</mo><mfrac><mi>𝑥</mi><mi>𝑎</mi></mfrac><mo>)</mo></mrow></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑥</mi><mo displaystyle="true">+</mo><msqrt displaystyle="true"><msup><mi>𝑥</mi><mn>2</mn></msup><mo>+</mo><msup><mi>𝑎</mi><mn>2</mn></msup></msqrt></math>とおくことにより解こう。</p>
+      <p>これは逆関数を考えると</p>
+      <math display="block">
+        <mi>𝑥</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mn>2</mn>
+        </mfrac>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo>−</mo>
+            <mfrac>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+              <mi>𝑡</mi>
+            </mfrac>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>であり、この置換を<strong><strong>Euler置換</strong></strong>という。</p>
+      <p>Euler置換に依れば</p>
+      <math display="block">
+        <mi>𝑑</mi>
+        <mi>𝑥</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mn>2</mn>
+        </mfrac>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>+</mo>
+            <mfrac>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+              <msup>
+                <mi>𝑡</mi>
+                <mn>2</mn>
+              </msup>
+            </mfrac>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mi>𝑑</mi>
+        <mi>𝑡</mi>
+        <mo rspace="0em">,</mo>
+        <mspace width="2em"/>
+        <msqrt>
+          <msup>
+            <mi>𝑥</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>+</mo>
+          <msup>
+            <mi>𝑎</mi>
+            <mn>2</mn>
+          </msup>
+        </msqrt>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mn>2</mn>
+        </mfrac>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo>+</mo>
+            <mfrac>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+              <mi>𝑡</mi>
+            </mfrac>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>となるため</p>
+      <math display="block">
+        <mo lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑥</mi>
+          </mrow>
+          <msqrt>
+            <msup>
+              <mi>𝑥</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mi>𝑎</mi>
+              <mn>2</mn>
+            </msup>
+          </msqrt>
+        </mfrac>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mn>2</mn>
+            </mfrac>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mfrac>
+                  <msup>
+                    <mi>𝑎</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <msup>
+                    <mi>𝑡</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mfrac>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mn>2</mn>
+            </mfrac>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑡</mi>
+                <mo>+</mo>
+                <mfrac>
+                  <msup>
+                    <mi>𝑎</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mi>𝑡</mi>
+                </mfrac>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+        </mfrac>
+        <mi>𝑑</mi>
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em">∫</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑡</mi>
+          </mrow>
+          <mi>𝑡</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">log</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑥</mi>
+            <mo>+</mo>
+            <msqrt>
+              <msup>
+                <mi>𝑥</mi>
+                <mn>2</mn>
+              </msup>
+              <mo>+</mo>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+            </msqrt>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>+</mo>
+        <mi>𝐶</mi>
+      </math>
+      <p>と得られる。</p>
+      <h2 id="loc-3">3. Weierstrass置換</h2>
+      <p>三角関数の積分</p>
+      <math display="block">
+        <mi>𝐼</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝜃</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em">∫</mo>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+            <mi>𝜃</mi>
+            <mo>,</mo>
+            <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">cos</mo>
+            <mi>𝜃</mi>
+            <mo>,</mo>
+            <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+            <mi>𝜃</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="0.1667em"/>
+        <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+        <mi>𝜃</mi>
+      </math>
+      <p>を、<strong><strong>Weierstrass置換</strong></strong></p>
+      <math display="block">
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+        <mfrac>
+          <mi>𝜃</mi>
+          <mn>2</mn>
+        </mfrac>
+      </math>
+      <p>により解くことを考える。</p>
+      <p>置換の両辺を微分することにより</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">d</mo>
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mn>2</mn>
+        </mfrac>
+        <mfrac>
+          <mrow>
+            <mo lspace="0em" rspace="0em">d</mo>
+            <mi>𝜃</mi>
+          </mrow>
+          <mrow>
+            <msup>
+              <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+              <mn>2</mn>
+            </msup>
+            <mfrac>
+              <mi>𝜃</mi>
+              <mn>2</mn>
+            </mfrac>
+          </mrow>
+        </mfrac>
+        <mo stretchy="false">⟹</mo>
+        <mfrac>
+          <mn>2</mn>
+          <mrow>
+            <mn>1</mn>
+            <mo>+</mo>
+            <msup>
+              <mi>𝑡</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+        </mfrac>
+        <mspace width="0.1667em"/>
+        <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+        <mi>𝑡</mi>
+        <mo rspace="0em">=</mo>
+        <mspace width="0.1667em"/>
+        <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+        <mi>𝜃</mi>
+      </math>
+      <p>を得ることができる。また</p>
+      <math display="block">
+        <mrow>
+          <mo>{</mo>
+          <mtable class="cases">
+            <mtr>
+              <mtd>
+                <mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">sin</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mn displaystyle="true" style="math-shift: normal">2</mn>
+                <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">sin</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mi>𝜃</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">cos</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mi>𝜃</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mn displaystyle="true" style="math-shift: normal">2</mn>
+                <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">tan</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mi>𝜃</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">cos</mo>
+                  <mn>2</mn>
+                </msup>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mi>𝜃</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mn>2</mn>
+                    <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">tan</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <msup>
+                      <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                      <mn>2</mn>
+                    </msup>
+                    <mfrac>
+                      <mi>𝜃</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                  </mrow>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mn>2</mn>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <msup>
+                      <mi>𝑡</mi>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                </mfrac>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">cos</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mn displaystyle="true" style="math-shift: normal">2</mn>
+                <msup displaystyle="true" style="math-shift: normal">
+                  <mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">cos</mo>
+                  <mn>2</mn>
+                </msup>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mi>𝜃</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">−</mo>
+                <mn displaystyle="true" style="math-shift: normal">1</mn>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mn>2</mn>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <msup>
+                      <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                      <mn>2</mn>
+                    </msup>
+                    <mfrac>
+                      <mi>𝜃</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                  </mrow>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">−</mo>
+                <mn displaystyle="true" style="math-shift: normal">1</mn>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <msup>
+                      <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                      <mn>2</mn>
+                    </msup>
+                    <mfrac>
+                      <mi>𝜃</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <msup>
+                      <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                      <mn>2</mn>
+                    </msup>
+                    <mfrac>
+                      <mi>𝜃</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                  </mrow>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <msup>
+                      <mi>𝑡</mi>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <msup>
+                      <mi>𝑡</mi>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                </mfrac>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true" style="math-shift: normal">tan</mo>
+                <mi displaystyle="true" style="math-shift: normal">𝜃</mi>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                  <mrow>
+                    <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                </mfrac>
+                <mo displaystyle="true" style="math-shift: normal">=</mo>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mn>2</mn>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <msup>
+                      <mi>𝑡</mi>
+                      <mn>2</mn>
+                    </msup>
+                  </mrow>
+                </mfrac>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mrow>
+      </math>
+      <p>であるから</p>
+      <math display="block">
+        <mi>𝐼</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝜃</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>2</mn>
+        <mo form="prefix">∫</mo>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mfrac>
+              <mrow>
+                <mn>2</mn>
+                <mi>𝑡</mi>
+              </mrow>
+              <mrow>
+                <mn>1</mn>
+                <mo>−</mo>
+                <msup>
+                  <mi>𝑡</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+            </mfrac>
+            <mo>,</mo>
+            <mfrac>
+              <mrow>
+                <mn>1</mn>
+                <mo>+</mo>
+                <msup>
+                  <mi>𝑡</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mrow>
+                <mn>1</mn>
+                <mo>−</mo>
+                <msup>
+                  <mi>𝑡</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+            </mfrac>
+            <mo>,</mo>
+            <mfrac>
+              <mrow>
+                <mn>2</mn>
+                <mi>𝑡</mi>
+              </mrow>
+              <mrow>
+                <mn>1</mn>
+                <mo>+</mo>
+                <msup>
+                  <mi>𝑡</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+            </mfrac>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mfrac>
+          <mrow>
+            <mo lspace="0em" rspace="0em">d</mo>
+            <mi>𝑡</mi>
+          </mrow>
+          <mrow>
+            <mn>1</mn>
+            <mo>+</mo>
+            <msup>
+              <mi>𝑡</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>という有理関数の積分に帰着できる。</p>
+      <h2 id="loc-4">4. 部分分数分解による積分</h2>
+      <p>以下の部分分数分解を考える：</p>
+      <math display="block">
+        <mfrac>
+          <mn>1</mn>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>−</mo>
+                <msup>
+                  <mi>𝑡</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mn>4</mn>
+        </mfrac>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mrow>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mi>𝑡</mi>
+              </mrow>
+            </mfrac>
+            <mo>+</mo>
+            <mfrac>
+              <mn>1</mn>
+              <mrow>
+                <mn>1</mn>
+                <mo>−</mo>
+                <mi>𝑡</mi>
+              </mrow>
+            </mfrac>
+            <mo>+</mo>
+            <mfrac>
+              <mn>1</mn>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mfrac>
+            <mo>+</mo>
+            <mfrac>
+              <mn>1</mn>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mfrac>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+      </math>
+      <p>これにより</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mo lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">d</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <msup>
+                    <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                    <mn>3</mn>
+                  </msup>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mo form="prefix" lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <msup>
+                    <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                    <mn>4</mn>
+                  </msup>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+              <mspace width="0.1667em"/>
+              <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+              <mi>𝜃</mi>
+              <mo>=</mo>
+              <mo form="prefix" lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo>−</mo>
+                  <msup>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                        <mi>𝜃</mi>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>′</mo>
+                  </msup>
+                </mrow>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <msup>
+                        <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                        <mn>2</mn>
+                      </msup>
+                      <mi>𝜃</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+              <mspace width="0.1667em"/>
+              <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+              <mi>𝜃</mi>
+              <mo>=</mo>
+              <mo form="prefix">−</mo>
+              <mo form="prefix">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">d</mo>
+                  <mi>𝑡</mi>
+                </mrow>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <msup>
+                        <mi>𝑡</mi>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mo form="prefix">−</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mo lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <msup>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mn>1</mn>
+                          <mo>+</mo>
+                          <mi>𝑡</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mn>2</mn>
+                    </msup>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <msup>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mn>1</mn>
+                          <mo>−</mo>
+                          <mi>𝑡</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mn>2</mn>
+                    </msup>
+                  </mfrac>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mo form="prefix">−</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">log</mo>
+                  <mrow>
+                    <mo>|</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>|</mo>
+                  </mrow>
+                  <mo>−</mo>
+                  <mo form="prefix" lspace="0em" rspace="0em">log</mo>
+                  <mrow>
+                    <mo>|</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>|</mo>
+                  </mrow>
+                  <mo>−</mo>
+                  <mfrac>
+                    <mn>1</mn>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mfrac>
+                    <mn>1</mn>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mo form="prefix" lspace="0.16666666666666666em" rspace="0em">log</mo>
+              <mrow>
+                <mo>|</mo>
+                <mfrac>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                </mfrac>
+                <mo>|</mo>
+              </mrow>
+              <mo>−</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>2</mn>
+              </mfrac>
+              <mfrac>
+                <mi>𝑡</mi>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <msup>
+                    <mi>𝑡</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mo form="prefix" lspace="0.16666666666666666em" rspace="0em">log</mo>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mo>−</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>2</mn>
+              </mfrac>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>が得られる。 また同様にして</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mo lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">d</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <msup>
+                    <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                    <mn>3</mn>
+                  </msup>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mo form="prefix" lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <msup>
+                    <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                    <mn>4</mn>
+                  </msup>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+              <mspace width="0.1667em"/>
+              <mo form="prefix" lspace="0em" rspace="0em">d</mo>
+              <mi>𝜃</mi>
+              <mo>=</mo>
+              <mo form="prefix" lspace="0em">∫</mo>
+              <mfrac>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mo lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                      <mi>𝜃</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>′</mo>
+                </msup>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <msup>
+                        <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                        <mn>2</mn>
+                      </msup>
+                      <mi>𝜃</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+              <mo>=</mo>
+              <mo form="prefix" lspace="0em">∫</mo>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">d</mo>
+                  <mi>𝑡</mi>
+                </mrow>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <msup>
+                        <mi>𝑡</mi>
+                        <mn>2</mn>
+                      </msup>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mo lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <msup>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mn>1</mn>
+                          <mo>+</mo>
+                          <mi>𝑡</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mn>2</mn>
+                    </msup>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mo form="prefix" lspace="0em">∫</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo lspace="0em" rspace="0em">d</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <msup>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mn>1</mn>
+                          <mo>−</mo>
+                          <mi>𝑡</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mn>2</mn>
+                    </msup>
+                  </mfrac>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mo lspace="0em" rspace="0em">log</mo>
+                  <mrow>
+                    <mo>|</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>|</mo>
+                  </mrow>
+                  <mo>−</mo>
+                  <mo form="prefix" lspace="0em" rspace="0em">log</mo>
+                  <mrow>
+                    <mo>|</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>|</mo>
+                  </mrow>
+                  <mo>−</mo>
+                  <mfrac>
+                    <mn>1</mn>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mfrac>
+                    <mn>1</mn>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mo form="prefix" lspace="0.16666666666666666em" rspace="0em">log</mo>
+              <mrow>
+                <mo>|</mo>
+                <mfrac>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <mi>𝑡</mi>
+                  </mrow>
+                </mfrac>
+                <mo>|</mo>
+              </mrow>
+              <mo>+</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>2</mn>
+              </mfrac>
+              <mfrac>
+                <mi>𝑡</mi>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <msup>
+                    <mi>𝑡</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>4</mn>
+              </mfrac>
+              <mo form="prefix" lspace="0.16666666666666666em" rspace="0em">log</mo>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>+</mo>
+                    <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>−</mo>
+                    <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">sin</mo>
+                    <mi>𝜃</mi>
+                  </mrow>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mo>+</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>2</mn>
+              </mfrac>
+              <mfrac>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">tan</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+                <mrow>
+                  <mo lspace="0em" rspace="0.16666666666666666em">cos</mo>
+                  <mi>𝜃</mi>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mi>𝐶</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>も得られる。</p>
+    </main>
+  </body>
+</html>

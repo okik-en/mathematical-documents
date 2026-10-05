@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>M/M/1モデル</title>
+    <meta property="og:title" content="M/M/1モデル">
+    <meta name="description" content="M/M/1モデルについて、その周辺知識をインストールする。">
+    <meta property="og:description" content="M/M/1モデルについて、その周辺知識をインストールする。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">probability-and-statistics</a>/mm1></code></nav>
+      <h1>M/M/1モデル</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-3"><span class="prefix">1.</span> ポアソン過程</a></li>
+          <li>
+            <div><a href="#loc-4"><span class="prefix">2.</span> ポアソン分布</a></div>
+            <ol style="list-style-type: none">
+              <li><a href="#loc-5"><span class="prefix">2.1.</span> 微分方程式による導出</a></li>
+              <li><a href="#loc-6"><span class="prefix">2.2.</span> コーシーの関数方程式による導出</a></li>
+            </ol>
+          </li>
+          <li><a href="#loc-7"><span class="prefix">3.</span> 指数分布</a></li>
+          <li><a href="#loc-8"><span class="prefix">4.</span> 待ち行列モデル</a></li>
+          <li><a href="#loc-9">参考文献</a></li>
+        </ol>
+      </nav>
+      <p>本記事は参考文献<a id="loc-1" href="#loc-10" role="doc-biblioref">[1]</a>、<a id="loc-2" href="#loc-11" role="doc-biblioref">[2]</a>に基づいて作成した。</p>
+      <h2 id="loc-3">1. ポアソン過程</h2>
+      <p>次を満たすモデルを<strong><strong>ポアソン過程</strong></strong>と定める。</p>
+      <dl>
+        <dt>独立性</dt>
+        <dd>出来事が起きるのはたがいに独立である。</dd>
+        <dt>定常性</dt>
+        <dd>出来事が起きる確率はどの時間帯でも同じである。</dd>
+        <dt>希少性</dt>
+        <dd>微小時間<math><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間にその出来事が2回以上起きる確率は<math><mi displaystyle="true">𝜊</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi mathvariant="normal">Δ</mi><mi>𝑡</mi></mrow><mo>)</mo></mrow></math>である。</dd>
+      </dl>
+      <p>ただし希少性について、微小時間<math><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間にその出来事が起きる確率は<math><mi displaystyle="true">𝜆</mi><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>であるものとする。 この<math><mi displaystyle="true">𝜆</mi></math>を<strong><strong>生起率</strong></strong>（単位時間当たりの出来事数を指す）という。</p>
+      <p>ポアソン過程について、以下の二面から分布を考えることができる。</p>
+      <dl>
+        <dt>ポアソン分布</dt>
+        <dd>出来事が起こる<strong><strong>回数</strong></strong></dd>
+        <dt>指数分布</dt>
+        <dd>出来事が起こる<strong><strong>時間間隔</strong></strong></dd>
+      </dl>
+      <h2 id="loc-4">2. ポアソン分布</h2>
+      <p>時間間隔<math><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mi>𝑡</mi></mrow><mo>]</mo></mrow></math>の中で、出来事が<math><mi displaystyle="true">𝑘</mi></math>回起きる確率を<math><msub displaystyle="true"><mi>𝑃</mi><mi>𝑘</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝑡</mi><mo>)</mo></mrow></math>とする。 このとき<math><msub displaystyle="true"><mi>𝑃</mi><mi>𝑘</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝑡</mi><mo>)</mo></mrow></math>のなす確率分布は<strong><strong>ポアソン分布</strong></strong><math><mtext displaystyle="true">𝑃𝑜</mtext><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜆</mi><mi>𝑡</mi></mrow><mo>)</mo></mrow></math>であることが知られている。 すなわち：</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑘</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝜆</mi>
+                <mi>𝑡</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mi>𝑘</mi>
+          </msup>
+          <mrow>
+            <mi>𝑘</mi>
+            <mo>!</mo>
+          </mrow>
+        </mfrac>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <h3 id="loc-5">2.1. 微分方程式による導出</h3>
+      <p>ポアソン過程の希少性より、時刻<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>において出来事が<math><mi displaystyle="true">𝑛</mi></math>回起こっている場合は次のいずれかによるとみなせる。</p>
+      <ol>
+        <li>時刻<math><mi displaystyle="true">𝑡</mi></math>において出来事がすでに<math><mi displaystyle="true">𝑛</mi></math>回起こっていて、かつ時刻<math><mi displaystyle="true">𝑡</mi></math>から<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間に出来事が起こらない場合。</li>
+        <li>時刻<math><mi displaystyle="true">𝑡</mi></math>において出来事が<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>回起こっていて、かつ時刻<math><mi displaystyle="true">𝑡</mi></math>から<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間に出来事が1回起こる場合。ただし<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>のときを除く。</li>
+      </ol>
+      <p>これより次の方程式が得られる。</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo>+</mo>
+            <mi mathvariant="normal">Δ</mi>
+            <mi>𝑡</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>≈</mo>
+        <mover>
+          <mover accent="true">
+            <mrow>
+              <msub style="math-shift: normal">
+                <mi>𝑃</mi>
+                <mi>𝑛</mi>
+              </msub>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mi>𝑡</mi>
+                <mo>)</mo>
+              </mrow>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mi>𝜆</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>⎴</mo>
+          </mover>
+          <mn>1.</mn>
+        </mover>
+        <mo>+</mo>
+        <mover>
+          <mover accent="true">
+            <mrow>
+              <msub style="math-shift: normal">
+                <mi>𝑃</mi>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mi>𝑡</mi>
+                <mo>)</mo>
+              </mrow>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝜆</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>⎴</mo>
+          </mover>
+          <mn>2.</mn>
+        </mover>
+      </math>
+      <p>すなわち<math><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi><mo stretchy="false" displaystyle="true">→</mo><mn displaystyle="true">0</mn></math>として</p>
+      <math display="block">
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <msub>
+              <mi>𝑃</mi>
+              <mi>𝑛</mi>
+            </msub>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝑡</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </mfrac>
+        <mo>+</mo>
+        <mi>𝜆</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝜆</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>を得て、この斉次一般解は</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝐴</mi>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>である。</p>
+      <p>いま<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>を仮定すると斉次部分のみが残り、希少性より</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>を得る。</p>
+      <p>これを基底ケースとして帰納法を用いることにより</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝜆</mi>
+                <mi>𝑡</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mi>𝑛</mi>
+          </msup>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo>!</mo>
+          </mrow>
+        </mfrac>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>を得る。</p>
+      <h3 id="loc-6">2.2. コーシーの関数方程式による導出</h3>
+      <p>ポアソン過程の独立性と定常性からコーシーの関数方程式</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑡</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>+</mo>
+            <msub>
+              <mi>𝑡</mi>
+              <mn>2</mn>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝑡</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝑡</mi>
+            <mn>2</mn>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>に帰着され、これは<math><msub displaystyle="true"><mi>𝑃</mi><mn>0</mn></msub></math>の連続性を仮定すれば</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>0</mn>
+        <mo rspace="0em">,</mo>
+        <mspace width="1em"/>
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝐴</mi>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝐵</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>と解ける。しかし前者は不適であるため、後者を採択する。</p>
+      <p>希少性より<math><mi displaystyle="true">𝐴</mi><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>、<math><mi displaystyle="true">𝐵</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝜆</mi></math>であり、すなわち次を得る：</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+      </math>
+      <h2 id="loc-7">3. 指数分布</h2>
+      <p>時間間隔<math><mi displaystyle="true">𝑇</mi><mspace width="0.2778em"/><mrow displaystyle="true"><mo>(</mo><mrow><mo form="infix" lspace="0em">></mo><mn>0</mn></mrow><mo>)</mo></mrow></math>の間に出来事が1回も起きない確率<math><mi displaystyle="true">𝑆</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑇</mi><mo>)</mo></mrow></math>は</p>
+      <math display="block">
+        <mi>𝑆</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑇</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑃</mi>
+          <mn>0</mn>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑇</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑇</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>である（ただし、<math><mi displaystyle="true">𝑆</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑇</mi><mo>)</mo></mrow><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn><mspace width="0.2778em"/><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑇</mi><mo>&lt;</mo><mn>0</mn></mrow><mo>)</mo></mrow></math>を約束する）。</p>
+      <p>つまり関数その確率密度関数<math><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑡</mi><mo>)</mo></mrow></math>について</p>
+      <math display="block">
+        <msubsup>
+          <mo lspace="0em">∫</mo>
+          <mi>𝑇</mi>
+          <mi>∞</mi>
+        </msubsup>
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mi>𝑑</mi>
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mi>𝑆</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑇</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑇</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>が成り立つため、この両辺を<math><mi displaystyle="true">𝑇</mi></math>で微分することで</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑇</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝜆</mi>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑇</mi>
+          </mrow>
+        </msup>
+      </math>
+      <p>を得る。</p>
+      <p>補足。 <math><mi displaystyle="true">𝑆</mi></math>はコーシーの関数方程式</p>
+      <math display="block">
+        <mi>𝑆</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑇</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>+</mo>
+            <msub>
+              <mi>𝑇</mi>
+              <mn>2</mn>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝑆</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝑇</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <mi>𝑆</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝑇</mi>
+            <mn>2</mn>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>を満たすことが知られる。 逆にこれを満たす非零連続関数は指数分布ただ一つである。</p>
+      <h2 id="loc-8">4. 待ち行列モデル</h2>
+      <p><math><mi displaystyle="true">𝑀</mi><mi displaystyle="true">/</mi><mi displaystyle="true">𝑀</mi><mi displaystyle="true">/</mi><mn displaystyle="true">1</mn></math>モデルとは次の条件を満たす待ち行列モデルである。</p>
+      <dl>
+        <dt>客の到着過程</dt>
+        <dd>生起率<math><mi displaystyle="true">𝜆</mi></math>のポアソン分布</dd>
+        <dt>客の処理時間</dt>
+        <dd>生起率<math><mi displaystyle="true">𝜇</mi></math>の指数分布</dd>
+      </dl>
+      <p>時刻<math><mi displaystyle="true">𝑡</mi></math>において、系内に客が<math><mi displaystyle="true">𝑛</mi></math>人いる確率を<math><msub displaystyle="true"><mi>𝑃</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝑡</mi><mo>)</mo></mrow></math>とする。</p>
+      <p>ポアソン過程の希少性より、時刻<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>において系内に客が<math><mi displaystyle="true">𝑛</mi></math>人いる場合は次のいずれかによるとみなせる。</p>
+      <ol>
+        <li>時刻<math><mi displaystyle="true">𝑡</mi></math>において客がすでに<math><mi displaystyle="true">𝑛</mi></math>人いて、かつ時刻<math><mi displaystyle="true">𝑡</mi></math>から<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間に客が到着せず、かつ客が処理されない場合。</li>
+        <li>時刻<math><mi displaystyle="true">𝑡</mi></math>において客が<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>人いて、かつ時刻<math><mi displaystyle="true">𝑡</mi></math>から<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間に客が1人到着する場合。ただし<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>のときを除く。</li>
+        <li>時刻<math><mi displaystyle="true">𝑡</mi></math>において客が<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">+</mo><mn displaystyle="true">1</mn></math>人いて、かつ時刻<math><mi displaystyle="true">𝑡</mi></math>から<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">+</mo><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi></math>の間に客が1人処理される場合。</li>
+      </ol>
+      <p>これより次の方程式が得られる。</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo>+</mo>
+            <mi mathvariant="normal">Δ</mi>
+            <mi>𝑡</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>≈</mo>
+        <mover>
+          <mover accent="true">
+            <mrow>
+              <msub style="math-shift: normal">
+                <mi>𝑃</mi>
+                <mi>𝑛</mi>
+              </msub>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mi>𝑡</mi>
+                <mo>)</mo>
+              </mrow>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mi>𝜆</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>⎴</mo>
+          </mover>
+          <mn>1.</mn>
+        </mover>
+        <mo>+</mo>
+        <mover>
+          <mover accent="true">
+            <mrow>
+              <msub style="math-shift: normal">
+                <mi>𝑃</mi>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mi>𝑡</mi>
+                <mo>)</mo>
+              </mrow>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝜆</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>⎴</mo>
+          </mover>
+          <mn>2.</mn>
+        </mover>
+        <mo>+</mo>
+        <mover>
+          <mover accent="true">
+            <mrow>
+              <msub style="math-shift: normal">
+                <mi>𝑃</mi>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">+</mo>
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mi>𝑡</mi>
+                <mo>)</mo>
+              </mrow>
+              <mrow style="math-shift: normal">
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝜇</mi>
+                  <mi mathvariant="normal">Δ</mi>
+                  <mi>𝑡</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>⎴</mo>
+          </mover>
+          <mn>3.</mn>
+        </mover>
+      </math>
+      <p>すなわち<math><mi mathvariant="normal" displaystyle="true">Δ</mi><mi displaystyle="true">𝑡</mi><mo stretchy="false" displaystyle="true">→</mo><mn displaystyle="true">0</mn></math>として</p>
+      <math display="block">
+        <mfrac>
+          <mrow>
+            <mi>𝑑</mi>
+            <msub>
+              <mi>𝑃</mi>
+              <mi>𝑛</mi>
+            </msub>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝑡</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mrow>
+            <mi>𝑑</mi>
+            <mi>𝑡</mi>
+          </mrow>
+        </mfrac>
+        <mo>+</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝜆</mi>
+            <mo>+</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝜆</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>+</mo>
+        <mi>𝜇</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">+</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑡</mi>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>を得る。同時に<math><mi displaystyle="true">𝑡</mi><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">∞</mi></math>において定常状態<math><munder displaystyle="true"><mo lspace="0em" rspace="0.16666666666666666em">lim</mo><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em" stretchy="false">→</mo><mi>∞</mi></mrow></munder><msub displaystyle="true"><mi>𝑃</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝑡</mi><mo>)</mo></mrow><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑃</mi><mi>𝑛</mi></msub></math>となることを仮定して</p>
+      <math display="block">
+        <mi>𝜇</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">+</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mo>−</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝜆</mi>
+            <mo>+</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mo>+</mo>
+        <mi>𝜆</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mn>0</mn>
+      </math>
+      <p>とできて、さらに<strong><strong>利用率</strong></strong><math><mi displaystyle="true">𝜌</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mi>𝜆</mi><mi>𝜇</mi></mfrac></math>を用いることで</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">+</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mo>−</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>+</mo>
+            <mi>𝜌</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mo>+</mo>
+        <mi>𝜌</mi>
+        <msub>
+          <mi>𝑃</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mn>0</mn>
+      </math>
+      <p>とかける。</p>
+      <p>これを解くことにより</p>
+      <math display="block">
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mo>=</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝜌</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <msup>
+          <mi>𝜌</mi>
+          <mi>𝑛</mi>
+        </msup>
+      </math>
+      <p>が得られる。 これは<strong><strong>幾何分布</strong></strong>と呼ばれる。</p>
+      <p>ここで定常状態における系内の平均客数は</p>
+      <math display="block">
+        <mi>𝐿</mi>
+        <mo>=</mo>
+        <mi>𝔼</mi>
+        <mrow>
+          <mo>[</mo>
+          <mi>𝑛</mi>
+          <mo>]</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mi>∞</mi>
+        </munderover>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mi>𝑛</mi>
+        <mo>=</mo>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝜌</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mi>∞</mi>
+        </munderover>
+        <mi>𝑛</mi>
+        <msup>
+          <mi>𝜌</mi>
+          <mi>𝑛</mi>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mi>𝜌</mi>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝜌</mi>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>であり、平均占有時間（スループットタイム）は、自分自身の処理を含めて</p>
+      <math display="block">
+        <mi>𝑊</mi>
+        <mo>=</mo>
+        <mi>𝔼</mi>
+        <mrow>
+          <mo>[</mo>
+          <mfrac>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+            </mrow>
+            <mi>𝜇</mi>
+          </mfrac>
+          <mo>]</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mi>∞</mi>
+        </munderover>
+        <msub>
+          <mi>𝑃</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mfrac>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝜇</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝐿</mi>
+            <mo>+</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝜇</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝜇</mi>
+        </mfrac>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝜌</mi>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>と求まる。</p>
+      <p>ここでこれらにおいて満たされる関係式</p>
+      <math display="block">
+        <mi>𝐿</mi>
+        <mo>=</mo>
+        <mi>𝜆</mi>
+        <mi>𝑊</mi>
+      </math>
+      <p>を<strong><strong>リトルの公式</strong></strong>という。</p>
+      <section role="doc-bibliography">
+        <h2 id="loc-9">参考文献</h2>
+        <ul style="list-style-type: none">
+          <li id="loc-10"><span class="prefix"><a href="#loc-1" role="doc-backlink">[1]</a></span> 大西 仁, 「問題解決の数理」. 参照: 2026年6月29日. [オンライン]. 入手先: <a href="https://info.ouj.ac.jp/~maps17/11/">https://info.ouj.ac.jp/~maps17/11/</a></li>
+          <li id="loc-11"><span class="prefix"><a href="#loc-2" role="doc-backlink">[2]</a></span> 大石進一, <em>待ち行列理論</em>. コロナ社, 2007.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

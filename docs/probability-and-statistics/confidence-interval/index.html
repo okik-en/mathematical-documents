@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>信頼区間</title>
+    <meta property="og:title" content="信頼区間">
+    <meta name="description" content="信頼区間を導出するページ。">
+    <meta property="og:description" content="信頼区間を導出するページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">probability-and-statistics</a>/confidence-interval></code></nav>
+      <h1>信頼区間</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 標準化変数</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 信頼区間の導出</a></li>
+        </ol>
+      </nav>
+      <p>確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>を用意する（<math><mi displaystyle="true">𝜎</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>とする）。 <math><mi displaystyle="true">𝑋</mi></math>の<math><mn displaystyle="true">100</mn><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mi displaystyle="true">%</mi></math>両側信頼区間を求めよう。</p>
+      <h2 id="loc-1">1. 標準化変数</h2>
+      <p>いま、<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑎</mi><mi displaystyle="true">𝑋</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑏</mi></math>で、かつ<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>と仮定する（正規分布の再生性よりそのような<math><mi displaystyle="true">𝑍</mi></math>が存在する）。</p>
+      <p>このとき、期待値および分散の性質より</p>
+      <math display="block">
+        <mtable class="multiline-equation">
+          <mtr>
+            <mtd>
+              <mn>0</mn>
+              <mo>=</mo>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑍</mi>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑎</mi>
+                  <mi>𝑋</mi>
+                  <mo>+</mo>
+                  <mi>𝑏</mi>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <mi>𝑎</mi>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑋</mi>
+                <mo>]</mo>
+              </mrow>
+              <mo>+</mo>
+              <mi>𝑏</mi>
+              <mo>=</mo>
+              <mi>𝑎</mi>
+              <mi>𝜇</mi>
+              <mo>+</mo>
+              <mi>𝑏</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mn>1</mn>
+              <mo>=</mo>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑍</mi>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑎</mi>
+                  <mi>𝑋</mi>
+                  <mo>+</mo>
+                  <mi>𝑏</mi>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+              <mspace width="0.2222em"/>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑋</mi>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>がいえる。</p>
+      <p>後者より：</p>
+      <math display="block">
+        <mi>𝑎</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝜎</mi>
+        </mfrac>
+      </math>
+      <p>また前者より：</p>
+      <math display="block">
+        <mi>𝑏</mi>
+        <mo>=</mo>
+        <mo form="prefix">−</mo>
+        <mi>𝑎</mi>
+        <mi>𝜇</mi>
+        <mo>=</mo>
+        <mo form="prefix">−</mo>
+        <mfrac>
+          <mi>𝜇</mi>
+          <mi>𝜎</mi>
+        </mfrac>
+      </math>
+      <p>ゆえにそのような<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>は</p>
+      <math display="block">
+        <mi>𝑍</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑋</mi>
+            <mo>−</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mi>𝜎</mi>
+        </mfrac>
+      </math>
+      <p>と表せて、これを<math><mi displaystyle="true">𝑋</mi></math>の<strong><strong>標準化変数</strong></strong>と呼ぶ。</p>
+      <h2 id="loc-2">2. 信頼区間の導出</h2>
+      <p>いま、<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>の上側<math><mn displaystyle="true">100</mn><mi displaystyle="true">𝛽</mi><mi displaystyle="true">%</mi></math>点を<math><mi displaystyle="true">𝑧</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛽</mi><mo>)</mo></mrow></math>とする。 すなわち：</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑍</mi>
+            <mo>≥</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛽</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝛽</mi>
+      </math>
+      <figure>
+        <div style="width: fit-content; background-color: white; margin: .5em; padding: .5em; overflow-x: auto; display: inline-block;">
+          <svg style="overflow: visible; width: 25.769506084em; height: 9.413365464em; display: block" viewBox="0 0 283.464566929 103.547020102" width="283.464566929pt" height="103.547020102pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:h5="http://www.w3.org/1999/xhtml">
+            <g>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" d="M 0 0m 0 88.452985572l 1.417322835 -0.062774695l 1.417322835 -0.068610302l 1.417322835 -0.074905728l 1.417322835 -0.081688474l 1.417322835 -0.08898681l 1.417322835 -0.096829706l 1.417322835 -0.10524675l 1.417322835 -0.114268056l 1.417322835 -0.123924154l 1.417322835 -0.134245876l 1.417322835 -0.145264219l 1.417322835 -0.157010204l 1.417322835 -0.16951471l 1.417322835 -0.182808303l 1.417322835 -0.196921048l 1.417322835 -0.211882304l 1.417322835 -0.227720511l 1.417322835 -0.244462958l 1.417322835 -0.262135538l 1.417322835 -0.280762497l 1.417322835 -0.300366163l 1.417322835 -0.320966673l 1.417322835 -0.342581679l 1.417322835 -0.365226057l 1.417322835 -0.388911604l 1.417322835 -0.413646729l 1.417322835 -0.439436144l 1.417322835 -0.466280548l 1.417322835 -0.494176319l 1.417322835 -0.523115206l 1.417322835 -0.553084022l 1.417322835 -0.584064354l 1.417322835 -0.616032276l 1.417322835 -0.648958081l 1.417322835 -0.682806029l 1.417322835 -0.717534109l 1.417322835 -0.753093835l 1.417322835 -0.789430055l 1.417322835 -0.826480801l 1.417322835 -0.86417716l 1.417322835 -0.902443191l 1.417322835 -0.941195869l 1.417322835 -0.980345076l 1.417322835 -1.019793637l 1.417322835 -1.059437393l 1.417322835 -1.099165333l 1.417322835 -1.138859766l 1.417322835 -1.178396547l 1.417322835 -1.217645359l 1.417322835 -1.256470047l 1.417322835 -1.294728999l 1.417322835 -1.332275592l 1.417322835 -1.368958682l 1.417322835 -1.404623155l 1.417322835 -1.439110522l 1.417322835 -1.47225957l 1.417322835 -1.503907056l 1.417322835 -1.533888447l 1.417322835 -1.562038707l 1.417322835 -1.588193111l 1.417322835 -1.612188103l 1.417322835 -1.633862177l 1.417322835 -1.653056785l 1.417322835 -1.669617261l 1.417322835 -1.68339376l 1.417322835 -1.694242202l 1.417322835 -1.702025213l 1.417322835 -1.706613068l 1.417322835 -1.707884609l 1.417322835 -1.705728153l 1.417322835 -1.70004236l 1.417322835 -1.69073708l 1.417322835 -1.677734145l 1.417322835 -1.660968121l 1.417322835 -1.640387002l 1.417322835 -1.615952834l 1.417322835 -1.587642285l 1.417322835 -1.55544713l 1.417322835 -1.519374657l 1.417322835 -1.479447994l 1.417322835 -1.435706344l 1.417322835 -1.388205127l 1.417322835 -1.337016028l 1.417322835 -1.282226948l 1.417322835 -1.223941855l 1.417322835 -1.162280536l 1.417322835 -1.097378248l 1.417322835 -1.029385271l 1.417322835 -0.958466364l 1.417322835 -0.884800127l 1.417322835 -0.80857827l 1.417322835 -0.730004791l 1.417322835 -0.649295084l 1.417322835 -0.566674951l 1.417322835 -0.482379562l 1.417322835 -0.396652334l 1.417322835 -0.309743769l 1.417322835 -0.221910227l 1.417322835 -0.133412673l 1.417322835 -0.04451538l 1.417322835 0.04451538l 1.417322835 0.133412673l 1.417322835 0.221910227l 1.417322835 0.309743769l 1.417322835 0.396652334l 1.417322835 0.482379562l 1.417322835 0.566674951l 1.417322835 0.649295084l 1.417322835 0.730004791l 1.417322835 0.80857827l 1.417322835 0.884800127l 1.417322835 0.958466364l 1.417322835 1.029385271l 1.417322835 1.097378248l 1.417322835 1.162280536l 1.417322835 1.223941855l 1.417322835 1.282226948l 1.417322835 1.337016028l 1.417322835 1.388205127l 1.417322835 1.435706344l 1.417322835 1.479447994l 1.417322835 1.519374657l 1.417322835 1.55544713l 1.417322835 1.587642285l 1.417322835 1.615952834l 1.417322835 1.640387002l 1.417322835 1.660968121l 1.417322835 1.677734145l 1.417322835 1.69073708l 1.417322835 1.70004236l 1.417322835 1.705728153l 1.417322835 1.707884609l 1.417322835 1.706613068l 1.417322835 1.702025213l 1.417322835 1.694242202l 1.417322835 1.68339376l 1.417322835 1.669617261l 1.417322835 1.653056785l 1.417322835 1.633862177l 1.417322835 1.612188103l 1.417322835 1.588193111l 1.417322835 1.562038707l 1.417322835 1.533888447l 1.417322835 1.503907056l 1.417322835 1.47225957l 1.417322835 1.439110522l 1.417322835 1.404623155l 1.417322835 1.368958682l 1.417322835 1.332275592l 1.417322835 1.294728999l 1.417322835 1.256470047l 1.417322835 1.217645359l 1.417322835 1.178396547l 1.417322835 1.138859766l 1.417322835 1.099165333l 1.417322835 1.059437393l 1.417322835 1.019793637l 1.417322835 0.980345076l 1.417322835 0.941195869l 1.417322835 0.902443191l 1.417322835 0.86417716l 1.417322835 0.826480801l 1.417322835 0.789430055l 1.417322835 0.753093835l 1.417322835 0.717534109l 1.417322835 0.682806029l 1.417322835 0.648958081l 1.417322835 0.616032276l 1.417322835 0.584064354l 1.417322835 0.553084022l 1.417322835 0.523115206l 1.417322835 0.494176319l 1.417322835 0.466280548l 1.417322835 0.439436144l 1.417322835 0.413646729l 1.417322835 0.388911604l 1.417322835 0.365226057l 1.417322835 0.342581679l 1.417322835 0.320966673l 1.417322835 0.300366163l 1.417322835 0.280762497l 1.417322835 0.262135538l 1.417322835 0.244462958l 1.417322835 0.227720511l 1.417322835 0.211882304l 1.417322835 0.196921048l 1.417322835 0.182808303l 1.417322835 0.16951471l 1.417322835 0.157010204l 1.417322835 0.145264219l 1.417322835 0.134245876l 1.417322835 0.123924154l 1.417322835 0.114268056l 1.417322835 0.10524675l 1.417322835 0.096829706l 1.417322835 0.08898681l 1.417322835 0.081688474l 1.417322835 0.074905728l 1.417322835 0.068610302l 1.417322835 0.062774695"/>
+              <path fill="none" stroke="#000000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" transform="translate(198.42519685 49.038918828)" d="M 0 0v 40.014101274"/>
+              <path fill="none" transform="translate(206.364779528 72.467437425)" d="M 0 0h 6.798v 10.494h -6.798v -10.494Z "/>
+              <g transform="translate(206.364779433 72.467437425)">
+                <g transform="matrix(1 0 0 -1 0 7.854)">
+                  <use xlink:href="#gD3BE271469A8450671171E15B5F4B023" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                </g>
+              </g>
+              <path fill="none" transform="translate(186.88819685 89.053020102)" d="M 0 0h 23.074v 14.494h -23.074v -14.494Z "/>
+              <g transform="translate(186.888196772 89.053019976)">
+                <g>
+                  <g transform="matrix(1 0 0 -1 2 9.854)">
+                    <use xlink:href="#g93076697CB3DA0354682C686B0CD3969" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  </g>
+                  <g transform="matrix(1 0 0 -1 7.06 10.239)">
+                    <use xlink:href="#g15A18808FA28794722DAC3AA5EC7ECB0" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  </g>
+                  <g transform="matrix(1 0 0 -1 10.668 9.854)">
+                    <use xlink:href="#gD3BE271469A8450671171E15B5F4B023" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  </g>
+                  <g transform="matrix(1 0 0 -1 17.466 10.239)">
+                    <use xlink:href="#g7FD30203D1730A81A0251DD9DB81AAA4" x="0" y="0" fill="#000000" fill-rule="nonzero"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <defs>
+              <symbol id="gD3BE271469A8450671171E15B5F4B023" overflow="visible">
+                <path d="M 0 0m 0.22 -2.64l 1.815 8.525q 0.154 0.693 0.44 1.265q 0.286 0.572 0.8195 0.9185q 0.5335 0.3465 1.4135 0.3465q 0.935 0 1.463 -0.4895q 0.528 -0.4895 0.528 -1.3695q 0 -1.782 -1.892 -2.2q 0.572 -0.121 0.9735 -0.5555q 0.4015 -0.4345 0.4015 -1.2595q 0 -0.748 -0.308 -1.353q -0.308 -0.605 -0.8965 -0.9515q -0.5885 -0.3465 -1.4355 -0.3465q -0.638 0 -1.023 0.1925q -0.385 0.1925 -0.66 0.4015l -0.682 -3.124h -0.957Z m 3.245 3.322q 0.605 0 0.9955 0.264q 0.3905 0.264 0.583 0.6765q 0.1925 0.4125 0.1925 0.8745q 0 0.66 -0.352 1.089q -0.352 0.429 -1.21 0.429h -0.352l 0.154 0.737h 0.407q 0.979 0 1.4025 0.5005q 0.4235 0.5005 0.4235 1.2375q 0 0.484 -0.2695 0.8085q -0.2695 0.3245 -0.8305 0.3245q -0.517 0 -0.836 -0.2475q -0.319 -0.2475 -0.495 -0.649q -0.176 -0.4015 -0.275 -0.8745l -1.001 -4.708q 0.264 -0.209 0.66 -0.3355q 0.396 -0.1265 0.803 -0.1265Z "/>
+              </symbol>
+              <symbol id="g93076697CB3DA0354682C686B0CD3969" overflow="visible">
+                <path d="M 0 0l 0.132 0.66l 3.663 4.51h -2.53l 0.154 0.726h 3.575l -0.154 -0.781l -3.597 -4.389h 2.805l -0.143 -0.726h -3.905Z "/>
+              </symbol>
+              <symbol id="g15A18808FA28794722DAC3AA5EC7ECB0" overflow="visible">
+                <path d="M 0 0m 2.365 -1.738q -0.99 1.045 -1.4575 2.376q -0.4675 1.331 -0.4675 2.761q 0 1.452 0.4675 2.805q 0.4675 1.353 1.4575 2.42h 0.913q -0.924 -1.111 -1.3915 -2.4585q -0.4675 -1.3475 -0.4675 -2.7555q 0 -1.386 0.473 -2.7115q 0.473 -1.3255 1.375 -2.4365h -0.902Z "/>
+              </symbol>
+              <symbol id="g7FD30203D1730A81A0251DD9DB81AAA4" overflow="visible">
+                <path d="M 0 0m 0.341 -1.738q 0.913 1.111 1.3805 2.4365q 0.4675 1.3255 0.4675 2.7115q 0 1.408 -0.4675 2.7555q -0.4675 1.3475 -1.3915 2.4585h 0.913q 0.99 -1.067 1.4575 -2.42q 0.4675 -1.353 0.4675 -2.805q 0 -1.43 -0.4675 -2.761q -0.4675 -1.331 -1.4575 -2.376h -0.902Z "/>
+              </symbol>
+            </defs>
+          </svg>
+        </div>
+        <figcaption>図 1: 上側<math><mn displaystyle="true">100</mn><mi displaystyle="true">𝛽</mi><mi displaystyle="true">%</mi></math>点</figcaption>
+      </figure>
+      <p>このとき、<math><mrow displaystyle="true"><mo>|</mo><mi>𝑍</mi><mo>|</mo></mrow><mo displaystyle="true">≥</mo><mi displaystyle="true">𝑧</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛽</mi><mo>)</mo></mrow></math>となる確率は、正規分布の対称性より</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mrow>
+              <mo>|</mo>
+              <mi>𝑍</mi>
+              <mo>|</mo>
+            </mrow>
+            <mo>≥</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛽</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑍</mi>
+            <mo>≥</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛽</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>+</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑍</mi>
+            <mo>≤</mo>
+            <mo form="prefix">−</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛽</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>2</mn>
+        <mo form="prefix" lspace="0.16666666666666666em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑍</mi>
+            <mo>≥</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛽</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>2</mn>
+        <mi>𝛽</mi>
+      </math>
+      <p>であるから、<math><mn displaystyle="true">2</mn><mi displaystyle="true">𝛽</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mrow>
+              <mo>|</mo>
+              <mi>𝑍</mi>
+              <mo>|</mo>
+            </mrow>
+            <mo>≥</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mi>𝛼</mi>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>100</mn>
+        <mi>𝛼</mi>
+        <mi>%</mi>
+      </math>
+      <p>すなわち</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mrow>
+              <mo>|</mo>
+              <mi>𝑍</mi>
+              <mo>|</mo>
+            </mrow>
+            <mo>≤</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mi>𝛼</mi>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>100</mn>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝛼</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mi>%</mi>
+      </math>
+      <p>が成り立つ。</p>
+      <p>先程<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mrow><mi>𝑋</mi><mo>−</mo><mi>𝜇</mi></mrow><mi>𝜎</mi></mfrac></math>であったから、これは</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mfrac>
+                <mrow>
+                  <mo>|</mo>
+                  <mrow>
+                    <mi>𝑋</mi>
+                    <mo>−</mo>
+                    <mi>𝜇</mi>
+                  </mrow>
+                  <mo>|</mo>
+                </mrow>
+                <mi>𝜎</mi>
+              </mfrac>
+              <mo>≤</mo>
+              <mi>𝑧</mi>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mi>𝛼</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mo lspace="0em" stretchy="false">⟺</mo>
+            </mtd>
+            <mtd>
+              <mrow>
+                <mo>|</mo>
+                <mrow>
+                  <mi>𝑋</mi>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                </mrow>
+                <mo>|</mo>
+              </mrow>
+              <mo>≤</mo>
+              <mi>𝑧</mi>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mi>𝛼</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mi>𝜎</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mo lspace="0em" stretchy="false">⟺</mo>
+            </mtd>
+            <mtd>
+              <mi>𝑋</mi>
+              <mo>−</mo>
+              <mi>𝜇</mi>
+              <mo>≥</mo>
+              <mo form="prefix">−</mo>
+              <mi>𝑧</mi>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mi>𝛼</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mi>𝜎</mi>
+              <mo>∨</mo>
+              <mi>𝑋</mi>
+              <mo>−</mo>
+              <mi>𝜇</mi>
+              <mo>≤</mo>
+              <mi>𝑧</mi>
+              <mrow>
+                <mo>(</mo>
+                <mfrac>
+                  <mi>𝛼</mi>
+                  <mn>2</mn>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mi>𝜎</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mo lspace="0em" stretchy="false">⟺</mo>
+            </mtd>
+            <mtd>
+              <mi>𝑋</mi>
+              <mo>∈</mo>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝜇</mi>
+                  <mo>−</mo>
+                  <mi>𝑧</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac>
+                      <mi>𝛼</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mi>𝜎</mi>
+                  <mo>,</mo>
+                  <mi>𝜇</mi>
+                  <mo>+</mo>
+                  <mi>𝑧</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac>
+                      <mi>𝛼</mi>
+                      <mn>2</mn>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mi>𝜎</mi>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>であり、ゆえに</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑋</mi>
+            <mo>∈</mo>
+            <mrow>
+              <mo>[</mo>
+              <mrow>
+                <mi>𝜇</mi>
+                <mo>−</mo>
+                <mi>𝑧</mi>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mi>𝛼</mi>
+                    <mn>2</mn>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mi>𝜎</mi>
+                <mo>,</mo>
+                <mi>𝜇</mi>
+                <mo>+</mo>
+                <mi>𝑧</mi>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mi>𝛼</mi>
+                    <mn>2</mn>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mi>𝜎</mi>
+              </mrow>
+              <mo>]</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>100</mn>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝛼</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mi>%</mi>
+      </math>
+      <p>がいえる。</p>
+      <p>すなわち、<math><mi displaystyle="true">𝑋</mi></math>の<math><mn displaystyle="true">100</mn><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mi displaystyle="true">%</mi></math>両側信頼区間は</p>
+      <math display="block">
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mi>𝜇</mi>
+            <mo>−</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mi>𝛼</mi>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mi>𝜎</mi>
+            <mo>,</mo>
+            <mi>𝜇</mi>
+            <mo>+</mo>
+            <mi>𝑧</mi>
+            <mrow>
+              <mo>(</mo>
+              <mfrac>
+                <mi>𝛼</mi>
+                <mn>2</mn>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mi>𝜎</mi>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+      </math>
+      <p>と求まる。</p>
+    </main>
+  </body>
+</html>

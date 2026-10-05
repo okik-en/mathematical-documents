@@ -1,10 +1,13 @@
-- src:
+- abstract-math:
+  - determinant
+- probability-and-statistics:
   - approximation
   - confidence-interval
-  - determinant
   - finite-population-correction
-  - integral
+  - lsm
   - mm1
   - sampling-distribution
-  - sqrt-n
   - unbiased-variance
+- utils:
+  - integral
+  - sqrt-n

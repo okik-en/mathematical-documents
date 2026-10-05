@@ -1,0 +1,2836 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>標本分布</title>
+    <meta property="og:title" content="標本分布">
+    <meta name="description" content="chi^2分布やt分布、F分布に関してまとめたページ。">
+    <meta property="og:description" content="chi^2分布やt分布、F分布に関してまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">probability-and-statistics</a>/sampling-distribution></code></nav>
+      <h1>標本分布</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li>
+            <div><a href="#loc-1"><span class="prefix">1.</span> <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</a></div>
+            <ol style="list-style-type: none">
+              <li><a href="#loc-2"><span class="prefix">1.1.</span> <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数</a></li>
+              <li><a href="#loc-3"><span class="prefix">1.2.</span> 指数分布と<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</a></li>
+              <li><a href="#loc-4"><span class="prefix">1.3.</span> <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布の再生性</a></li>
+            </ol>
+          </li>
+          <li>
+            <div><a href="#loc-5"><span class="prefix">2.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</a></div>
+            <ol style="list-style-type: none">
+              <li><a href="#loc-6"><span class="prefix">2.1.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の定義</a></li>
+              <li><a href="#loc-7"><span class="prefix">2.2.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の再生性</a></li>
+            </ol>
+          </li>
+          <li>
+            <div><a href="#loc-8"><span class="prefix">3.</span> <math><mi displaystyle="true">𝑡</mi></math>分布</a></div>
+            <ol style="list-style-type: none">
+              <li><a href="#loc-9"><span class="prefix">3.1.</span> <math><mi displaystyle="true">𝑡</mi></math>分布の定義</a></li>
+            </ol>
+          </li>
+          <li>
+            <div><a href="#loc-10"><span class="prefix">4.</span> <math><mi displaystyle="true">𝐹</mi></math>分布</a></div>
+            <ol style="list-style-type: none">
+              <li><a href="#loc-11"><span class="prefix">4.1.</span> <math><mi displaystyle="true">𝐹</mi></math>分布の定義</a></li>
+              <li><a href="#loc-12"><span class="prefix">4.2.</span> <math><mi displaystyle="true">𝐹</mi></math>分布の交換性</a></li>
+            </ol>
+          </li>
+          <li>
+            <div><a href="#loc-13"><span class="prefix">5.</span> 統計量</a></div>
+            <ol style="list-style-type: none">
+              <li>
+                <div><a href="#loc-14"><span class="prefix">5.1.</span> 不偏分散に関する統計量</a></div>
+                <ol style="list-style-type: none">
+                  <li><a href="#loc-15"><span class="prefix">5.1.1.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>変量</a></li>
+                  <li><a href="#loc-16"><span class="prefix">5.1.2.</span> <math><mi displaystyle="true">𝑍</mi></math>統計量</a></li>
+                  <li><a href="#loc-17"><span class="prefix">5.1.3.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</a></li>
+                  <li><a href="#loc-18"><span class="prefix">5.1.4.</span> スチューデントの<math><mi displaystyle="true">𝑡</mi></math>統計量</a></li>
+                </ol>
+              </li>
+              <li><a href="#loc-19"><span class="prefix">5.2.</span> ピアソンの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</a></li>
+              <li>
+                <div><a href="#loc-20"><span class="prefix">5.3.</span> 2標本問題</a></div>
+                <ol style="list-style-type: none">
+                  <li><a href="#loc-21"><span class="prefix">5.3.1.</span> 母分散が既知のとき</a></li>
+                  <li><a href="#loc-22"><span class="prefix">5.3.2.</span> 母分散が未知で等しいとき</a></li>
+                  <li><a href="#loc-23"><span class="prefix">5.3.3.</span> 母分散が未知で等しくないとき</a></li>
+                  <li><a href="#loc-24"><span class="prefix">5.3.4.</span> 母平均が未知で母分散が既知のとき</a></li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div><a href="#loc-25"><span class="prefix">6.</span> 検定</a></div>
+            <ol style="list-style-type: none">
+              <li>
+                <div><a href="#loc-26"><span class="prefix">6.1.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>検定</a></div>
+                <ol style="list-style-type: none">
+                  <li><a href="#loc-27"><span class="prefix">6.1.1.</span> 分散の検定</a></li>
+                  <li><a href="#loc-28"><span class="prefix">6.1.2.</span> 適合度の検定</a></li>
+                  <li><a href="#loc-29"><span class="prefix">6.1.3.</span> 独立性の検定</a></li>
+                </ol>
+              </li>
+              <li>
+                <div><a href="#loc-30"><span class="prefix">6.2.</span> <math><mi displaystyle="true">𝑡</mi></math>検定</a></div>
+                <ol style="list-style-type: none">
+                  <li><a href="#loc-31"><span class="prefix">6.2.1.</span> 母平均の検定（母分散未知）</a></li>
+                  <li><a href="#loc-32"><span class="prefix">6.2.2.</span> 等平均の検定（母分散未知）</a></li>
+                </ol>
+              </li>
+              <li>
+                <div><a href="#loc-33"><span class="prefix">6.3.</span> <math><mi displaystyle="true">𝐹</mi></math>検定</a></div>
+                <ol style="list-style-type: none">
+                  <li><a href="#loc-34"><span class="prefix">6.3.1.</span> 等分散の検定</a></li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</h2>
+      <h3 id="loc-2">1.1. <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数</h3>
+      <p><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数は<math><mi displaystyle="true">𝛼</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>で以下のように定義される関数である。</p>
+      <math display="block">
+        <mi mathvariant="normal">Γ</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝛼</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msubsup>
+          <mo form="prefix" lspace="0em">∫</mo>
+          <mn>0</mn>
+          <mi>∞</mi>
+        </msubsup>
+        <msup>
+          <mi>𝑡</mi>
+          <mrow>
+            <mi>𝛼</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+        <mi>𝑑</mi>
+        <mi>𝑡</mi>
+      </math>
+      <p><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数は以下の性質を満たす。</p>
+      <ol>
+        <li><math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mn>1</mn><mo>)</mo></mrow><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>、<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo></mrow><mo displaystyle="true">=</mo><msqrt displaystyle="true"><mi>𝜋</mi></msqrt></math></li>
+        <li><math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝛼</mi><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math></li>
+      </ol>
+      <p>これらより、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">∈</mo><mi displaystyle="true">ℕ</mi></math>について<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑛</mi><mo displaystyle="true">!</mo></math>が言える。</p>
+      <p>次のように覚えておいてもよいだろう。</p>
+      <math display="block">
+        <msubsup>
+          <mo lspace="0em">∫</mo>
+          <mn>0</mn>
+          <mi>∞</mi>
+        </msubsup>
+        <msup>
+          <mi>𝑡</mi>
+          <mi>𝑛</mi>
+        </msup>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝑡</mi>
+          </mrow>
+        </msup>
+        <mi>𝑑</mi>
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mi>𝑛</mi>
+        <mo>!</mo>
+      </math>
+      <h3 id="loc-3">1.2. 指数分布と<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</h3>
+      <p><math><mi displaystyle="true">𝜆</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>について、指数分布の確率密度関数は次式で与えられた。</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑥</mi>
+            <mo>;</mo>
+            <mi>𝜆</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝜆</mi>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑥</mi>
+          </mrow>
+        </msup>
+        <mspace width="2em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑥</mi>
+            <mo>></mo>
+            <mn>0</mn>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>これをパラメータ<math><mi displaystyle="true">𝛼</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>により拡張した次の確率密度関数で与えられる分布を<strong><strong><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</strong></strong>といい、<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>で表す。</p>
+      <math display="block">
+        <mi>𝑓</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑥</mi>
+            <mo>;</mo>
+            <mi>𝛼</mi>
+            <mo>,</mo>
+            <mi>𝜆</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <msup>
+            <mi>𝜆</mi>
+            <mi>𝛼</mi>
+          </msup>
+          <mrow>
+            <mi mathvariant="normal">Γ</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛼</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+        </mfrac>
+        <msup>
+          <mi>𝑥</mi>
+          <mrow>
+            <mi>𝛼</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜆</mi>
+            <mi>𝑥</mi>
+          </mrow>
+        </msup>
+        <mspace width="2em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑥</mi>
+            <mo>></mo>
+            <mn>0</mn>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>ただし、<math><mi displaystyle="true">𝛼</mi><mo stretchy="false" displaystyle="true">→</mo><mn displaystyle="true">1</mn></math>とすれば指数分布に一致することに留意せよ。</p>
+      <h3 id="loc-4">1.3. <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布の再生性</h3>
+      <p><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布に従う確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>を考える。</p>
+      <p>いま、<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数の定義式において<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝜈</mi><mi displaystyle="true">𝑥</mi><mspace width="0.2778em"/><mrow displaystyle="true"><mo>(</mo><mrow><mo form="infix" lspace="0em" stretchy="false">⟹</mo><mi>𝑑</mi><mi>𝑡</mi><mo>=</mo><mi>𝜈</mi><mi>𝑑</mi><mi>𝑥</mi></mrow><mo>)</mo></mrow></math>とおくことで</p>
+      <math display="block">
+        <mi mathvariant="normal">Γ</mi>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝛼</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <msubsup>
+          <mo form="prefix" lspace="0em">∫</mo>
+          <mn>0</mn>
+          <mi>∞</mi>
+        </msubsup>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝜈</mi>
+              <mi>𝑥</mi>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mrow>
+            <mi>𝛼</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜈</mi>
+            <mi>𝑥</mi>
+          </mrow>
+        </msup>
+        <mi>𝜈</mi>
+        <mi>𝑑</mi>
+        <mi>𝑥</mi>
+        <mo>=</mo>
+        <msup>
+          <mi>𝜈</mi>
+          <mi>𝛼</mi>
+        </msup>
+        <msubsup>
+          <mo form="prefix">∫</mo>
+          <mn>0</mn>
+          <mi>∞</mi>
+        </msubsup>
+        <msup>
+          <mi>𝑥</mi>
+          <mrow>
+            <mi>𝛼</mi>
+            <mo lspace="0em" rspace="0em">−</mo>
+            <mn>1</mn>
+          </mrow>
+        </msup>
+        <msup>
+          <mi>𝑒</mi>
+          <mrow>
+            <mo>−</mo>
+            <mi>𝜈</mi>
+            <mi>𝑥</mi>
+          </mrow>
+        </msup>
+        <mi>𝑑</mi>
+        <mi>𝑥</mi>
+      </math>
+      <p>が得られ、これにより<math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">&lt;</mo><mi displaystyle="true">𝜆</mi></math>についてそのモーメント母関数は</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <msub>
+                <mi>𝑀</mi>
+                <mi>𝑋</mi>
+              </msub>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑡</mi>
+                  <mo>;</mo>
+                  <mi>𝛼</mi>
+                  <mo>,</mo>
+                  <mi>𝜆</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <msubsup>
+                <mo form="prefix" lspace="0em">∫</mo>
+                <mn>0</mn>
+                <mi>∞</mi>
+              </msubsup>
+              <msup>
+                <mi>𝑒</mi>
+                <mrow>
+                  <mi>𝑡</mi>
+                  <mi>𝑥</mi>
+                </mrow>
+              </msup>
+              <mfrac>
+                <msup>
+                  <mi>𝜆</mi>
+                  <mi>𝛼</mi>
+                </msup>
+                <mrow>
+                  <mi mathvariant="normal">Γ</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mi>𝛼</mi>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+              <msup>
+                <mi>𝑥</mi>
+                <mrow>
+                  <mi>𝛼</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </msup>
+              <msup>
+                <mi>𝑒</mi>
+                <mrow>
+                  <mo>−</mo>
+                  <mi>𝜆</mi>
+                  <mi>𝑥</mi>
+                </mrow>
+              </msup>
+              <mi>𝑑</mi>
+              <mi>𝑥</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <msup>
+                  <mi>𝜆</mi>
+                  <mi>𝛼</mi>
+                </msup>
+                <mrow>
+                  <mi mathvariant="normal">Γ</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mi>𝛼</mi>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+              <msubsup>
+                <mo form="prefix">∫</mo>
+                <mn>0</mn>
+                <mi>∞</mi>
+              </msubsup>
+              <msup>
+                <mi>𝑥</mi>
+                <mrow>
+                  <mi>𝛼</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </msup>
+              <msup>
+                <mi>𝑒</mi>
+                <mrow>
+                  <mo>−</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝜆</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mi>𝑥</mi>
+                </mrow>
+              </msup>
+              <mi>𝑑</mi>
+              <mi>𝑥</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <msup>
+                  <mi>𝜆</mi>
+                  <mi>𝛼</mi>
+                </msup>
+                <mrow>
+                  <mi mathvariant="normal">Γ</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mi>𝛼</mi>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+              <mfrac>
+                <mrow>
+                  <mi mathvariant="normal">Γ</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mi>𝛼</mi>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝜆</mi>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mi>𝛼</mi>
+                </msup>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mi>𝜆</mi>
+                    <mrow>
+                      <mi>𝜆</mi>
+                      <mo>−</mo>
+                      <mi>𝑡</mi>
+                    </mrow>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mi>𝛼</mi>
+              </msup>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>と書ける。</p>
+      <p>この式から、<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub></math>および<math><msub displaystyle="true"><mi>𝑋</mi><mn>2</mn></msub></math>が独立であれば</p>
+      <math display="block">
+        <msub>
+          <mi>𝑋</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>∼</mo>
+        <mi mathvariant="normal">Γ</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝛼</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>𝜆</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>∧</mo>
+        <msub>
+          <mi>𝑋</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>∼</mo>
+        <mi mathvariant="normal">Γ</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝛼</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>𝜆</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo stretchy="false">⟹</mo>
+        <msub>
+          <mi>𝑋</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝑋</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>∼</mo>
+        <mi mathvariant="normal">Γ</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝛼</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>+</mo>
+            <msub>
+              <mi>𝛼</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>,</mo>
+            <mi>𝜆</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>が成り立つことがわかる。 この性質を<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布の<strong><strong>再生性</strong></strong>という。</p>
+      <h2 id="loc-5">2. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</h2>
+      <h3 id="loc-6">2.1. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の定義</h3>
+      <p>独立な標本<math><msub displaystyle="true"><mi>𝑍</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑍</mi><mi>𝑛</mi></msub></math>がそれぞれ標準正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従うととする。 このとき、新たな確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">=</mo><munderover displaystyle="true"><mo form="prefix" lspace="0em">∑</mo><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">=</mo><mn>1</mn></mrow><mi>𝑛</mi></munderover><msubsup displaystyle="true"><mi>𝑍</mi><mi>𝑖</mi><mn>2</mn></msubsup></math>の従う分布を自由度<math><mi displaystyle="true">𝑛</mi></math>の<strong><strong><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</strong></strong>（chi-squared distribution）といい、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>で表す。</p>
+      <p>また、自由度<math><mi displaystyle="true">𝑛</mi></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布について、その上側<math><mi displaystyle="true">𝛼</mi></math>点を<math><msub displaystyle="true"><mi>𝜒</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>で表すものとする。</p>
+      <h3 id="loc-7">2.2. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の再生性</h3>
+      <p><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>は<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mi>𝑛</mi><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>と一致することが知られている。 数学的帰納法による略証を以下に示す。</p>
+      <ol>
+        <li>
+          <p><math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>とすれば、<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">=</mo><msup displaystyle="true"><mi>𝑍</mi><mn>2</mn></msup></math>は<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mn>1</mn><mo>)</mo></mrow></math>に従い、また<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">≥</mo><mn displaystyle="true">0</mn></math>について</p>
+          <math display="block">
+            <mi>𝑋</mi>
+            <mo>≤</mo>
+            <mi>𝑥</mi>
+            <mo stretchy="false">⟺</mo>
+            <msup>
+              <mi>𝑍</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>≤</mo>
+            <mi>𝑥</mi>
+            <mo stretchy="false">⟺</mo>
+            <mrow>
+              <mo>|</mo>
+              <mi>𝑍</mi>
+              <mo>|</mo>
+            </mrow>
+            <mo>≤</mo>
+            <msqrt>
+              <mi>𝑥</mi>
+            </msqrt>
+            <mo stretchy="false">⟺</mo>
+            <mo form="prefix">−</mo>
+            <msqrt>
+              <mi>𝑥</mi>
+            </msqrt>
+            <mo>≤</mo>
+            <mi>𝑍</mi>
+            <mo>≤</mo>
+            <msqrt>
+              <mi>𝑥</mi>
+            </msqrt>
+          </math>
+          <p>であるから、その分布関数<math><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow></math>について</p>
+          <math display="block">
+            <mi>𝐹</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝑥</mi>
+              <mo>)</mo>
+            </mrow>
+            <mo>=</mo>
+            <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+            <mrow>
+              <mo>{</mo>
+              <mrow>
+                <mi>𝑋</mi>
+                <mo>≤</mo>
+                <mi>𝑥</mi>
+              </mrow>
+              <mo>}</mo>
+            </mrow>
+            <mo>=</mo>
+            <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+            <mrow>
+              <mo>{</mo>
+              <mrow>
+                <mo>−</mo>
+                <msqrt>
+                  <mi>𝑥</mi>
+                </msqrt>
+                <mo>≤</mo>
+                <mi>𝑍</mi>
+                <mo>≤</mo>
+                <msqrt>
+                  <mi>𝑥</mi>
+                </msqrt>
+              </mrow>
+              <mo>}</mo>
+            </mrow>
+            <mo>=</mo>
+            <mfrac>
+              <mn>1</mn>
+              <msqrt>
+                <mn>2</mn>
+                <mi>𝜋</mi>
+              </msqrt>
+            </mfrac>
+            <msubsup>
+              <mo form="prefix">∫</mo>
+              <mrow>
+                <mo>−</mo>
+                <msqrt>
+                  <mi>𝑥</mi>
+                </msqrt>
+              </mrow>
+              <msqrt>
+                <mi>𝑥</mi>
+              </msqrt>
+            </msubsup>
+            <msup>
+              <mi>𝑒</mi>
+              <mrow>
+                <mo>−</mo>
+                <mfrac>
+                  <msup>
+                    <mi>𝑧</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mn>2</mn>
+                </mfrac>
+              </mrow>
+            </msup>
+            <mi>𝑑</mi>
+            <mi>𝑧</mi>
+          </math>
+          <p>が得られ、ゆえに確率密度関数<math><mi displaystyle="true">𝑓</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow><mo displaystyle="true">=</mo><msup displaystyle="true"><mi>𝐹</mi><mo>′</mo></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow></math>は</p>
+          <math display="block">
+            <mi>𝑓</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝑥</mi>
+              <mo>)</mo>
+            </mrow>
+            <mo>=</mo>
+            <mfrac>
+              <mi>𝑑</mi>
+              <mrow>
+                <mi>𝑑</mi>
+                <mi>𝑥</mi>
+              </mrow>
+            </mfrac>
+            <mi>𝐹</mi>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝑥</mi>
+              <mo>)</mo>
+            </mrow>
+            <mo>=</mo>
+            <mfrac>
+              <mn>1</mn>
+              <msqrt>
+                <mn>2</mn>
+                <mi>𝜋</mi>
+                <mi>𝑥</mi>
+              </msqrt>
+            </mfrac>
+            <msup>
+              <mi>𝑒</mi>
+              <mrow>
+                <mo>−</mo>
+                <mfrac>
+                  <mi>𝑥</mi>
+                  <mn>2</mn>
+                </mfrac>
+              </mrow>
+            </msup>
+          </math>
+          <p>と表せる。これは<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>に一致する。</p>
+        </li>
+        <li>任意の<math><mi displaystyle="true">𝑘</mi><mo displaystyle="true">∈</mo><mi displaystyle="true">ℕ</mi></math>をとり、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑘</mi><mo>)</mo></mrow></math>が<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mi>𝑘</mi><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>に一致するものとする。 <math><msub displaystyle="true"><mi>𝑍</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑍</mi><mrow><mi>𝑘</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow></msub><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>とすれば、<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝑍</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">+</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mi>𝑘</mi><mn>2</mn></msubsup><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mrow><mi>𝑘</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow><mn>2</mn></msubsup></math>は<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑘</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従う。 ここで<math><msup displaystyle="true"><mi>𝑋</mi><mo>′</mo></msup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝑍</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">+</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mi>𝑘</mi><mn>2</mn></msubsup></math>は<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mi>𝑘</mi><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>に従い、<math><msubsup displaystyle="true"><mi>𝑍</mi><mrow><mi>𝑘</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow><mn>2</mn></msubsup></math>は<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>に従うため、<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布の再生性により<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">=</mo><msup displaystyle="true"><mi>𝑋</mi><mo>′</mo></msup><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mrow><mi>𝑘</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow><mn>2</mn></msubsup></math>は<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mrow><mi>𝑘</mi><mo>+</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>に従う。</li>
+      </ol>
+      <p>これにより、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布は<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布と同じように再生性をもつことが示された。</p>
+      <h2 id="loc-8">3. <math><mi displaystyle="true">𝑡</mi></math>分布</h2>
+      <h3 id="loc-9">3.1. <math><mi displaystyle="true">𝑡</mi></math>分布の定義</h3>
+      <p>独立な確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>について、新たな確率変数<math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mi>𝑍</mi><msqrt><mo stretchy="false">(</mo><mi>𝑋</mi><mi>/</mi><mi>𝑛</mi><mo stretchy="false">)</mo></msqrt></mfrac></math>が従う分布を自由度<math><mi displaystyle="true">𝑛</mi></math>の<strong><strong><math><mi displaystyle="true">𝑡</mi></math>分布</strong></strong>（t-distribution）といい、<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>で表す。</p>
+      <p>また、自由度<math><mi displaystyle="true">𝑛</mi></math>の<math><mi displaystyle="true">𝑡</mi></math>分布について、その上側<math><mi displaystyle="true">𝛼</mi></math>点を<math><msub displaystyle="true"><mi>𝑡</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>で表すものとする。</p>
+      <h2 id="loc-10">4. <math><mi displaystyle="true">𝐹</mi></math>分布</h2>
+      <h3 id="loc-11">4.1. <math><mi displaystyle="true">𝐹</mi></math>分布の定義</h3>
+      <p>独立な確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑚</mi><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>について、新たな確率変数<math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mrow><mo stretchy="false">(</mo><mi>𝑋</mi><mi>/</mi><mi>𝑚</mi><mo stretchy="false">)</mo></mrow><mrow><mo stretchy="false">(</mo><mi>𝑌</mi><mi>/</mi><mi>𝑛</mi><mo stretchy="false">)</mo></mrow></mfrac></math>が従う分布を自由度<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>の<strong><strong><math><mi displaystyle="true">𝐹</mi></math>分布</strong></strong>（F-distribution）といい、<math><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>で表す。</p>
+      <p>また、自由度<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>の<math><mi displaystyle="true">𝐹</mi></math>分布について、その上側<math><mi displaystyle="true">𝛼</mi></math>点を<math><msubsup displaystyle="true"><mi>𝐹</mi><mi>𝑛</mi><mi>𝑚</mi></msubsup><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>で表すものとする。</p>
+      <h3 id="loc-12">4.2. <math><mi displaystyle="true">𝐹</mi></math>分布の交換性</h3>
+      <p><math><mn displaystyle="true">0</mn><mo displaystyle="true">&lt;</mo><mi displaystyle="true">𝛼</mi><mo displaystyle="true">&lt;</mo><mn displaystyle="true">1</mn></math>について、<math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>,</mo><mi>𝑚</mi></mrow><mo>)</mo></mrow></math>とすれば</p>
+      <math display="block">
+        <mi>𝛼</mi>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝐹</mi>
+            <mo>≥</mo>
+            <msubsup>
+              <mi>𝐹</mi>
+              <mi>𝑚</mi>
+              <mi>𝑛</mi>
+            </msubsup>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛼</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mi>𝐹</mi>
+            </mfrac>
+            <mo>≤</mo>
+            <mfrac>
+              <mn>1</mn>
+              <mrow>
+                <msubsup>
+                  <mi>𝐹</mi>
+                  <mi>𝑚</mi>
+                  <mi>𝑛</mi>
+                </msubsup>
+                <mrow>
+                  <mo>(</mo>
+                  <mi>𝛼</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+            </mfrac>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>1</mn>
+        <mo>−</mo>
+        <mo form="prefix" lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mi>𝐹</mi>
+            </mfrac>
+            <mo>≥</mo>
+            <mfrac>
+              <mn>1</mn>
+              <mrow>
+                <msubsup>
+                  <mi>𝐹</mi>
+                  <mi>𝑚</mi>
+                  <mi>𝑛</mi>
+                </msubsup>
+                <mrow>
+                  <mo>(</mo>
+                  <mi>𝛼</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+            </mfrac>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+      </math>
+      <p>であり、ゆえに</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mfrac>
+              <mn>1</mn>
+              <mi>𝐹</mi>
+            </mfrac>
+            <mo>≥</mo>
+            <mfrac>
+              <mn>1</mn>
+              <mrow>
+                <msubsup>
+                  <mi>𝐹</mi>
+                  <mi>𝑚</mi>
+                  <mi>𝑛</mi>
+                </msubsup>
+                <mrow>
+                  <mo>(</mo>
+                  <mi>𝛼</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+            </mfrac>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>1</mn>
+        <mo>−</mo>
+        <mi>𝛼</mi>
+      </math>
+      <p>である。ここで定義から<math><mfrac displaystyle="true"><mn>1</mn><mi>𝐹</mi></mfrac><mo displaystyle="true">∼</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>であり</p>
+      <math display="block">
+        <msubsup>
+          <mi>𝐹</mi>
+          <mi>𝑛</mi>
+          <mi>𝑚</mi>
+        </msubsup>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>−</mo>
+            <mi>𝛼</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mrow>
+            <msubsup>
+              <mi>𝐹</mi>
+              <mi>𝑚</mi>
+              <mi>𝑛</mi>
+            </msubsup>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛼</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>が示された。</p>
+      <h2 id="loc-13">5. 統計量</h2>
+      <h3 id="loc-14">5.1. 不偏分散に関する統計量</h3>
+      <p><math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑛</mi></msub></math>を<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>からの無作為標本とする。</p>
+      <p>標本平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mn>1</mn><mi>𝑛</mi></mfrac><munderover displaystyle="true"><mo form="prefix">∑</mo><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">=</mo><mn>1</mn></mrow><mi>𝑛</mi></munderover><msub displaystyle="true"><mi>𝑋</mi><mi>𝑖</mi></msub></math>と不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mn>1</mn><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow></mfrac><munderover displaystyle="true"><mo form="prefix">∑</mo><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">=</mo><mn>1</mn></mrow><mi>𝑛</mi></munderover><msup displaystyle="true"><mrow><mo>(</mo><mrow><msub><mi>𝑋</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle></mrow><mo>)</mo></mrow><mn>2</mn></msup></math>が既知であるとする。</p>
+      <p>いま、標本平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>について</p>
+      <math display="block">
+        <munderover>
+          <mo lspace="0em" rspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝑋</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>−</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msub>
+          <mi>𝑋</mi>
+          <mi>𝑛</mi>
+        </msub>
+        <mo>−</mo>
+        <mi>𝑛</mi>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑋</mi>
+        </mstyle>
+        <mo>=</mo>
+        <mn>0</mn>
+      </math>
+      <p>である（すなわち、<math><msub displaystyle="true"><mi>𝑋</mi><mi>𝑖</mi></msub><mo displaystyle="true">−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>の自由度は高々<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>である）ことに注意して次を議論する。</p>
+      <h4 id="loc-15">5.1.1. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>変量</h4>
+      <p>標本<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑛</mi></msub></math>について、これらを標準化した変量</p>
+      <math display="block">
+        <msub>
+          <mi>𝑍</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝑋</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>−</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mi>𝜎</mi>
+        </mfrac>
+        <mspace width="1em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo>=</mo>
+            <mn>1</mn>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>を考えると、それぞれ<math><msub displaystyle="true"><mi>𝑍</mi><mi>𝑖</mi></msub><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>であるから、統計量<math><mi displaystyle="true">𝑊</mi></math>を</p>
+      <math display="block">
+        <mi>𝑊</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msubsup>
+          <mi>𝑍</mi>
+          <mi>𝑖</mi>
+          <mn>2</mn>
+        </msubsup>
+      </math>
+      <p>で定義すれば、<math><mi displaystyle="true">𝑊</mi></math>は自由度<math><mi displaystyle="true">𝑛</mi></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従う。</p>
+      <h4 id="loc-16">5.1.2. <math><mi displaystyle="true">𝑍</mi></math>統計量</h4>
+      <p>標本平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>について、これを標準化した統計量</p>
+      <math display="block">
+        <mi>𝑍</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mi>𝜎</mi>
+            <mi>/</mi>
+            <msqrt>
+              <mi>𝑛</mi>
+            </msqrt>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>を考えると、<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>であるから、<math><msup displaystyle="true"><mi>𝑍</mi><mn>2</mn></msup></math>は自由度<math><mn displaystyle="true">1</mn></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従う。</p>
+      <h4 id="loc-17">5.1.3. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</h4>
+      <p>標本<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑛</mi></msub></math>について、これらを「標本平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>により」標準化した変量</p>
+      <math display="block">
+        <msubsup>
+          <mi>𝑍</mi>
+          <mi>𝑖</mi>
+          <mo>′</mo>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝑋</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>−</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+          </mrow>
+          <mi>𝜎</mi>
+        </mfrac>
+        <mspace width="1em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo>=</mo>
+            <mn>1</mn>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>を考える。 これについて新たな統計量</p>
+      <math display="block">
+        <mi>𝑌</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msubsup>
+          <mi>𝑍</mi>
+          <mi>𝑖</mi>
+          <mrow>
+            <mo form="postfix">′</mo>
+            <mn>2</mn>
+          </mrow>
+        </msubsup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <msup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <msup>
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+      </math>
+      <p>を考えると、</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mi>𝑌</mi>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <munderover>
+                <mo form="prefix" lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mrow>
+                      <msub>
+                        <mi>𝑋</mi>
+                        <mi>𝑖</mi>
+                      </msub>
+                      <mo>−</mo>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑋</mi>
+                      </mstyle>
+                    </mrow>
+                    <mi>𝜎</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <munderover>
+                <mo form="prefix" lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>[</mo>
+                  <mfrac>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <msub>
+                            <mi>𝑋</mi>
+                            <mi>𝑖</mi>
+                          </msub>
+                          <mo>−</mo>
+                          <mi>𝜇</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>−</mo>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                            <mi>𝑋</mi>
+                          </mstyle>
+                          <mo>−</mo>
+                          <mi>𝜇</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                    </mrow>
+                    <mi>𝜎</mi>
+                  </mfrac>
+                  <mo>]</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <munderover>
+                <mo form="prefix" lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mrow>
+                      <msub>
+                        <mi>𝑋</mi>
+                        <mi>𝑖</mi>
+                      </msub>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mi>𝜎</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mo>−</mo>
+              <mn>2</mn>
+              <mfrac>
+                <mrow>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑋</mi>
+                  </mstyle>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                </mrow>
+                <msup>
+                  <mi>𝜎</mi>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+              <munder>
+                <munder accentunder="true">
+                  <mrow>
+                    <munderover>
+                      <mo lspace="0em" rspace="0em">∑</mo>
+                      <mrow>
+                        <mi>𝑖</mi>
+                        <mo lspace="0em" rspace="0em">=</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mi>𝑛</mi>
+                    </munderover>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <msub>
+                          <mi>𝑋</mi>
+                          <mi>𝑖</mi>
+                        </msub>
+                        <mo>−</mo>
+                        <mi>𝜇</mi>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                  </mrow>
+                  <mo>⎵</mo>
+                </munder>
+                <mrow>
+                  <mo form="infix" lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+              </munder>
+              <mo>+</mo>
+              <mi>𝑛</mi>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mrow>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑋</mi>
+                      </mstyle>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mi>𝜎</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <munderover>
+                <mo form="prefix" lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mrow>
+                      <msub>
+                        <mi>𝑋</mi>
+                        <mi>𝑖</mi>
+                      </msub>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mi>𝜎</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mo>−</mo>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac>
+                    <mrow>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑋</mi>
+                      </mstyle>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mrow>
+                      <mo stretchy="false">(</mo>
+                      <mi>𝜎</mi>
+                      <mi>/</mi>
+                      <msqrt>
+                        <mi>𝑛</mi>
+                      </msqrt>
+                      <mo stretchy="false">)</mo>
+                    </mrow>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑊</mi>
+              <mo>−</mo>
+              <msup>
+                <mi>𝑍</mi>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>を得る。 <math><mi displaystyle="true">𝑊</mi></math>と<math><msup displaystyle="true"><mi>𝑍</mi><mn>2</mn></msup></math>は独立だから、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の再生性より、<math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑊</mi><mo displaystyle="true">−</mo><msup displaystyle="true"><mi>𝑍</mi><mn>2</mn></msup></math>は自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従う。</p>
+      <h4 id="loc-18">5.1.4. スチューデントの<math><mi displaystyle="true">𝑡</mi></math>統計量</h4>
+      <p><math><mi displaystyle="true">𝑍</mi></math>統計量は母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>を既知とする統計量であるが、必ずしも既知とは限らないため、代わりに不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>を用いた別の統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mi>𝑈</mi>
+            <mi>/</mi>
+            <msqrt>
+              <mi>𝑛</mi>
+            </msqrt>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>を考えると、</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mi>𝜇</mi>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mi>𝜎</mi>
+            <mi>/</mi>
+            <msqrt>
+              <mi>𝑛</mi>
+            </msqrt>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+        <mi>/</mi>
+        <msqrt>
+          <mfrac>
+            <mfrac>
+              <mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑛</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <msup>
+                  <mi>𝑈</mi>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+            </mfrac>
+            <mi>𝑛</mi>
+          </mfrac>
+        </msqrt>
+        <mo form="postfix" stretchy="false">)</mo>
+        <mo>=</mo>
+        <mfrac>
+          <mi>𝑍</mi>
+          <msqrt>
+            <mo stretchy="false">(</mo>
+            <mi>𝑌</mi>
+            <mi>/</mi>
+            <mi>𝑛</mi>
+            <mo stretchy="false">)</mo>
+          </msqrt>
+        </mfrac>
+      </math>
+      <p>より<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>と<math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>は独立であり、定義より<math><mi displaystyle="true">𝑇</mi></math>は自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><mi displaystyle="true">𝑡</mi></math>分布に従う。</p>
+      <p>この統計量<math><mi displaystyle="true">𝑇</mi></math>は<strong><strong>スチューデントの<math><mi displaystyle="true">𝑡</mi></math>統計量</strong></strong>（Student’s t-statistic）と呼ばれる。</p>
+      <h3 id="loc-19">5.2. ピアソンの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</h3>
+      <p>事象<math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐴</mi><mi>𝑘</mi></msub></math>は互いに排反で、各事象が起こる確率を<math><msub displaystyle="true"><mi>𝑝</mi><mi>𝑖</mi></msub></math>とし、<math><mi displaystyle="true">𝑛</mi></math>個の標本を抽出したとき<math><msub displaystyle="true"><mi>𝐴</mi><mi>𝑖</mi></msub></math>が出現した回数を<math><msub displaystyle="true"><mi>𝑋</mi><mi>𝑖</mi></msub></math>とする。</p>
+      <p><math><mi displaystyle="true">𝑛</mi></math>が十分大きいとき、ピアソンの定理（Pearson’s theorem）によれば、統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑘</mi>
+        </munderover>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑋</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mi>𝑛</mi>
+                <msub>
+                  <mi>𝑝</mi>
+                  <mi>𝑖</mi>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mi>𝑛</mi>
+            <msub>
+              <mi>𝑝</mi>
+              <mi>𝑖</mi>
+            </msub>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mi displaystyle="true">𝑘</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従うことが知られる。</p>
+      <p>この統計量<math><mi displaystyle="true">𝑇</mi></math>は<strong><strong>ピアソンの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</strong></strong>（Pearson’s chi-squared statistic）と呼ばれる。</p>
+      <h3 id="loc-20">5.3. 2標本問題</h3>
+      <p><math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>に従う無作為標本<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑚</mi></msub></math>と<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>に従う無作為標本<math><msub displaystyle="true"><mi>𝑌</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑌</mi><mi>𝑛</mi></msub></math>があり、それぞれは独立とする。 それぞれの標本平均を<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>と<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>、不偏分散を<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></math>と<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></math>とする。</p>
+      <h4 id="loc-21">5.3.1. 母分散が既知のとき</h4>
+      <p>それぞれの標本平均は、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>は<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><mfrac><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mi>𝑚</mi></mfrac></mrow><mo>)</mo></mrow></math>に、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>は<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><mfrac><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup><mi>𝑛</mi></mfrac></mrow><mo>)</mo></mrow></math>に従うため、差<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝐷</mi></mstyle><mo displaystyle="true">=</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle><mo displaystyle="true">−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>は正規分布の再生性より<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>−</mo><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><mfrac><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mi>𝑚</mi></mfrac><mo>+</mo><mfrac><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup><mi>𝑛</mi></mfrac></mrow><mo>)</mo></mrow></math>に従う。 すなわち統計量</p>
+      <math display="block">
+        <mi>𝑍</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝐷</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>−</mo>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>2</mn>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <msqrt>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <mi>𝑚</mi>
+            <mo form="postfix" stretchy="false">)</mo>
+            <mo>+</mo>
+            <mo form="prefix" stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <mi>𝑛</mi>
+            <mo stretchy="false">)</mo>
+          </msqrt>
+        </mfrac>
+      </math>
+      <p>は標準正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従う。</p>
+      <h4 id="loc-22">5.3.2. 母分散が未知で等しいとき</h4>
+      <p>それぞれの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量<math><mfrac displaystyle="true"><mrow><mrow><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><msubsup><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></mrow><msup><mi>𝜎</mi><mn>2</mn></msup></mfrac></math>と<math><mfrac displaystyle="true"><mrow><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><msubsup><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></mrow><msup><mi>𝜎</mi><mn>2</mn></msup></mfrac></math>はそれぞれ独立に<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>および<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従うため、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の再生性より</p>
+      <math display="block">
+        <mi>𝑌</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑚</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mrow>
+          <msup>
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+        <mo>+</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mrow>
+          <msup>
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑚</mi>
+            <mo>+</mo>
+            <mi>𝑛</mi>
+            <mo>−</mo>
+            <mn>2</mn>
+          </mrow>
+          <msup>
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+        <munder>
+          <munder accentunder="true">
+            <mfrac>
+              <mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑚</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>1</mn>
+                  <mn>2</mn>
+                </msubsup>
+                <mo>+</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑛</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>2</mn>
+                  <mn>2</mn>
+                </msubsup>
+              </mrow>
+              <mrow>
+                <mi>𝑚</mi>
+                <mo>+</mo>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>2</mn>
+              </mrow>
+            </mfrac>
+            <mo>⎵</mo>
+          </munder>
+          <mrow>
+            <mo form="infix" lspace="0em" rspace="0em">≜</mo>
+            <msup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+        </munder>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑚</mi>
+                <mo>+</mo>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>2</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <msup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <msup>
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+        </mfrac>
+      </math>
+      <p>は<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>+</mo><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow><mo>)</mo></mrow></math>に従う。 また<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝐷</mi></mstyle><mo>−</mo><mrow><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>−</mo><msub><mi>𝜇</mi><mn>2</mn></msub></mrow><mo>)</mo></mrow></mrow><mrow><mi>𝜎</mi><msqrt><mo stretchy="false">(</mo><mn>1</mn><mi>/</mi><mi>𝑚</mi><mo form="postfix" stretchy="false">)</mo><mo>+</mo><mo form="prefix" stretchy="false">(</mo><mn>1</mn><mi>/</mi><mi>𝑛</mi><mo stretchy="false">)</mo></msqrt></mrow></mfrac></math>は<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従うため、<math><mi displaystyle="true">𝑌</mi></math>と<math><mi displaystyle="true">𝑍</mi></math>が独立であることから、統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>𝑍</mi>
+        <mi>/</mi>
+        <msqrt>
+          <mfrac>
+            <mi>𝑌</mi>
+            <mrow>
+              <mi>𝑚</mi>
+              <mo>+</mo>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>2</mn>
+            </mrow>
+          </mfrac>
+        </msqrt>
+        <mo form="postfix" stretchy="false">)</mo>
+        <mo>=</mo>
+        <mi>𝑍</mi>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+        <mfrac>
+          <mi>𝜎</mi>
+          <mi>𝑈</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝐷</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>−</mo>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>2</mn>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mrow>
+            <mi>𝑈</mi>
+            <msqrt>
+              <mo stretchy="false">(</mo>
+              <mn>1</mn>
+              <mi>/</mi>
+              <mi>𝑚</mi>
+              <mo form="postfix" stretchy="false">)</mo>
+              <mo>+</mo>
+              <mo form="prefix" stretchy="false">(</mo>
+              <mn>1</mn>
+              <mi>/</mi>
+              <mi>𝑛</mi>
+              <mo stretchy="false">)</mo>
+            </msqrt>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>+</mo><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow><mo>)</mo></mrow></math>に従う。</p>
+      <h4 id="loc-23">5.3.3. 母分散が未知で等しくないとき</h4>
+      <p><math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></math>の代わりに<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></math>、<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>の代わりに<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></math>を用いるという<strong><strong>ウェルチの近似法</strong></strong>（Welch’s approximation）により、統計量</p>
+      <math display="block">
+        <msub>
+          <mi>𝑇</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝐷</mi>
+            </mstyle>
+            <mo>−</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>−</mo>
+                <msub>
+                  <mi>𝜇</mi>
+                  <mn>2</mn>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <msqrt>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <mi>𝑚</mi>
+            <mo form="postfix" stretchy="false">)</mo>
+            <mo>+</mo>
+            <mo form="prefix" stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <mi>𝑛</mi>
+            <mo stretchy="false">)</mo>
+          </msqrt>
+        </mfrac>
+      </math>
+      <p>は、近似的に自由度が</p>
+      <math display="block">
+        <mi>𝑐</mi>
+        <mo>=</mo>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mo stretchy="false">(</mo>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>1</mn>
+                  <mn>2</mn>
+                </msubsup>
+                <mi>/</mi>
+                <mi>𝑚</mi>
+                <mo form="postfix" stretchy="false">)</mo>
+                <mo>+</mo>
+                <mo form="prefix" stretchy="false">(</mo>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>2</mn>
+                  <mn>2</mn>
+                </msubsup>
+                <mi>/</mi>
+                <mi>𝑛</mi>
+                <mo stretchy="false">)</mo>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mfrac>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mo stretchy="false">(</mo>
+                    <msubsup>
+                      <mi>𝑈</mi>
+                      <mn>1</mn>
+                      <mn>2</mn>
+                    </msubsup>
+                    <mi>/</mi>
+                    <mi>𝑚</mi>
+                    <mo stretchy="false">)</mo>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mi>𝑚</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </mfrac>
+            <mo>+</mo>
+            <mfrac>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mo stretchy="false">(</mo>
+                    <msubsup>
+                      <mi>𝑈</mi>
+                      <mn>2</mn>
+                      <mn>2</mn>
+                    </msubsup>
+                    <mi>/</mi>
+                    <mi>𝑛</mi>
+                    <mo stretchy="false">)</mo>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+            </mfrac>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>に最も近い自然数<math><mi displaystyle="true">𝑘</mi></math>の<math><mi displaystyle="true">𝑡</mi></math>分布<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑘</mi><mo>)</mo></mrow></math>に従うことが知られている。</p>
+      <h4 id="loc-24">5.3.4. 母平均が未知で母分散が既知のとき</h4>
+      <p>それぞれの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量<math><mfrac displaystyle="true"><mrow><mrow><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><msubsup><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></mrow><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mfrac></math>と<math><mfrac displaystyle="true"><mrow><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><msubsup><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></mrow><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mfrac></math>はそれぞれ独立に<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>および<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従うため、<math><mi displaystyle="true">𝐹</mi></math>分布の定義より</p>
+      <math display="block">
+        <mi>𝐹</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mfrac>
+              <mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑚</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>1</mn>
+                  <mn>2</mn>
+                </msubsup>
+              </mrow>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mn>1</mn>
+                <mn>2</mn>
+              </msubsup>
+            </mfrac>
+            <mi>/</mi>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑚</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo stretchy="false">)</mo>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mfrac>
+              <mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑛</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>2</mn>
+                  <mn>2</mn>
+                </msubsup>
+              </mrow>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+                <mn>2</mn>
+              </msubsup>
+            </mfrac>
+            <mi>/</mi>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mo stretchy="false">)</mo>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は<math><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従う。</p>
+      <h2 id="loc-25">6. 検定</h2>
+      <h3 id="loc-26">6.1. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>検定</h3>
+      <h4 id="loc-27">6.1.1. 分散の検定</h4>
+      <p>平均<math><mi displaystyle="true">𝜇</mi></math>、分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>がともに未知である正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>の母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の検定を考える。</p>
+      <p>いま、「<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math>」を仮定すると、不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>について<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</p>
+      <math display="block">
+        <mi>𝑌</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>𝑋</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑋</mi>
+                </mstyle>
+              </mrow>
+              <mi>𝜎</mi>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <msup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <msubsup>
+            <mi>𝜎</mi>
+            <mn>0</mn>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <dl>
+        <dt>両側検定</dt>
+        <dd><math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑦</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑦</mi><mo>&lt;</mo><msubsup><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac></mrow><mo>)</mo></mrow><mo>,</mo><mi>𝑦</mi><mo>></mo><msubsup><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">≠</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+        <dt>右側検定</dt>
+        <dd><math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑦</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑦</mi><mo>></mo><msubsup><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+        <dt>左側検定</dt>
+        <dd><math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑦</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑦</mi><mo>&lt;</mo><msubsup><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+      </dl>
+      <p>がいえる。</p>
+      <h4 id="loc-28">6.1.2. 適合度の検定</h4>
+      <p>母集団が互いに排反な<math><mi displaystyle="true">𝑘</mi></math>個の事象<math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐴</mi><mi>𝑘</mi></msub></math>に分割されているとき、各事象における母比率<math><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><msub><mi>𝐴</mi><mn>1</mn></msub><mo>)</mo></mrow><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><msub><mi>𝐴</mi><mi>𝑘</mi></msub><mo>)</mo></mrow></math>の検定を考える。</p>
+      <p>いま、「<math><mo displaystyle="true">∀</mo><mi displaystyle="true">𝑖</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>𝑘</mi></mrow><mo>}</mo></mrow><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><msub><mi>𝐴</mi><mi>𝑖</mi></msub><mo>)</mo></mrow><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑝</mi><mi>𝑖</mi></msub></math>」を仮定すると、十分大きい<math><mi displaystyle="true">𝑛</mi></math>でピアソンの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑘</mi>
+        </munderover>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑋</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>−</mo>
+                <mi>𝑛</mi>
+                <msub>
+                  <mi>𝑝</mi>
+                  <mi>𝑖</mi>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mi>𝑛</mi>
+            <msub>
+              <mi>𝑝</mi>
+              <mi>𝑖</mi>
+            </msub>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mi displaystyle="true">𝑘</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>∈</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo fence="false" stretchy="true" symmetric="true">|</mo>
+            <mi>𝑡</mi>
+            <mo>></mo>
+            <msubsup>
+              <mi>𝜒</mi>
+              <mrow>
+                <mi>𝑘</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mn>2</mn>
+            </msubsup>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛼</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo stretchy="false">⟹</mo>
+        <mo form="prefix">∃</mo>
+        <mi>𝑖</mi>
+        <mo>∈</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mn>1</mn>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <mi>𝑘</mi>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <mi>𝑃</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝐴</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <mo>≠</mo>
+        <msub>
+          <mi>𝑝</mi>
+          <mi>𝑖</mi>
+        </msub>
+      </math>
+      <p>がいえる（適合しない場合はズレが大きくなるため）。</p>
+      <h4 id="loc-29">6.1.3. 独立性の検定</h4>
+      <p>母集団における2つの性質<math><mi displaystyle="true">𝐴</mi></math>および<math><mi displaystyle="true">𝐵</mi></math>がそれぞれ<math><mi displaystyle="true">𝑘</mi></math>個、<math><mi displaystyle="true">𝑙</mi></math>個の排反な階級<math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐴</mi><mi>𝑘</mi></msub></math>および<math><msub displaystyle="true"><mi>𝐵</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐵</mi><mi>𝑙</mi></msub></math>に分割されているとき、2つの性質<math><mi displaystyle="true">𝐴</mi></math>と<math><mi displaystyle="true">𝐵</mi></math>が独立であるかどうかの検定を考える。</p>
+      <p>いま、「性質<math><mi displaystyle="true">𝐴</mi></math>と<math><mi displaystyle="true">𝐵</mi></math>は独立である」ことを仮定する。このとき、</p>
+      <math display="block">
+        <mi>𝑃</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝐴</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <mo>≈</mo>
+        <msub>
+          <mi>𝑞</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑙</mi>
+        </munderover>
+        <msub>
+          <mi>𝑛</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+        <mo rspace="0em">,</mo>
+        <mspace width="2em"/>
+        <mi>𝑃</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub>
+            <mi>𝐵</mi>
+            <mi>𝑗</mi>
+          </msub>
+          <mo>)</mo>
+        </mrow>
+        <mo>≈</mo>
+        <msub>
+          <mi>𝑟</mi>
+          <mi>𝑗</mi>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑗</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑘</mi>
+        </munderover>
+        <msub>
+          <mi>𝑛</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo rspace="0em">,</mo>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+      </math>
+      <p>とおけば、性質の独立性より</p>
+      <math display="block">
+        <mi>𝑃</mi>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msub>
+              <mi>𝐴</mi>
+              <mi>𝑖</mi>
+            </msub>
+            <mo>∩</mo>
+            <msub>
+              <mi>𝐵</mi>
+              <mi>𝑗</mi>
+            </msub>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>≈</mo>
+        <msub>
+          <mi>𝑝</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <msub>
+          <mi>𝑞</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <msub>
+          <mi>𝑟</mi>
+          <mi>𝑗</mi>
+        </msub>
+      </math>
+      <p>であり、十分大きい<math><mi displaystyle="true">𝑛</mi></math>についてピアソンの<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑘</mi>
+        </munderover>
+        <munderover>
+          <mo form="prefix" lspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑗</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑙</mi>
+        </munderover>
+        <mfrac>
+          <msup>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <msub>
+                  <mi>𝑛</mi>
+                  <mrow>
+                    <mi>𝑖</mi>
+                    <mi>𝑗</mi>
+                  </mrow>
+                </msub>
+                <mo>−</mo>
+                <mi>𝑛</mi>
+                <msub>
+                  <mi>𝑝</mi>
+                  <mrow>
+                    <mi>𝑖</mi>
+                    <mi>𝑗</mi>
+                  </mrow>
+                </msub>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mi>𝑛</mi>
+            <msub>
+              <mi>𝑝</mi>
+              <mrow>
+                <mi>𝑖</mi>
+                <mi>𝑗</mi>
+              </mrow>
+            </msub>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑘</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑙</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>の<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>∈</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑡</mi>
+            <mo fence="false" stretchy="true" symmetric="true">|</mo>
+            <mi>𝑡</mi>
+            <mo>></mo>
+            <msubsup>
+              <mi>𝜒</mi>
+              <mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑘</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑙</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mn>2</mn>
+            </msubsup>
+            <mrow>
+              <mo>(</mo>
+              <mi>𝛼</mi>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo stretchy="false">⟹</mo>
+        <mi>𝐴</mi>
+        <mspace width="0.2222em"/>
+        <mtext>と</mtext>
+        <mspace width="0.2222em"/>
+        <mi>𝐵</mi>
+        <mspace width="0.2222em"/>
+        <mtext>は独立でない</mtext>
+      </math>
+      <p>がいえる。</p>
+      <h3 id="loc-30">6.2. <math><mi displaystyle="true">𝑡</mi></math>検定</h3>
+      <h4 id="loc-31">6.2.1. 母平均の検定（母分散未知）</h4>
+      <p>平均<math><mi displaystyle="true">𝜇</mi></math>、分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>がともに未知である正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>の母平均<math><mi displaystyle="true">𝜇</mi></math>の検定を考える。</p>
+      <p>いま、「<math><mi displaystyle="true">𝜇</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>0</mn></msub></math>」を仮定すると、標本平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>についてスチューデントの<math><mi displaystyle="true">𝑡</mi></math>統計量</p>
+      <math display="block">
+        <mi>𝑇</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑋</mi>
+            </mstyle>
+            <mo>−</mo>
+            <msub>
+              <mi>𝜇</mi>
+              <mn>0</mn>
+            </msub>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <mi>𝑈</mi>
+            <mi>/</mi>
+            <msqrt>
+              <mi>𝑛</mi>
+            </msqrt>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>の<math><mi displaystyle="true">𝑡</mi></math>分布に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <dl>
+        <dt>両側検定</dt>
+        <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mrow><mo>|</mo><mi>𝑡</mi><mo>|</mo></mrow><mo>></mo><msub><mi>𝑡</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><mi displaystyle="true">𝜇</mi><mo displaystyle="true">≠</mo><msub displaystyle="true"><mi>𝜇</mi><mn>0</mn></msub></math></dd>
+        <dt>右側検定</dt>
+        <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑡</mi><mo>></mo><msub><mi>𝑡</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><mi displaystyle="true">𝜇</mi><mo displaystyle="true">></mo><msub displaystyle="true"><mi>𝜇</mi><mn>0</mn></msub></math></dd>
+        <dt>左側検定</dt>
+        <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑡</mi><mo>&lt;</mo><mo form="prefix">−</mo><msub><mi>𝑡</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><mi displaystyle="true">𝜇</mi><mo displaystyle="true">&lt;</mo><msub displaystyle="true"><mi>𝜇</mi><mn>0</mn></msub></math></dd>
+      </dl>
+      <p>がいえる。</p>
+      <p>この手法は、サイズがともに<math><mi displaystyle="true">𝑛</mi></math>である2つの標本を比較する場合にも応用できる。</p>
+      <p>平均<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>、分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></math>、<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>がともに未知である正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>および<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>の母平均<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub></math>と<math><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>の検定を考えると、<math><mi displaystyle="true">𝜇</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">−</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>とすることで等平均の検定を行うことができる。</p>
+      <h4 id="loc-32">6.2.2. 等平均の検定（母分散未知）</h4>
+      <p>平均<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>、分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></math>、<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>がともに未知である正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>および<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>の母平均<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub></math>と<math><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>の検定を考える。</p>
+      <ol>
+        <li>
+          <p>「<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>」が既知であるとする。 「<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>」を仮定すると、サイズが<math><mi displaystyle="true">𝑚</mi></math>、<math><mi displaystyle="true">𝑛</mi></math>である各標本の平均<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>および<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>について統計量</p>
+          <math display="block">
+            <mi>𝑇</mi>
+            <mo>=</mo>
+            <mfrac>
+              <mrow>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑋</mi>
+                </mstyle>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑌</mi>
+                </mstyle>
+              </mrow>
+              <mrow>
+                <mi>𝑈</mi>
+                <msqrt>
+                  <mo stretchy="false">(</mo>
+                  <mn>1</mn>
+                  <mi>/</mi>
+                  <mi>𝑚</mi>
+                  <mo form="postfix" stretchy="false">)</mo>
+                  <mo>+</mo>
+                  <mo form="prefix" stretchy="false">(</mo>
+                  <mn>1</mn>
+                  <mi>/</mi>
+                  <mi>𝑛</mi>
+                  <mo stretchy="false">)</mo>
+                </msqrt>
+              </mrow>
+            </mfrac>
+          </math>
+          <p>は自由度<math><mi displaystyle="true">𝑚</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">2</mn></math>の<math><mi displaystyle="true">𝑡</mi></math>分布に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+          <dl>
+            <dt>両側検定</dt>
+            <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mrow><mo>|</mo><mi>𝑡</mi><mo>|</mo></mrow><mo>></mo><msub><mi>𝑡</mi><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">+</mo><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>2</mn></mrow></msub><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">≠</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+            <dt>右側検定</dt>
+            <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑡</mi><mo>></mo><msub><mi>𝑡</mi><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">+</mo><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>2</mn></mrow></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">></mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+            <dt>左側検定</dt>
+            <dd><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑡</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑡</mi><mo>&lt;</mo><mo form="prefix">−</mo><msub><mi>𝑡</mi><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">+</mo><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>2</mn></mrow></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">&lt;</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+          </dl>
+          <p>がいえる。</p>
+        </li>
+        <li>
+          <p>より一般の場合、ウェルチの近似法により統計量</p>
+          <math display="block">
+            <msub>
+              <mi>𝑇</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>=</mo>
+            <mfrac>
+              <mrow>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑋</mi>
+                </mstyle>
+                <mo>−</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑌</mi>
+                </mstyle>
+              </mrow>
+              <msqrt>
+                <mo stretchy="false">(</mo>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>1</mn>
+                  <mn>2</mn>
+                </msubsup>
+                <mi>/</mi>
+                <mi>𝑚</mi>
+                <mo form="postfix" stretchy="false">)</mo>
+                <mo>+</mo>
+                <mo form="prefix" stretchy="false">(</mo>
+                <msubsup>
+                  <mi>𝑈</mi>
+                  <mn>2</mn>
+                  <mn>2</mn>
+                </msubsup>
+                <mi>/</mi>
+                <mi>𝑛</mi>
+                <mo stretchy="false">)</mo>
+              </msqrt>
+            </mfrac>
+          </math>
+          <p>は、近似的に自由度が</p>
+          <math display="block">
+            <mi>𝑐</mi>
+            <mo>=</mo>
+            <mfrac>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mo stretchy="false">(</mo>
+                    <msubsup>
+                      <mi>𝑈</mi>
+                      <mn>1</mn>
+                      <mn>2</mn>
+                    </msubsup>
+                    <mi>/</mi>
+                    <mi>𝑚</mi>
+                    <mo form="postfix" stretchy="false">)</mo>
+                    <mo>+</mo>
+                    <mo form="prefix" stretchy="false">(</mo>
+                    <msubsup>
+                      <mi>𝑈</mi>
+                      <mn>2</mn>
+                      <mn>2</mn>
+                    </msubsup>
+                    <mi>/</mi>
+                    <mi>𝑛</mi>
+                    <mo stretchy="false">)</mo>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mfrac>
+                  <msup>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mo stretchy="false">(</mo>
+                        <msubsup>
+                          <mi>𝑈</mi>
+                          <mn>1</mn>
+                          <mn>2</mn>
+                        </msubsup>
+                        <mi>/</mi>
+                        <mi>𝑚</mi>
+                        <mo stretchy="false">)</mo>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mn>2</mn>
+                  </msup>
+                  <mrow>
+                    <mi>𝑚</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </mfrac>
+                <mo>+</mo>
+                <mfrac>
+                  <msup>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mo stretchy="false">(</mo>
+                        <msubsup>
+                          <mi>𝑈</mi>
+                          <mn>2</mn>
+                          <mn>2</mn>
+                        </msubsup>
+                        <mi>/</mi>
+                        <mi>𝑛</mi>
+                        <mo stretchy="false">)</mo>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mn>2</mn>
+                  </msup>
+                  <mrow>
+                    <mi>𝑛</mi>
+                    <mo lspace="0em" rspace="0em">−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </mfrac>
+              </mrow>
+            </mfrac>
+          </math>
+          <p>に最も近い自然数<math><mi displaystyle="true">𝑘</mi></math>の<math><mi displaystyle="true">𝑡</mi></math>分布<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑘</mi><mo>)</mo></mrow></math>に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+          <dl>
+            <dt>両側検定</dt>
+            <dd><math><msub displaystyle="true"><mi>𝑇</mi><mn>0</mn></msub><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><msub><mi>𝑡</mi><mn>0</mn></msub><mo fence="false" stretchy="true" symmetric="true">|</mo><mrow><mo>|</mo><msub><mi>𝑡</mi><mn>0</mn></msub><mo>|</mo></mrow><mo>></mo><msub><mi>𝑡</mi><mi>𝑘</mi></msub><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">≠</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+            <dt>右側検定</dt>
+            <dd><math><msub displaystyle="true"><mi>𝑇</mi><mn>0</mn></msub><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><msub><mi>𝑡</mi><mn>0</mn></msub><mo fence="false" stretchy="true" symmetric="true">|</mo><msub><mi>𝑡</mi><mn>0</mn></msub><mo>></mo><msub><mi>𝑡</mi><mi>𝑘</mi></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">></mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+            <dt>左側検定</dt>
+            <dd><math><msub displaystyle="true"><mi>𝑇</mi><mn>0</mn></msub><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><msub><mi>𝑡</mi><mn>0</mn></msub><mo fence="false" stretchy="true" symmetric="true">|</mo><msub><mi>𝑡</mi><mn>0</mn></msub><mo>&lt;</mo><mo form="prefix">−</mo><msub><mi>𝑡</mi><mi>𝑘</mi></msub><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">&lt;</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+          </dl>
+          <p>がいえる。</p>
+        </li>
+      </ol>
+      <h3 id="loc-33">6.3. <math><mi displaystyle="true">𝐹</mi></math>検定</h3>
+      <h4 id="loc-34">6.3.1. 等分散の検定</h4>
+      <p>平均<math><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>、分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></math>、<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>がともに未知である正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>および<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>の母分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></math>と<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>の検定を考える。</p>
+      <p>いま、「<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>」を仮定すると、サイズが<math><mi displaystyle="true">𝑚</mi></math>、<math><mi displaystyle="true">𝑛</mi></math>である各標本の不偏分散<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></math>と<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></math>について<math><mi displaystyle="true">𝐹</mi></math>統計量</p>
+      <math display="block">
+        <mi>𝐹</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mo stretchy="false">)</mo>
+          </mrow>
+          <mrow>
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mi>/</mi>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+            <mo stretchy="false">)</mo>
+          </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <msubsup>
+            <mi>𝑈</mi>
+            <mn>1</mn>
+            <mn>2</mn>
+          </msubsup>
+          <msubsup>
+            <mi>𝑈</mi>
+            <mn>2</mn>
+            <mn>2</mn>
+          </msubsup>
+        </mfrac>
+      </math>
+      <p>は自由度<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>の<math><mi displaystyle="true">𝐹</mi></math>分布に従い、とくに有意水準を<math><mi displaystyle="true">𝛼</mi></math>とすれば</p>
+      <dl>
+        <dt>両側検定</dt>
+        <dd><math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑓</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑓</mi><mo>&lt;</mo><msubsup><mi>𝐹</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac></mrow><mo>)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><msubsup><mi>𝐹</mi><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow></mfrac><mo>,</mo><mi>𝑓</mi><mo>></mo><msubsup><mi>𝐹</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">≠</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math></dd>
+        <dt>右側検定</dt>
+        <dd><math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑓</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑓</mi><mo>></mo><msubsup><mi>𝐹</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math></dd>
+        <dt>左側検定</dt>
+        <dd><math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">∈</mo><mrow displaystyle="true"><mo>{</mo><mrow><mi>𝑓</mi><mo fence="false" stretchy="true" symmetric="true">|</mo><mi>𝑓</mi><mo>&lt;</mo><msubsup><mi>𝐹</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><msubsup><mi>𝐹</mi><mrow><mi>𝑚</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></mrow></mfrac></mrow><mo>}</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math></dd>
+      </dl>
+      <p>がいえる。</p>
+    </main>
+  </body>
+</html>
