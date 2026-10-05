@@ -1,8 +1,10 @@
 repos:
   - repo: local
     hooks:
-      - id: build-typst-website
-        name: Build Typst Website
-        entry: sh build.sh
-        language: system
+      - id: build
+        name: Build Typst HTML
+        entry: uv run scripts/build.py
+        language: python
         pass_filenames: false
+        additional_dependencies:
+          - pyyaml

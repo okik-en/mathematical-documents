@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>有限母集団補正</title>
+    <meta property="og:title" content="有限母集団補正">
+    <meta name="description" content="有限母集団補正とは何か。">
+    <meta property="og:description" content="有限母集団補正とは何か。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">probability-and-statistics</a>/finite-population-correction></code></nav>
+      <h1>有限母集団補正</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 超幾何分布</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 有限母集団補正</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> 補正係数</a></li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. 超幾何分布</h2>
+      <p>母比率<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mi>𝑀</mi><mi>𝑁</mi></mfrac></math>の有限母集団から<math><mi displaystyle="true">𝑛</mi></math>個の標本を<strong><strong>非復元抽出</strong></strong>することを考える。</p>
+      <p>いま、二項係数を次のとおり拡張する。</p>
+      <math display="block">
+        <mrow>
+          <mo>(</mo>
+          <mfrac linethickness="0">
+            <mi>𝑛</mi>
+            <mi>𝑘</mi>
+          </mfrac>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mo>{</mo>
+          <mtable class="cases">
+            <mtr>
+              <mtd>
+                <mfrac displaystyle="true" style="math-shift: normal">
+                  <mrow>
+                    <mi>𝑛</mi>
+                    <mo>!</mo>
+                  </mrow>
+                  <mrow>
+                    <mi>𝑘</mi>
+                    <mo form="postfix">!</mo>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mi>𝑛</mi>
+                        <mo>−</mo>
+                        <mi>𝑘</mi>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>!</mo>
+                  </mrow>
+                </mfrac>
+                <mspace width="2em"/>
+                <mrow displaystyle="true" style="math-shift: normal">
+                  <mo>(</mo>
+                  <mrow>
+                    <mi>𝑘</mi>
+                    <mo>=</mo>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mi>…</mi>
+                    <mo>,</mo>
+                    <mi>𝑛</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mn displaystyle="true" style="math-shift: normal">0</mn>
+                <mspace width="2em"/>
+                <mrow displaystyle="true" style="math-shift: normal">
+                  <mo>(</mo>
+                  <mtext>otherwise</mtext>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mrow>
+      </math>
+      <p>いま、標本のうち性質を満たすものの個数を<math><mi displaystyle="true">𝑘</mi></math>とすると、場合の数は</p>
+      <math display="block">
+        <mrow>
+          <mo>(</mo>
+          <mfrac linethickness="0">
+            <mi>𝑀</mi>
+            <mi>𝑘</mi>
+          </mfrac>
+          <mo>)</mo>
+        </mrow>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+        <mrow>
+          <mo>(</mo>
+          <mfrac linethickness="0">
+            <mrow>
+              <mi>𝑁</mi>
+              <mo>−</mo>
+              <mi>𝑀</mi>
+            </mrow>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mi>𝑘</mi>
+            </mrow>
+          </mfrac>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>であり、ゆえに</p>
+      <math display="block">
+        <mrow>
+          <mo>(</mo>
+          <mfrac linethickness="0">
+            <mi>𝑁</mi>
+            <mi>𝑛</mi>
+          </mfrac>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <munderover>
+          <mo form="prefix" lspace="0em" rspace="0em">∑</mo>
+          <mrow>
+            <mi>𝑘</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>0</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mfrac linethickness="0">
+                <mi>𝑀</mi>
+                <mi>𝑘</mi>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+            <mrow>
+              <mo>(</mo>
+              <mfrac linethickness="0">
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mi>𝑀</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mi>𝑘</mi>
+                </mrow>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+      </math>
+      <p>がいえる。</p>
+      <p>しかも<math><mi displaystyle="true">𝑘</mi></math>を確率変数とみなすと、<math><mi displaystyle="true">𝑘</mi></math>は分布</p>
+      <math display="block">
+        <mo lspace="0em" rspace="0em">Pr</mo>
+        <mrow>
+          <mo>{</mo>
+          <mrow>
+            <mi>𝑋</mi>
+            <mo>=</mo>
+            <mi>𝑘</mi>
+          </mrow>
+          <mo>}</mo>
+        </mrow>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mfrac linethickness="0">
+                <mi>𝑀</mi>
+                <mi>𝑘</mi>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+            <mrow>
+              <mo>(</mo>
+              <mfrac linethickness="0">
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mi>𝑀</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mi>𝑘</mi>
+                </mrow>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mrow>
+            <mo>(</mo>
+            <mfrac linethickness="0">
+              <mi>𝑁</mi>
+              <mi>𝑛</mi>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+        </mfrac>
+        <mspace width="1em"/>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <mi>𝑘</mi>
+            <mo>∈</mo>
+            <mn>0</mn>
+            <mo>,</mo>
+            <mn>1</mn>
+            <mo>,</mo>
+            <mi>…</mi>
+            <mo>,</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+      </math>
+      <p>に従う。 この分布は<strong><strong>超幾何分布</strong></strong>と呼ばれる。以降<math><mtext displaystyle="true">Hyper</mtext><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑁</mi><mo>,</mo><mi>𝑀</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>で表す。</p>
+      <p>二項分布は復元抽出であったことに注意せよ。</p>
+      <h2 id="loc-2">2. 有限母集団補正</h2>
+      <p>超幾何分布に従う確率変数<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><mtext displaystyle="true">Hyper</mtext><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑁</mi><mo>,</mo><mi>𝑀</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>の期待値は</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑋</mi>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mi>𝑀</mi>
+                      <mi>𝑘</mi>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑁</mi>
+                        <mo>−</mo>
+                        <mi>𝑀</mi>
+                      </mrow>
+                      <mrow>
+                        <mi>𝑛</mi>
+                        <mo>−</mo>
+                        <mi>𝑘</mi>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑀</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mrow>
+                        <mi>𝑘</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑁</mi>
+                        <mo>−</mo>
+                        <mi>𝑀</mi>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑛</mi>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑘</mi>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <mi>𝑀</mi>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <msup>
+                    <mi>𝑘</mi>
+                    <mo>′</mo>
+                  </msup>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑀</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <msup>
+                        <mi>𝑘</mi>
+                        <mo>′</mo>
+                      </msup>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑁</mi>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑀</mi>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑛</mi>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <msup>
+                          <mi>𝑘</mi>
+                          <mo>′</mo>
+                        </msup>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <mi>𝑀</mi>
+              <mo>=</mo>
+              <mfrac>
+                <mi>𝑛</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mi>𝑀</mi>
+              <mo>=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mo>=</mo>
+              <mi>𝑛</mi>
+              <mi>𝑝</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>と二項分布の結果に一致する。</p>
+      <p>一方で分散は二項分布の結果と一致しない。 これを示そう。</p>
+      <p>ところで、任意の確率変数<math><mi displaystyle="true">𝑋</mi></math>について</p>
+      <math display="block">
+        <mtext>Var</mtext>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝑋</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mi>𝔼</mi>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mi>𝑋</mi>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑋</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+        <mo>+</mo>
+        <mi>𝔼</mi>
+        <mrow>
+          <mo>[</mo>
+          <mi>𝑋</mi>
+          <mo>]</mo>
+        </mrow>
+        <mo>−</mo>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mi>𝑋</mi>
+                <mo>]</mo>
+              </mrow>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>であることが知られている。 ここで<math><mi displaystyle="true">𝔼</mi><mrow displaystyle="true"><mo>[</mo><mrow><mi>𝑋</mi><mrow><mo>(</mo><mrow><mi>𝑋</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow></math>は<strong><strong>分散モーメント</strong></strong>と呼ばれる。</p>
+      <p>いま、<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><mtext displaystyle="true">Hyper</mtext><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑁</mi><mo>,</mo><mi>𝑀</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>について</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑋</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑋</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑘</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mi>𝑀</mi>
+                      <mi>𝑘</mi>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑁</mi>
+                        <mo>−</mo>
+                        <mi>𝑀</mi>
+                      </mrow>
+                      <mrow>
+                        <mi>𝑛</mi>
+                        <mo>−</mo>
+                        <mi>𝑘</mi>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑀</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑀</mi>
+                        <mo>−</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mrow>
+                        <mi>𝑘</mi>
+                        <mo>−</mo>
+                        <mn>2</mn>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑁</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑀</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑛</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑘</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <mi>𝑀</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <msup>
+                    <mi>𝑘</mi>
+                    <mo>′</mo>
+                  </msup>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>0</mn>
+                </mrow>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>2</mn>
+                </mrow>
+              </munderover>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mi>𝑀</mi>
+                        <mo>−</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <msup>
+                        <mi>𝑘</mi>
+                        <mo>′</mo>
+                      </msup>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mfrac linethickness="0">
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑁</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑀</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                      </mrow>
+                      <mrow>
+                        <mrow>
+                          <mo>(</mo>
+                          <mrow>
+                            <mi>𝑛</mi>
+                            <mo>−</mo>
+                            <mn>2</mn>
+                          </mrow>
+                          <mo>)</mo>
+                        </mrow>
+                        <mo>−</mo>
+                        <msup>
+                          <mi>𝑘</mi>
+                          <mo>′</mo>
+                        </msup>
+                      </mrow>
+                    </mfrac>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mn>2</mn>
+                    </mrow>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mn>2</mn>
+                    </mrow>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mfrac linethickness="0">
+                    <mi>𝑁</mi>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <mi>𝑀</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+              <mi>𝑀</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>であるから、その分散は</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>(</mo>
+                <mi>𝑋</mi>
+                <mo>)</mo>
+              </mrow>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mfrac>
+                <mrow>
+                  <mi>𝑀</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑀</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mo>−</mo>
+              <msup>
+                <mi>𝑛</mi>
+                <mn>2</mn>
+              </msup>
+              <mfrac>
+                <msup>
+                  <mi>𝑀</mi>
+                  <mn>2</mn>
+                </msup>
+                <msup>
+                  <mi>𝑁</mi>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mrow>
+                <mo>[</mo>
+                <mrow>
+                  <mfrac>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mi>𝑛</mi>
+                          <mo>−</mo>
+                          <mn>1</mn>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mi>𝑀</mi>
+                          <mo>−</mo>
+                          <mn>1</mn>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                    </mrow>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mi>𝑛</mi>
+                  <mfrac>
+                    <mi>𝑀</mi>
+                    <mi>𝑁</mi>
+                  </mfrac>
+                </mrow>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+              <mfrac>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mi>𝑀</mi>
+                      <mo>−</mo>
+                      <mi>𝑛</mi>
+                      <mo>−</mo>
+                      <mi>𝑀</mi>
+                      <mo>+</mo>
+                      <mi>𝑁</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mi>𝑛</mi>
+                  <mi>𝑀</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+              <mfrac>
+                <mrow>
+                  <mo>−</mo>
+                  <mi>𝑛</mi>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mi>𝑀</mi>
+                  <mi>𝑁</mi>
+                  <mo>+</mo>
+                  <msup>
+                    <mi>𝑁</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mo>+</mo>
+                  <mi>𝑛</mi>
+                  <mi>𝑀</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+              <mfrac>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mi>𝑀</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mi>𝑛</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑁</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mfrac>
+                <mi>𝑀</mi>
+                <mi>𝑁</mi>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mfrac>
+                    <mi>𝑀</mi>
+                    <mi>𝑁</mi>
+                  </mfrac>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+              <mfrac>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mi>𝑛</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mi>𝑛</mi>
+              <mi>𝑝</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mi>𝑝</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+              <mfrac>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mi>𝑛</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑁</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </mfrac>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>となり、二項分布の結果<math><mi displaystyle="true">𝑛</mi><mi displaystyle="true">𝑝</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝑝</mi></mrow><mo>)</mo></mrow></math>に補正係数<math><mfrac displaystyle="true"><mrow><mi>𝑁</mi><mo>−</mo><mi>𝑛</mi></mrow><mrow><mi>𝑁</mi><mo>−</mo><mn>1</mn></mrow></mfrac></math>が乗じられてしまう。</p>
+      <p>このように、超幾何分布を二項分布により近似するとき、（厳密には）分散に補正係数</p>
+      <math display="block">
+        <mfrac>
+          <mrow>
+            <mi>𝑁</mi>
+            <mo>−</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mrow>
+            <mi>𝑁</mi>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfrac>
+      </math>
+      <p>を乗じなければならず、これを<strong><strong>有限母集団補正</strong></strong>という。</p>
+      <h2 id="loc-3">3. 補正係数</h2>
+      <p><math><mi displaystyle="true">𝑁</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn><mo displaystyle="true">≈</mo><mi displaystyle="true">𝑁</mi></math>として抽出率<math><mi displaystyle="true">𝑓</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mi>𝑛</mi><mi>𝑁</mi></mfrac></math>と補正係数の関係を調べると</p>
+      <math display="block">
+        <mfrac>
+          <mrow>
+            <mi>𝑁</mi>
+            <mo>−</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mrow>
+            <mi>𝑁</mi>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑁</mi>
+            <mo>−</mo>
+            <mi>𝑛</mi>
+          </mrow>
+          <mi>𝑁</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mn>1</mn>
+        <mo>−</mo>
+        <mfrac>
+          <mi>𝑛</mi>
+          <mi>𝑁</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mn>1</mn>
+        <mo>−</mo>
+        <mi>𝑓</mi>
+      </math>
+      <p>となり、例えば相対誤差が<math><mfrac displaystyle="true"><mi>𝑓</mi><mrow><mn>1</mn><mo>−</mo><mi>𝑓</mi></mrow></mfrac><mo displaystyle="true">=</mo><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>となる点は<math><mi displaystyle="true">𝑓</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">4.76</mn><mi displaystyle="true">%</mi></math>であるとわかる。</p>
+      <p>よっておよそ<math><mi displaystyle="true">𝑓</mi><mo displaystyle="true">≥</mo><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>のときは有限母集団補正を考慮する必要があり、実際の運用でもこれを目安とすることが多い。</p>
+    </main>
+  </body>
+</html>

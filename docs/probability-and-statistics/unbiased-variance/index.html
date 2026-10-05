@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>不偏分散</title>
+    <meta property="og:title" content="不偏分散">
+    <meta name="description" content="不偏分散を導出しよう。">
+    <meta property="og:description" content="不偏分散を導出しよう。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">probability-and-statistics</a>/unbiased-variance></code></nav>
+      <h1>不偏分散</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 標本分散の非不偏性</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 不偏分散</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> 不偏分散の一致性</a></li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. 標本分散の非不偏性</h2>
+      <p>いま母平均<math><mi displaystyle="true">𝜇</mi></math>、母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の分布から抽出した標本の分散<math><msup displaystyle="true"><mi>𝑆</mi><mn>2</mn></msup></math>は</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <msup>
+                <mi>𝑆</mi>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <munderover>
+                <mo form="prefix">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <msub>
+                      <mi>𝑥</mi>
+                      <mi>𝑖</mi>
+                    </msub>
+                    <mo>−</mo>
+                    <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                      <mi>𝑥</mi>
+                    </mstyle>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <munderover>
+                <mo form="prefix">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>[</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <msub>
+                          <mi>𝑥</mi>
+                          <mi>𝑖</mi>
+                        </msub>
+                        <mo>−</mo>
+                        <mi>𝜇</mi>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>−</mo>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                          <mi>𝑥</mi>
+                        </mstyle>
+                        <mo>−</mo>
+                        <mi>𝜇</mi>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                  </mrow>
+                  <mo>]</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <munderover>
+                <mo form="prefix">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <msub>
+                      <mi>𝑥</mi>
+                      <mi>𝑖</mi>
+                    </msub>
+                    <mo>−</mo>
+                    <mi>𝜇</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mo>−</mo>
+              <mfrac>
+                <mn>2</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑥</mi>
+                  </mstyle>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <munderover>
+                <mo form="prefix" rspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑥</mi>
+                    <mi>𝑖</mi>
+                  </msub>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo>+</mo>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                      <mi>𝑥</mi>
+                    </mstyle>
+                    <mo>−</mo>
+                    <mi>𝜇</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <munderover>
+                <mo form="prefix">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <msub>
+                      <mi>𝑥</mi>
+                      <mi>𝑖</mi>
+                    </msub>
+                    <mo>−</mo>
+                    <mi>𝜇</mi>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+              <mo>−</mo>
+              <munder accentunder="true">
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑥</mi>
+                      </mstyle>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+                <mo>⎵</mo>
+              </munder>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>であるから、期待値の線形性より</p>
+      <math display="block">
+        <mtable class="multiline-equation aligned">
+          <mtr>
+            <mtd>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <msup>
+                  <mi>𝑆</mi>
+                  <mn>2</mn>
+                </msup>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <munderover>
+                <mo form="prefix">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mi>𝔼</mi>
+              <mrow>
+                <mo>[</mo>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑥</mi>
+                        <mi>𝑖</mi>
+                      </msub>
+                      <mo>−</mo>
+                      <mi>𝜇</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+                <mo>]</mo>
+              </mrow>
+              <mo>−</mo>
+              <munder accentunder="true">
+                <mrow>
+                  <mi>𝔼</mi>
+                  <mrow>
+                    <mo>[</mo>
+                    <msup>
+                      <mrow>
+                        <mo>(</mo>
+                        <mrow>
+                          <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                            <mi>𝑥</mi>
+                          </mstyle>
+                          <mo>−</mo>
+                          <mi>𝜇</mi>
+                        </mrow>
+                        <mo>)</mo>
+                      </mrow>
+                      <mn>2</mn>
+                    </msup>
+                    <mo>]</mo>
+                  </mrow>
+                </mrow>
+                <mo>⎵</mo>
+              </munder>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <mspace width="0.2222em"/>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <msub>
+                  <mi>𝑥</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <mo>]</mo>
+              </mrow>
+              <mo>−</mo>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑥</mi>
+                </mstyle>
+                <mo>]</mo>
+              </mrow>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>𝑛</mi>
+              </mfrac>
+              <mi>𝑛</mi>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+              <mo>−</mo>
+              <mfrac>
+                <msup>
+                  <mi>𝜎</mi>
+                  <mn>2</mn>
+                </msup>
+                <mi>𝑛</mi>
+              </mfrac>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd></mtd>
+            <mtd>
+              <mo form="infix">=</mo>
+              <mfrac>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </mfrac>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+      <p>となる。 すなわち、<math><msup displaystyle="true"><mrow><mo>(</mo><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑥</mi></mstyle><mo>−</mo><mi>𝜇</mi></mrow><mo>)</mo></mrow><mn>2</mn></msup></math>のために標本分散<math><msup displaystyle="true"><mi>𝑆</mi><mn>2</mn></msup></math>は母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の不偏推定量ではない。</p>
+      <h2 id="loc-2">2. 不偏分散</h2>
+      <p>上の式と期待値の線形性より</p>
+      <math display="block">
+        <mi>𝔼</mi>
+        <mrow>
+          <mo>[</mo>
+          <mrow>
+            <mfrac>
+              <mi>𝑛</mi>
+              <mrow>
+                <mi>𝑛</mi>
+                <mo>−</mo>
+                <mn>1</mn>
+              </mrow>
+            </mfrac>
+            <msup>
+              <mi>𝑆</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <mo>]</mo>
+        </mrow>
+        <mo>=</mo>
+        <msup>
+          <mi>𝜎</mi>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>がいえて、この</p>
+      <math display="block">
+        <msup>
+          <mi>𝑈</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mi>𝑛</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfrac>
+        <msup>
+          <mi>𝑆</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfrac>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <msub>
+                <mi>𝑥</mi>
+                <mi>𝑖</mi>
+              </msub>
+              <mo>−</mo>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑥</mi>
+              </mstyle>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>を<strong><strong>不偏分散</strong></strong>という。</p>
+      <h2 id="loc-3">3. 不偏分散の一致性</h2>
+      <p>不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>は母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の一致推定量である。</p>
+      <p>まず、大数の法則より</p>
+      <math display="block">
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑥</mi>
+        </mstyle>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msub>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <munder>
+          <mo stretchy="false">⟶</mo>
+          <mi>𝑃</mi>
+        </munder>
+        <mi>𝜇</mi>
+        <mo rspace="0em">,</mo>
+        <mspace width="2em"/>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <msup>
+            <mi>𝑥</mi>
+            <mn>2</mn>
+          </msup>
+        </mstyle>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1</mn>
+          <mi>𝑛</mi>
+        </mfrac>
+        <munderover>
+          <mo form="prefix">∑</mo>
+          <mrow>
+            <mi>𝑖</mi>
+            <mo lspace="0em" rspace="0em">=</mo>
+            <mn>1</mn>
+          </mrow>
+          <mi>𝑛</mi>
+        </munderover>
+        <msubsup>
+          <mi>𝑥</mi>
+          <mi>𝑖</mi>
+          <mn>2</mn>
+        </msubsup>
+        <munder>
+          <mo stretchy="false">⟶</mo>
+          <mi>𝑃</mi>
+        </munder>
+        <msup>
+          <mi>𝜇</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>+</mo>
+        <msup>
+          <mi>𝜎</mi>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>であるから</p>
+      <math display="block">
+        <msup>
+          <mi>𝑆</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <msup>
+            <mi>𝑥</mi>
+            <mn>2</mn>
+          </msup>
+        </mstyle>
+        <mo>−</mo>
+        <msup>
+          <mrow>
+            <mo>(</mo>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝑥</mi>
+            </mstyle>
+            <mo>)</mo>
+          </mrow>
+          <mn>2</mn>
+        </msup>
+        <munder>
+          <mo stretchy="false">⟶</mo>
+          <mi>𝑃</mi>
+        </munder>
+        <mrow>
+          <mo>(</mo>
+          <mrow>
+            <msup>
+              <mi>𝜇</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mi>𝜎</mi>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <mo>)</mo>
+        </mrow>
+        <mo>−</mo>
+        <msup>
+          <mi>𝜇</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <msup>
+          <mi>𝜎</mi>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>とわかる。</p>
+      <p>よって</p>
+      <math display="block">
+        <msup>
+          <mi>𝑈</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mi>𝑛</mi>
+          <mrow>
+            <mi>𝑛</mi>
+            <mo>−</mo>
+            <mn>1</mn>
+          </mrow>
+        </mfrac>
+        <msup>
+          <mi>𝑆</mi>
+          <mn>2</mn>
+        </msup>
+        <munder>
+          <mo stretchy="false">⟶</mo>
+          <mi>𝑃</mi>
+        </munder>
+        <msup>
+          <mi>𝜎</mi>
+          <mn>2</mn>
+        </msup>
+      </math>
+      <p>であり、ゆえに不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>は母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の一致推定量である。</p>
+      <p>一方で、不偏分散は母分散の有効推定量ではないことが知られている。</p>
+    </main>
+  </body>
+</html>
