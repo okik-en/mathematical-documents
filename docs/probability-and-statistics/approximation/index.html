@@ -9,7 +9,7 @@
     <meta property="og:description" content="数値解析における近似法についての解説ページ。Aitkenのdelta^2加速法や指数関数の近似を含む。">
     <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
     <meta property="og:type" content="article">
-    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:site_name" content="mdocs">
     <meta property="og:locale" content="ja_JP">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -19,6 +19,7 @@
       body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
       p{text-align: justify;}
       math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
       mtable, mrow{width: max-content;}
       code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
       math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
@@ -3728,88 +3729,86 @@
       <h3 id="loc-7">2.1. 連分数展開</h3>
       <p>一般に次が知られている。</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
-        <div style="flex: 1;">
-          <math id="efrac" display="block">
-            <msup>
-              <mi>𝑒</mi>
+        <math id="efrac" display="block">
+          <msup>
+            <mi>𝑒</mi>
+            <mrow>
+              <mo stretchy="false">(</mo>
+              <mn>2</mn>
+              <mi>𝑥</mi>
+              <mi>/</mi>
+              <mi>𝑦</mi>
+              <mo stretchy="false">)</mo>
+            </mrow>
+          </msup>
+          <mo>=</mo>
+          <mn>1</mn>
+          <mo>+</mo>
+          <mfrac style="math-shift: compact">
+            <mrow>
+              <mn>2</mn>
+              <mi>𝑥</mi>
+            </mrow>
+            <mrow>
               <mrow>
-                <mo stretchy="false">(</mo>
-                <mn>2</mn>
-                <mi>𝑥</mi>
-                <mi>/</mi>
-                <mi>𝑦</mi>
-                <mo stretchy="false">)</mo>
-              </mrow>
-            </msup>
-            <mo>=</mo>
-            <mn>1</mn>
-            <mo>+</mo>
-            <mfrac style="math-shift: compact">
-              <mrow>
-                <mn>2</mn>
-                <mi>𝑥</mi>
-              </mrow>
-              <mrow>
+                <mo>(</mo>
                 <mrow>
-                  <mo>(</mo>
-                  <mrow>
-                    <mi>𝑦</mi>
-                    <mo>−</mo>
-                    <mi>𝑥</mi>
-                  </mrow>
-                  <mo>)</mo>
+                  <mi>𝑦</mi>
+                  <mo>−</mo>
+                  <mi>𝑥</mi>
                 </mrow>
-                <mo>+</mo>
-                <mfrac displaystyle="true">
-                  <msup>
-                    <mi>𝑥</mi>
-                    <mn>2</mn>
-                  </msup>
-                  <mrow>
-                    <mn>3</mn>
-                    <mi>𝑦</mi>
-                    <mo>+</mo>
-                    <mfrac displaystyle="true">
-                      <msup>
-                        <mi>𝑥</mi>
-                        <mn>2</mn>
-                      </msup>
-                      <mrow>
-                        <mn>5</mn>
-                        <mi>𝑦</mi>
-                        <mo>+</mo>
-                        <mfrac displaystyle="true">
-                          <msup>
-                            <mi>𝑥</mi>
-                            <mn>2</mn>
-                          </msup>
-                          <mrow>
-                            <mn>7</mn>
-                            <mi>𝑦</mi>
-                            <mo>+</mo>
-                            <mfrac displaystyle="true">
-                              <msup>
-                                <mi>𝑥</mi>
-                                <mn>2</mn>
-                              </msup>
-                              <mrow>
-                                <mn>9</mn>
-                                <mi>𝑦</mi>
-                                <mo>+</mo>
-                                <mi>⋱</mi>
-                              </mrow>
-                            </mfrac>
-                          </mrow>
-                        </mfrac>
-                      </mrow>
-                    </mfrac>
-                  </mrow>
-                </mfrac>
+                <mo>)</mo>
               </mrow>
-            </mfrac>
-          </math>
-        </div>
-        <div style="min-width: 2em;">[1]</div>
+              <mo>+</mo>
+              <mfrac displaystyle="true">
+                <msup>
+                  <mi>𝑥</mi>
+                  <mn>2</mn>
+                </msup>
+                <mrow>
+                  <mn>3</mn>
+                  <mi>𝑦</mi>
+                  <mo>+</mo>
+                  <mfrac displaystyle="true">
+                    <msup>
+                      <mi>𝑥</mi>
+                      <mn>2</mn>
+                    </msup>
+                    <mrow>
+                      <mn>5</mn>
+                      <mi>𝑦</mi>
+                      <mo>+</mo>
+                      <mfrac displaystyle="true">
+                        <msup>
+                          <mi>𝑥</mi>
+                          <mn>2</mn>
+                        </msup>
+                        <mrow>
+                          <mn>7</mn>
+                          <mi>𝑦</mi>
+                          <mo>+</mo>
+                          <mfrac displaystyle="true">
+                            <msup>
+                              <mi>𝑥</mi>
+                              <mn>2</mn>
+                            </msup>
+                            <mrow>
+                              <mn>9</mn>
+                              <mi>𝑦</mi>
+                              <mo>+</mo>
+                              <mi>⋱</mi>
+                            </mrow>
+                          </mfrac>
+                        </mrow>
+                      </mfrac>
+                    </mrow>
+                  </mfrac>
+                </mrow>
+              </mfrac>
+            </mrow>
+          </mfrac>
+        </math>
+        <div style="width: 2em; flex-grow: 0; flex-shrink: 0;">[1]</div>
       </div>
       <h4 id="loc-8">2.1.1. <math><mi displaystyle="true">𝑒</mi></math>の近似</h4>
       <p><math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>、<math><mi displaystyle="true">𝑦</mi><mo displaystyle="true">=</mo><mn displaystyle="true">2</mn></math>として<a href="#efrac">式 [1]</a>に代入すると</p>

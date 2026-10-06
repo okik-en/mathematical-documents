@@ -62,7 +62,7 @@
       html.elem("meta", attrs: (property: "og:type", content: doc-type))
       html.elem("meta", attrs: (
         property: "og:site_name",
-        content: "数学的読み物",
+        content: "mdocs",
       ))
       html.elem("meta", attrs: (
         property: "og:locale",
@@ -89,6 +89,7 @@
           ),
           ("p", (text-align: "justify")),
           ("math", (font-family: "'Noto Sans Math', 'Noto Emoji', math", padding: "1pt")),
+          ("math[display='block']", (flex-grow: "1", flex-shrink: "1", overflow-x: "auto")),
           ("mtable, mrow", (width: "max-content")),
           ("code", (font-family: "'Noto Sans Mono', 'Noto Emoji', monospace")),
           ("math, pre", (overflow-x: "auto", overflow-y: "hidden", max-width: "100%")),

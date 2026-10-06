@@ -9,7 +9,7 @@
     <meta property="og:description" content="行列式の最高次外冪による定義を説明したページ。">
     <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
     <meta property="og:type" content="article">
-    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:site_name" content="mdocs">
     <meta property="og:locale" content="ja_JP">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -19,6 +19,7 @@
       body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
       p{text-align: justify;}
       math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
       mtable, mrow{width: max-content;}
       code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
       math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
@@ -920,26 +921,24 @@
       <p>ここで<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><mi displaystyle="true">⋯</mi><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⊗</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑟</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>の像を<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo displaystyle="true">∧</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">∧</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑟</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>と書き表す。</p>
       <p>いま、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑟</mi><mo displaystyle="true">=</mo><mn displaystyle="true">2</mn></math>として考えると、</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
-        <div style="flex: 1;">
-          <math id="eq0" display="block">
-            <mi>𝑥</mi>
-            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
-            <mi>𝑥</mi>
-            <mo>∈</mo>
-            <msub>
-              <mi>ℜ</mi>
-              <mn>2</mn>
-            </msub>
-            <mspace width="2em"/>
-            <mo rspace="0.2777777777777778em">∴</mo>
-            <mi>𝑥</mi>
-            <mo>∧</mo>
-            <mi>𝑥</mi>
-            <mo>=</mo>
-            <mn>0</mn>
-          </math>
-        </div>
-        <div style="min-width: 2em;">[1]</div>
+        <math id="eq0" display="block">
+          <mi>𝑥</mi>
+          <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⊗</mo>
+          <mi>𝑥</mi>
+          <mo>∈</mo>
+          <msub>
+            <mi>ℜ</mi>
+            <mn>2</mn>
+          </msub>
+          <mspace width="2em"/>
+          <mo rspace="0.2777777777777778em">∴</mo>
+          <mi>𝑥</mi>
+          <mo>∧</mo>
+          <mi>𝑥</mi>
+          <mo>=</mo>
+          <mn>0</mn>
+        </math>
+        <div style="width: 2em; flex-grow: 0; flex-shrink: 0;">[1]</div>
       </div>
       <p>であり、<a href="#eq0">式 [1]</a>において<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>とすることで</p>
       <math display="block">
@@ -1066,208 +1065,206 @@
       </math>
       <p>を得る。ゆえに一般の<math><msup displaystyle="true"><mi>ℝ</mi><mn>2</mn></msup></math>上の元<math><mi displaystyle="true">𝑎</mi><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><mi displaystyle="true">𝑐</mi><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>および<math><mi displaystyle="true">𝑏</mi><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">+</mo><mi displaystyle="true">𝑑</mi><msub displaystyle="true"><mi>𝑒</mi><mn>1</mn></msub></math>について</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
-        <div style="flex: 1;">
-          <math id="ad-bc" display="block">
-            <mtable class="multiline-equation aligned">
-              <mtr>
-                <mtd>
+        <math id="ad-bc" display="block">
+          <mtable class="multiline-equation aligned">
+            <mtr>
+              <mtd>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <mi>𝑎</mi>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>+</mo>
-                      <mi>𝑐</mi>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <mi>𝑎</mi>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>+</mo>
+                    <mi>𝑐</mi>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                  <mo>∧</mo>
+                  <mo>)</mo>
+                </mrow>
+                <mo>∧</mo>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <mi>𝑏</mi>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>+</mo>
-                      <mi>𝑑</mi>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <mi>𝑏</mi>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>+</mo>
+                    <mi>𝑑</mi>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                </mtd>
-                <mtd>
-                  <mo form="infix">=</mo>
-                  <mi>𝑎</mi>
-                  <mi>𝑏</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+              <mtd>
+                <mo form="infix">=</mo>
+                <mi>𝑎</mi>
+                <mi>𝑏</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
                   </mrow>
-                  <mo>+</mo>
-                  <mi>𝑎</mi>
-                  <mi>𝑑</mi>
+                  <mo>)</mo>
+                </mrow>
+                <mo>+</mo>
+                <mi>𝑎</mi>
+                <mi>𝑑</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                  <mo>+</mo>
-                  <mi>𝑐</mi>
-                  <mi>𝑏</mi>
+                  <mo>)</mo>
+                </mrow>
+                <mo>+</mo>
+                <mi>𝑐</mi>
+                <mi>𝑏</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
                   </mrow>
-                  <mo>+</mo>
-                  <mi>𝑐</mi>
-                  <mi>𝑑</mi>
+                  <mo>)</mo>
+                </mrow>
+                <mo>+</mo>
+                <mi>𝑐</mi>
+                <mi>𝑑</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                </mtd>
-              </mtr>
-              <mtr>
-                <mtd></mtd>
-                <mtd>
-                  <mo form="infix">=</mo>
-                  <mi>𝑎</mi>
-                  <mi>𝑏</mi>
-                  <mn>0</mn>
-                  <mo>+</mo>
-                  <mi>𝑎</mi>
-                  <mi>𝑑</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd></mtd>
+              <mtd>
+                <mo form="infix">=</mo>
+                <mi>𝑎</mi>
+                <mi>𝑏</mi>
+                <mn>0</mn>
+                <mo>+</mo>
+                <mi>𝑎</mi>
+                <mi>𝑑</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                  <mo>+</mo>
-                  <mi>𝑐</mi>
-                  <mi>𝑏</mi>
+                  <mo>)</mo>
+                </mrow>
+                <mo>+</mo>
+                <mi>𝑐</mi>
+                <mi>𝑏</mi>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <mo>−</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <mo>−</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                  <mo>+</mo>
-                  <mi>𝑐</mi>
-                  <mi>𝑑</mi>
-                  <mn>0</mn>
-                </mtd>
-              </mtr>
-              <mtr>
-                <mtd></mtd>
-                <mtd>
-                  <mo form="infix">=</mo>
+                  <mo>)</mo>
+                </mrow>
+                <mo>+</mo>
+                <mi>𝑐</mi>
+                <mi>𝑑</mi>
+                <mn>0</mn>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd></mtd>
+              <mtd>
+                <mo form="infix">=</mo>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <mi>𝑎</mi>
-                      <mi>𝑑</mi>
-                      <mo>−</mo>
-                      <mi>𝑏</mi>
-                      <mi>𝑐</mi>
-                    </mrow>
-                    <mo>)</mo>
+                    <mi>𝑎</mi>
+                    <mi>𝑑</mi>
+                    <mo>−</mo>
+                    <mi>𝑏</mi>
+                    <mi>𝑐</mi>
                   </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mrow>
+                  <mo>(</mo>
                   <mrow>
-                    <mo>(</mo>
-                    <mrow>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>0</mn>
-                      </msub>
-                      <mo>∧</mo>
-                      <msub>
-                        <mi>𝑒</mi>
-                        <mn>1</mn>
-                      </msub>
-                    </mrow>
-                    <mo>)</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>0</mn>
+                    </msub>
+                    <mo>∧</mo>
+                    <msub>
+                      <mi>𝑒</mi>
+                      <mn>1</mn>
+                    </msub>
                   </mrow>
-                </mtd>
-              </mtr>
-            </mtable>
-          </math>
-        </div>
-        <div style="min-width: 2em;">[2]</div>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+            </mtr>
+          </mtable>
+        </math>
+        <div style="width: 2em; flex-grow: 0; flex-shrink: 0;">[2]</div>
       </div>
       <p>と計算できることがわかる。</p>
       <p>一般に、<math><mo lspace="0em" rspace="0.16666666666666666em" displaystyle="true">dim</mo><msup displaystyle="true"><mi mathvariant="normal">Λ</mi><mi>𝑛</mi></msup><msup displaystyle="true"><mi>ℝ</mi><mi>𝑛</mi></msup><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>であることが知られており、しかもその基底は<math><msub displaystyle="true"><mi>𝑒</mi><mn>0</mn></msub><mo displaystyle="true">∧</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">∧</mo><msub displaystyle="true"><mi>𝑒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>である。ゆえに<math><msub displaystyle="true"><mi>𝑎</mi><mn>0</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑎</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></math>に対して、ある実数<math><mo lspace="0em" rspace="0em" displaystyle="true">det</mo><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝑎</mi><mn>0</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>𝑎</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub></mrow><mo>)</mo></mrow><mo displaystyle="true">∈</mo><mi displaystyle="true">ℝ</mi></math>が存在して</p>

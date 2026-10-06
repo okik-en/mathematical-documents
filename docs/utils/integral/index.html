@@ -9,7 +9,7 @@
     <meta property="og:description" content="積分に関して知っておいた方がよい知識をまとめたページ。">
     <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
     <meta property="og:type" content="article">
-    <meta property="og:site_name" content="数学的読み物">
+    <meta property="og:site_name" content="mdocs">
     <meta property="og:locale" content="ja_JP">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -19,6 +19,7 @@
       body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
       p{text-align: justify;}
       math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
       mtable, mrow{width: max-content;}
       code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
       math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
@@ -545,14 +546,33 @@
       </math>
       <p>と得られることを踏まえて</p>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 1em;">
-        <div style="flex: 1;">
-          <math id="x2a2" display="block">
-            <mo lspace="0em">∫</mo>
-            <mfrac>
-              <mrow>
-                <mi>𝑑</mi>
+        <math id="x2a2" display="block">
+          <mo lspace="0em">∫</mo>
+          <mfrac>
+            <mrow>
+              <mi>𝑑</mi>
+              <mi>𝑥</mi>
+            </mrow>
+            <msqrt>
+              <msup>
                 <mi>𝑥</mi>
-              </mrow>
+                <mn>2</mn>
+              </msup>
+              <mo>+</mo>
+              <msup>
+                <mi>𝑎</mi>
+                <mn>2</mn>
+              </msup>
+            </msqrt>
+          </mfrac>
+          <mo>=</mo>
+          <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">log</mo>
+          <mi>𝑎</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑥</mi>
+              <mo>+</mo>
               <msqrt>
                 <msup>
                   <mi>𝑥</mi>
@@ -564,60 +584,39 @@
                   <mn>2</mn>
                 </msup>
               </msqrt>
-            </mfrac>
-            <mo>=</mo>
-            <mo form="prefix" lspace="0em" rspace="0.16666666666666666em">log</mo>
-            <mi>𝑎</mi>
-            <mrow>
-              <mo>(</mo>
-              <mrow>
-                <mi>𝑥</mi>
-                <mo>+</mo>
-                <msqrt>
-                  <msup>
-                    <mi>𝑥</mi>
-                    <mn>2</mn>
-                  </msup>
-                  <mo>+</mo>
-                  <msup>
-                    <mi>𝑎</mi>
-                    <mn>2</mn>
-                  </msup>
-                </msqrt>
-              </mrow>
-              <mo>)</mo>
             </mrow>
-            <mo>+</mo>
-            <msup>
-              <mi>𝐶</mi>
-              <mo>′</mo>
-            </msup>
-            <mo>=</mo>
-            <mo form="prefix" lspace="0em" rspace="0em">log</mo>
-            <mrow>
-              <mo>(</mo>
-              <mrow>
-                <mi>𝑥</mi>
-                <mo>+</mo>
-                <msqrt>
-                  <msup>
-                    <mi>𝑥</mi>
-                    <mn>2</mn>
-                  </msup>
-                  <mo>+</mo>
-                  <msup>
-                    <mi>𝑎</mi>
-                    <mn>2</mn>
-                  </msup>
-                </msqrt>
-              </mrow>
-              <mo>)</mo>
-            </mrow>
-            <mo>+</mo>
+            <mo>)</mo>
+          </mrow>
+          <mo>+</mo>
+          <msup>
             <mi>𝐶</mi>
-          </math>
-        </div>
-        <div style="min-width: 2em;">[1]</div>
+            <mo>′</mo>
+          </msup>
+          <mo>=</mo>
+          <mo form="prefix" lspace="0em" rspace="0em">log</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑥</mi>
+              <mo>+</mo>
+              <msqrt>
+                <msup>
+                  <mi>𝑥</mi>
+                  <mn>2</mn>
+                </msup>
+                <mo>+</mo>
+                <msup>
+                  <mi>𝑎</mi>
+                  <mn>2</mn>
+                </msup>
+              </msqrt>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mo>+</mo>
+          <mi>𝐶</mi>
+        </math>
+        <div style="width: 2em; flex-grow: 0; flex-shrink: 0;">[1]</div>
       </div>
       <p>とわかる。</p>
       <h2 id="loc-2">2. Euler置換</h2>

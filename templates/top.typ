@@ -1,5 +1,6 @@
-#import "/lib/styles.typ": style, styled
-#set document(title: "目次")
+#import "/lib/styles.typ": nav, style, styled
+
+#set document(title: "mdocs")
 
 #show: style.with(doc-type: "website")
 
