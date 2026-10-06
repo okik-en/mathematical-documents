@@ -96,17 +96,18 @@
       align-items: "center",
       gap: "1em",
     ),
-    {
-      html.div(style: styled(flex: "1"), [
-        #math.equation(
-          block: true,
-          numbering: numbering.with("[1]"),
-          number-align: right + horizon,
-          body,
-        )
-        #ref
-      ])
-      html.div(style: styled(min-width: "2em"), context numbering("[1]", counter(math.equation).get().first()))
-    },
+    [
+      #math.equation(
+        block: true,
+        numbering: numbering.with("[1]"),
+        number-align: right + horizon,
+        body,
+      )
+      #ref
+      #html.div(
+        style: styled(width: "2em", flex-grow: "0", flex-shrink: "0"),
+        context numbering("[1]", counter(math.equation).get().first()),
+      )
+    ],
   )
 }
