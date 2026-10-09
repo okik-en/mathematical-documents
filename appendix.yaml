@@ -1,5 +1,8 @@
 - abstract-math:
   - determinant
+- asm-68k:
+  - inst
+  - reg
 - probability-and-statistics:
   - approximation
   - confidence-interval

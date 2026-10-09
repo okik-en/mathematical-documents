@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>m68k Registers</title>
+    <meta property="og:title" content="m68k Registers">
+    <meta name="description" content="About m68k registers and their sizes.">
+    <meta property="og:description" content="About m68k registers and their sizes.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../">~</a>/<a href="../">asm-68k</a>/reg></code></nav>
+      <h1>m68k Registers</h1>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> Kind of Registers</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> Size of Registers</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> Data Representation</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> Addressing Modes</a></li>
+        </ol>
+      </nav>
+      <h2 id="loc-1">1. Kind of Registers</h2>
+      <dl>
+        <dt>Data Register</dt>
+        <dd><code>%d0</code> – <code>%d7</code></dd>
+        <dt>Address Register</dt>
+        <dd><code>%a0</code> – <code>%a6</code></dd>
+        <dt>Stack Pointer</dt>
+        <dd><code>%a7</code></dd>
+        <dt>Program Counter</dt>
+        <dd><code>%pc</code></dd>
+        <dt>Status Register</dt>
+        <dd><code>sr</code> <a href="https://moodle.s.kyushu-u.ac.jp/pluginfile.php/2606430/mod_resource/content/1/講義1.pdf#page=13">🔗</a></dd>
+      </dl>
+      <h2 id="loc-2">2. Size of Registers</h2>
+      <dl>
+        <dt>Byte <code>.b</code></dt>
+        <dd>1 Byte = 8 bits</dd>
+        <dt>Word <code>.w</code></dt>
+        <dd>2 Bytes = 16 bits</dd>
+        <dt>Long Word <code>.l</code></dt>
+        <dd>4 Bytes = 32 bits (register size)</dd>
+      </dl>
+      <h2 id="loc-3">3. Data Representation</h2>
+      <p>Little Endian</p>
+      <pre><code>0x12345678
+---
+00: 1 2
+02: 3 4
+04: 5 6
+06: 7 8</code></pre>
+      <h2 id="loc-4">4. Addressing Modes</h2>
+      <dl>
+        <dt>Immediate data</dt>
+        <dd><code>#0x1234</code> → <code>0x1234</code></dd>
+        <dt>Absolute address</dt>
+        <dd><code>0x1000</code> → <code>(mem+) 0x1000</code></dd>
+        <dt>Data/Address register direct</dt>
+        <dd><code>%a0</code> → <code>(reg+) a0</code></dd>
+        <dt>Address register indirect</dt>
+        <dd><code>(%a0)</code> → <code>(mem+) reg[a0]</code></dd>
+        <dt>Postincrement address register indirect</dt>
+        <dd><code>(%a0)+</code> → <code>(mem+) reg[a0]++</code></dd>
+        <dt>Predecrement address register indirect</dt>
+        <dd><code>-(%a0)</code> → <code>(mem+) --reg[a0]</code></dd>
+        <dt>Indexed address register indirect</dt>
+        <dd><code>d8(%a0, %d1.l)</code> → <code>(mem+) reg[a0] + reg[d1] + FFFFFFFF</code></dd>
+      </dl>
+    </main>
+  </body>
+</html>
