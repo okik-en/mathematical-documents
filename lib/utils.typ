@@ -1,6 +1,7 @@
 #import "@preview/cetz:0.5.2"
 
 // MARK: MATH
+#let se = math.class("normal", "se")
 #let Var = math.class("normal", "Var")
 #let Cov = math.class("normal", "Cov")
 #let Bin = math.class("normal", math.italic("Bin"))
