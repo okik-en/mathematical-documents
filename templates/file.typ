@@ -1,4 +1,4 @@
-#import "/lib/styles.typ": nav, style, styled
+#import "/lib/styles.typ": keywords, nav, style, styled
 
 #let __path__ = sys.inputs.at("path")
 
@@ -10,6 +10,7 @@
 #nav(__path__)
 
 #title()
+#keywords()
 #outline()
 
 #include "/src/" + __path__ + ".typ"

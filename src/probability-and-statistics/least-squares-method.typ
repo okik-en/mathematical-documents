@@ -2,8 +2,9 @@
 
 #let document-config = (
   title: "線形単回帰と最小二乗法",
-  description: "最小二乗法はどのようにして導出されるのか。",
+  description: "最小二乗法はどのようにして導出されるのか。どのように応用されるのか。",
   author: "Salty Lemon",
+  keywords: ("統計検定",),
 )
 
 #show: previewer(document-config)

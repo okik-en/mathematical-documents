@@ -5,6 +5,7 @@
   title: "信頼区間",
   description: "信頼区間を導出するページ。",
   author: "Salty Lemon",
+  keywords: ("統計検定",),
 )
 
 #show: previewer(document-config)
@@ -37,7 +38,7 @@ $
 $
 と表せて、これを$X$の*標準化変数*と呼ぶ。
 
-= 信頼区間の導出
+= $Z$統計量の信頼区間の導出
 
 いま、$Z tilde.op N(0, 1)$の上側$100beta%$点を$z(beta)$とする。
 すなわち：

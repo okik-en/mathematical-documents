@@ -1,4 +1,4 @@
-#import "utils.typ": __svg__, frame, myrepr, nav, styled
+#import "utils.typ": __svg__, frame, keywords, myrepr, nav, styled
 
 #let style(doc-type: "article", body) = context {
   set text(

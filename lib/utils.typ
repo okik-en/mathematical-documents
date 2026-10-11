@@ -12,9 +12,16 @@
   ..args.pos().map(child => math.display(child)),
 )
 
-
 // MARK: PREVIEW
 #let is-preview = sys.inputs.keys().contains("x-preview")
+#let keywords() = context if document.keywords != () {
+  let _keywords = if type(document.keywords) == array {
+    document.keywords
+  } else if type(document.keywords) == text {
+    (document.keywords,)
+  }
+  "Keywords: " + _keywords.map(w => "#" + w).join(", ")
+}
 #let previewer(document-config) = body => if is-preview {
   set document(..document-config)
   set page(height: auto)
@@ -22,6 +29,7 @@
   show math.equation: set text(font: "Noto Sans Math")
 
   title()
+  keywords()
   outline()
   body
 } else { body }

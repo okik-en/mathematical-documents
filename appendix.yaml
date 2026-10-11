@@ -7,8 +7,8 @@
   - approximation
   - confidence-interval
   - finite-population-correction
-  - lsm
-  - mm1
+  - least-squares-method
+  - m-m-1
   - sampling-distribution
   - unbiased-variance
 - utils:

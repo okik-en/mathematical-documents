@@ -3,6 +3,8 @@
 #let document-config = (
   title: "不偏分散",
   description: "不偏分散を導出しよう。",
+  author: "Salty Lemon",
+  keywords: ("統計検定",),
 )
 
 #show: previewer(document-config)

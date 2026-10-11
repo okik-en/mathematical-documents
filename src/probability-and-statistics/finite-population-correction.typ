@@ -4,6 +4,7 @@
   title: "有限母集団補正",
   description: "有限母集団補正とは何か。",
   author: "Salty Lemon",
+  keywords: ("統計検定",),
 )
 
 #show: previewer(document-config)

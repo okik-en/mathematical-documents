@@ -4,6 +4,7 @@
   title: "標本分布",
   description: "chi^2分布やt分布、F分布に関してまとめたページ。",
   author: "Salty Lemon",
+  keywords: ("統計検定",),
 )
 
 #show: previewer(document-config)
