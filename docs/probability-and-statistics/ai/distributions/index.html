@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>標本分布のまとめ</title>
+    <meta property="og:title" content="標本分布のまとめ">
+    <meta name="description" content="Gamma分布、chi^2分布、t分布、F分布の定義と覚え方をまとめたページ。">
+    <meta property="og:description" content="Gamma分布、chi^2分布、t分布、F分布の定義と覚え方をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/distributions></code></nav>
+      <h1>標本分布のまとめ</h1>
+      <p>Keywords: #統計検定, #標本分布</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 全体像</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> <math><mi displaystyle="true">𝑡</mi></math>分布</a></li>
+          <li><a href="#loc-5"><span class="prefix">5.</span> <math><mi displaystyle="true">𝐹</mi></math>分布</a></li>
+          <li><a href="#loc-6"><span class="prefix">6.</span> どの検定でどの分布を使うか</a></li>
+        </ol>
+      </nav>
+      <p><a href="../../sampling-distribution/">標本分布</a>のページに登場する4つの分布について、定義・性質・覚え方を短くまとめる。 導出の詳細は元のページを参照のこと。</p>
+      <h2 id="loc-1">1. 全体像</h2>
+      <p>4つの分布は、すべて<strong><strong>標準正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>から組み立てられる</strong></strong>。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方：組み立ての流れ</p>
+        <ol>
+          <li><math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>を<strong><strong>2乗して足す</strong></strong>と<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</li>
+          <li><math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>を<strong><strong><math><msqrt displaystyle="true"><msup><mi>𝜒</mi><mn>2</mn></msup><mspace width="0.2222em"/><mtext>/ 自由度</mtext></msqrt></math>で割る</strong></strong>と<math><mi displaystyle="true">𝑡</mi></math>分布</li>
+          <li><strong><strong><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mspace width="0.2222em"/><mtext displaystyle="true">/ 自由度</mtext></math>同士の比</strong></strong>をとると<math><mi displaystyle="true">𝐹</mi></math>分布</li>
+          <li><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布は<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布の特別な場合</li>
+        </ol>
+        <p>「自由度で割る」のは、平均を<math><mn displaystyle="true">1</mn></math>にそろえて大きさを比べやすくするためと覚えるとよい（<math><mi displaystyle="true">𝔼</mi><mrow displaystyle="true"><mo>[</mo><mrow><msup><mi>𝜒</mi><mn>2</mn></msup><mrow><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></mrow><mo>]</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑛</mi></math>なので<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mi displaystyle="true">𝑛</mi></math>の平均は<math><mn displaystyle="true">1</mn></math>）。</p>
+      </div>
+      <table>
+        <tr>
+          <td><strong><strong>分布</strong></strong></td>
+          <td><strong><strong>作り方</strong></strong></td>
+          <td><strong><strong>平均</strong></strong></td>
+          <td><strong><strong>分散</strong></strong></td>
+          <td><strong><strong>主な用途</strong></strong></td>
+        </tr>
+        <tr>
+          <td><math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math></td>
+          <td>指数分布の拡張</td>
+          <td><math><mfrac displaystyle="true"><mi>𝛼</mi><mi>𝜆</mi></mfrac></math></td>
+          <td><math><mfrac displaystyle="true"><mi>𝛼</mi><msup><mi>𝜆</mi><mn>2</mn></msup></mfrac></math></td>
+          <td>待ち時間</td>
+        </tr>
+        <tr>
+          <td><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math></td>
+          <td><math><msubsup displaystyle="true"><mi>𝑍</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">+</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mi>𝑛</mi><mn>2</mn></msubsup></math></td>
+          <td><math><mi displaystyle="true">𝑛</mi></math></td>
+          <td><math><mn displaystyle="true">2</mn><mi displaystyle="true">𝑛</mi></math></td>
+          <td>母分散・適合度・独立性の検定</td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math></td>
+          <td><math><mfrac displaystyle="true"><mi>𝑍</mi><msqrt><mi>𝑋</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mi>𝑛</mi></msqrt></mfrac></math></td>
+          <td><math><mn displaystyle="true">0</mn></math></td>
+          <td><math><mfrac displaystyle="true"><mi>𝑛</mi><mrow><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow></mfrac></math></td>
+          <td>母平均の検定（分散未知）</td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math></td>
+          <td><math><mfrac displaystyle="true"><mrow><mi>𝑋</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mi>𝑚</mi></mrow><mrow><mi>𝑌</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mi>𝑛</mi></mrow></mfrac></math></td>
+          <td><math><mfrac displaystyle="true"><mi>𝑛</mi><mrow><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow></mfrac></math></td>
+          <td>（略）</td>
+          <td>分散の比・分散分析・回帰</td>
+        </tr>
+      </table>
+      <p>ここで<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑍</mi><mi>𝑖</mi></msub><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑚</mi><mo>)</mo></mrow></math>（<math><mi displaystyle="true">𝑡</mi></math>分布の行では<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>）、<math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>で、すべて独立とする。 <math><mi displaystyle="true">𝑡</mi></math>分布の分散は<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">></mo><mn displaystyle="true">2</mn></math>、<math><mi displaystyle="true">𝐹</mi></math>分布の平均は<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">></mo><mn displaystyle="true">2</mn></math>のときに存在する。</p>
+      <h2 id="loc-2">2. <math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</h2>
+      <div style="border-left: 4px solid #0891b2; background-color: #0891b21f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #0891b2; margin: .5em 0;">動機：待ち時間を足し合わせたい</p>
+        <p>指数分布<math><mi displaystyle="true">𝜆</mi><msup displaystyle="true"><mi>𝑒</mi><mrow><mo>−</mo><mi>𝜆</mi><mi>𝑥</mi></mrow></msup></math>は、「平均して単位時間に<math><mi displaystyle="true">𝜆</mi></math>回起こる事象が、<strong><strong>1回</strong></strong>起こるまでの待ち時間」の分布だった。 では「<strong><strong><math><mi displaystyle="true">𝛼</mi></math>回</strong></strong>起こるまでの待ち時間」はどう分布するだろうか。</p>
+        <p>これは独立な指数分布<math><mi displaystyle="true">𝛼</mi></math>個の和であり、計算すると密度は<math><msup displaystyle="true"><mi>𝑥</mi><mrow><mi>𝛼</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msup><msup displaystyle="true"><mi>𝑒</mi><mrow><mo>−</mo><mi>𝜆</mi><mi>𝑥</mi></mrow></msup></math>に比例する形になる。 この形は<math><mi displaystyle="true">𝛼</mi></math>が整数でなくても意味をもち、全体を<math><mn displaystyle="true">1</mn></math>にする定数がちょうど<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数で書ける。 そこで<math><mi displaystyle="true">𝛼</mi></math>を正の実数に広げたものを<math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布と定義する。</p>
+        <p><math><mi displaystyle="true">𝛼</mi></math>を半整数（<math><mfrac displaystyle="true"><mn>1</mn><mn>2</mn></mfrac><mo displaystyle="true">,</mo><mfrac displaystyle="true"><mn>3</mn><mn>2</mn></mfrac><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi></math>）まで許しておくと、後で<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布をその特別な場合として扱えるようになる。</p>
+      </div>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義</p>
+        <p><math><mi displaystyle="true">𝛼</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>、<math><mi displaystyle="true">𝜆</mi><mo displaystyle="true">></mo><mn displaystyle="true">0</mn></math>について、確率密度関数</p>
+        <math display="block">
+          <mi>𝑓</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑥</mi>
+              <mo>;</mo>
+              <mi>𝛼</mi>
+              <mo>,</mo>
+              <mi>𝜆</mi>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mo>=</mo>
+          <mfrac>
+            <msup>
+              <mi>𝜆</mi>
+              <mi>𝛼</mi>
+            </msup>
+            <mrow>
+              <mi mathvariant="normal">Γ</mi>
+              <mrow>
+                <mo>(</mo>
+                <mi>𝛼</mi>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+          <msup>
+            <mi>𝑥</mi>
+            <mrow>
+              <mi>𝛼</mi>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mn>1</mn>
+            </mrow>
+          </msup>
+          <msup>
+            <mi>𝑒</mi>
+            <mrow>
+              <mo>−</mo>
+              <mi>𝜆</mi>
+              <mi>𝑥</mi>
+            </mrow>
+          </msup>
+          <mspace width="2em"/>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑥</mi>
+              <mo>></mo>
+              <mn>0</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>で与えられる分布を<strong><strong><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>分布</strong></strong>といい、<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>で表す。</p>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理：性質</p>
+        <ul>
+          <li>平均<math><mfrac displaystyle="true"><mi>𝛼</mi><mi>𝜆</mi></mfrac></math>、分散<math><mfrac displaystyle="true"><mi>𝛼</mi><msup><mi>𝜆</mi><mn>2</mn></msup></mfrac></math></li>
+          <li><math><mi displaystyle="true">𝛼</mi><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>のとき指数分布<math><mi displaystyle="true">𝜆</mi><msup displaystyle="true"><mi>𝑒</mi><mrow><mo>−</mo><mi>𝜆</mi><mi>𝑥</mi></mrow></msup></math>に一致する</li>
+          <li><strong><strong>再生性</strong></strong>：独立に<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">∼</mo><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝛼</mi><mn>1</mn></msub><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>、<math><msub displaystyle="true"><mi>𝑋</mi><mn>2</mn></msub><mo displaystyle="true">∼</mo><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝛼</mi><mn>2</mn></msub><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>なら<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">+</mo><msub displaystyle="true"><mi>𝑋</mi><mn>2</mn></msub><mo displaystyle="true">∼</mo><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝛼</mi><mn>1</mn></msub><mo>+</mo><msub><mi>𝛼</mi><mn>2</mn></msub><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math></li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><math><mi displaystyle="true">𝛼</mi></math>は「何回分の待ち時間を足したか」、<math><mi displaystyle="true">𝜆</mi></math>は「単位時間あたりに起こる回数」。 指数分布（<math><mn displaystyle="true">1</mn></math>回分の待ち時間）を<math><mi displaystyle="true">𝛼</mi></math>回分足したものが<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mi>𝜆</mi></mrow><mo>)</mo></mrow></math>だと思えば、平均<math><mfrac displaystyle="true"><mi>𝛼</mi><mi>𝜆</mi></mfrac></math>は「<math><mn displaystyle="true">1</mn></math>回あたり<math><mfrac displaystyle="true"><mn>1</mn><mi>𝜆</mi></mfrac></math>の待ち時間 × <math><mi displaystyle="true">𝛼</mi></math>回」として自然に出てくる。</li>
+          <li><math><mi mathvariant="normal" displaystyle="true">Γ</mi></math>関数は「階乗の一般化」：<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑛</mi><mo displaystyle="true">!</mo></math>、<math><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo></mrow><mo displaystyle="true">=</mo><msqrt displaystyle="true"><mi>𝜋</mi></msqrt></math>。</li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        再生性が使えるのは<strong><strong><math><mi displaystyle="true">𝜆</mi></math>が等しいとき</strong></strong>だけである。
+      </div>
+      <h2 id="loc-3">3. <math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</h2>
+      <div style="border-left: 4px solid #0891b2; background-color: #0891b21f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #0891b2; margin: .5em 0;">動機：ばらつき・ずれの大きさを測りたい</p>
+        <p>平均は<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>という<strong><strong>1次式</strong></strong>で推定でき、その分布は正規分布で済んだ。 しかし<strong><strong>分散（ばらつき）</strong></strong>を推定しようとすると、<math><mo lspace="0em" displaystyle="true">∑</mo><msup displaystyle="true"><mrow><mo>(</mo><mrow><msub><mi>𝑋</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle></mrow><mo>)</mo></mrow><mn>2</mn></msup></math>のような<strong><strong>2乗の和</strong></strong>が必ず出てくる。</p>
+        <p>各項を標準化すると、2乗の和は「標準正規分布に従う変数の2乗の和」になる。 そこで、この<strong><strong><math><msubsup displaystyle="true"><mi>𝑍</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">+</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">+</mo><msubsup displaystyle="true"><mi>𝑍</mi><mi>𝑛</mi><mn>2</mn></msubsup></math>の分布</strong></strong>さえ調べておけば、母分散についての推定・検定がすべてできる。 これが<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布を定義する理由である。</p>
+        <p>同じ発想で、適合度検定や独立性の検定の「観測と期待の<strong><strong>ずれの2乗の和</strong></strong>」も<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布で評価できる。</p>
+      </div>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義</p>
+        <p>独立な<math><msub displaystyle="true"><mi>𝑍</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑍</mi><mi>𝑛</mi></msub><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>について、</p>
+        <math display="block">
+          <mi>𝑋</mi>
+          <mo>=</mo>
+          <msubsup>
+            <mi>𝑍</mi>
+            <mn>1</mn>
+            <mn>2</mn>
+          </msubsup>
+          <mo>+</mo>
+          <msubsup>
+            <mi>𝑍</mi>
+            <mn>2</mn>
+            <mn>2</mn>
+          </msubsup>
+          <mo>+</mo>
+          <mi>⋯</mi>
+          <mo>+</mo>
+          <msubsup>
+            <mi>𝑍</mi>
+            <mi>𝑛</mi>
+            <mn>2</mn>
+          </msubsup>
+        </math>
+        <p>が従う分布を自由度<math><mi displaystyle="true">𝑛</mi></math>の<strong><strong><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</strong></strong>といい、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>で表す。 上側<math><mn displaystyle="true">100</mn><mi displaystyle="true">𝛼</mi><mi displaystyle="true">%</mi></math>点を<math><msubsup displaystyle="true"><mi>𝜒</mi><mi>𝑛</mi><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>と書く。</p>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理：性質</p>
+        <ul>
+          <li>平均<math><mi displaystyle="true">𝑛</mi></math>、分散<math><mn displaystyle="true">2</mn><mi displaystyle="true">𝑛</mi></math></li>
+          <li><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi mathvariant="normal" displaystyle="true">Γ</mi><mrow displaystyle="true"><mo>(</mo><mrow><mfrac><mi>𝑛</mi><mn>2</mn></mfrac><mo>,</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math></li>
+          <li><strong><strong>再生性</strong></strong>：独立に<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑚</mi><mo>)</mo></mrow></math>、<math><msub displaystyle="true"><mi>𝑋</mi><mn>2</mn></msub><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>なら<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">+</mo><msub displaystyle="true"><mi>𝑋</mi><mn>2</mn></msub><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>+</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math></li>
+          <li>
+            <p>正規母集団<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>からの標本について、不偏分散<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>を使った</p>
+            <math display="block">
+              <mfrac>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo>−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <msup>
+                    <mi>𝑈</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mrow>
+                <msup>
+                  <mi>𝜎</mi>
+                  <mn>2</mn>
+                </msup>
+              </mfrac>
+              <mo>∼</mo>
+              <msup>
+                <mi>𝜒</mi>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </math>
+            <p>が成り立つ（<math><mi displaystyle="true">𝜇</mi></math>を<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>で推定したぶん、自由度が<math><mn displaystyle="true">1</mn></math>減る）。</p>
+          </li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><strong><strong>「二乗の和」なので必ず<math><mn displaystyle="true">0</mn></math>以上</strong></strong>で、右に裾が長い。自由度が大きくなるほど左右対称に近づく。</li>
+          <li><math><mi displaystyle="true">𝔼</mi><mrow displaystyle="true"><mo>[</mo><msubsup><mi>𝑍</mi><mi>𝑖</mi><mn>2</mn></msubsup><mo>]</mo></mrow><mo displaystyle="true">=</mo><mtext displaystyle="true">Var</mtext><mrow displaystyle="true"><mo>[</mo><msub><mi>𝑍</mi><mi>𝑖</mi></msub><mo>]</mo></mrow><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>なので、<math><mi displaystyle="true">𝑛</mi></math>個足すと平均は<math><mi displaystyle="true">𝑛</mi></math>。「平均＝自由度」と覚える。</li>
+          <li>分散は「<math><mn displaystyle="true">2</mn><mo form="infix" lspace="0.2222222222222222em" rspace="0em" displaystyle="true">×</mo></math>自由度」。</li>
+          <li>左右非対称なので、両側検定では<strong><strong>下側と上側で別々の値</strong></strong>（<math><msubsup displaystyle="true"><mi>𝜒</mi><mi>𝑛</mi><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>と<math><msubsup displaystyle="true"><mi>𝜒</mi><mi>𝑛</mi><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></math>）を分布表から読む。</li>
+        </ul>
+      </div>
+      <h2 id="loc-4">4. <math><mi displaystyle="true">𝑡</mi></math>分布</h2>
+      <div style="border-left: 4px solid #0891b2; background-color: #0891b21f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #0891b2; margin: .5em 0;">動機：母分散がわからないまま平均を調べたい</p>
+        <p>母平均の推定・検定には<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">=</mo><mfrac displaystyle="true"><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle><mo>−</mo><mi>𝜇</mi></mrow><mrow><mi>𝜎</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><msqrt><mi>𝑛</mi></msqrt></mrow></mfrac></math>を使えばよいが、これには<strong><strong>母標準偏差<math><mi displaystyle="true">𝜎</mi></math></strong></strong>が必要である。 現実には<math><mi displaystyle="true">𝜎</mi></math>がわかっていることはほとんどない。</p>
+        <p>そこで<math><mi displaystyle="true">𝜎</mi></math>を標本から計算した<math><mi displaystyle="true">𝑈</mi></math>で置き換えると、</p>
+        <math display="block">
+          <mfrac>
+            <mrow>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑋</mi>
+              </mstyle>
+              <mo>−</mo>
+              <mi>𝜇</mi>
+            </mrow>
+            <mrow>
+              <mi>𝑈</mi>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <msqrt>
+                <mi>𝑛</mi>
+              </msqrt>
+            </mrow>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mi>𝑍</mi>
+            <msqrt>
+              <mfrac>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo lspace="0em" rspace="0em">−</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <msup>
+                    <mi>𝑈</mi>
+                    <mn>2</mn>
+                  </msup>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <msup>
+                    <mi>𝜎</mi>
+                    <mn>2</mn>
+                  </msup>
+                </mrow>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </mfrac>
+            </msqrt>
+          </mfrac>
+        </math>
+        <p>となり、<strong><strong>分子は<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>、分母は<math><msqrt displaystyle="true"><msup><mi>𝜒</mi><mn>2</mn></msup><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></msqrt></math></strong></strong>という形になる（しかも正規母集団なら<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>と<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>は独立）。 未知の<math><mi displaystyle="true">𝜎</mi></math>は分子と分母で約分されて消えている。</p>
+        <p>そこで「<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>を独立な<math><msqrt displaystyle="true"><msup><mi>𝜒</mi><mn>2</mn></msup><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mtext>自由度</mtext></msqrt></math>で割ったもの」を新しい分布として定義すれば、<math><mi displaystyle="true">𝜎</mi></math>を知らなくても母平均を扱える。 これが<math><mi displaystyle="true">𝑡</mi></math>分布である。 ビール会社で少ない標本から品質管理をしていたゴセットが、「スチューデント」というペンネームで発表した。</p>
+      </div>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義</p>
+        <p>独立な<math><mi displaystyle="true">𝑍</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>について、</p>
+        <math display="block">
+          <mi>𝑇</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mi>𝑍</mi>
+            <msqrt>
+              <mi>𝑋</mi>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑛</mi>
+            </msqrt>
+          </mfrac>
+        </math>
+        <p>が従う分布を自由度<math><mi displaystyle="true">𝑛</mi></math>の<strong><strong><math><mi displaystyle="true">𝑡</mi></math>分布</strong></strong>といい、<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>で表す。 上側<math><mn displaystyle="true">100</mn><mi displaystyle="true">𝛼</mi><mi displaystyle="true">%</mi></math>点を<math><msub displaystyle="true"><mi>𝑡</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>と書く。</p>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理：性質</p>
+        <ul>
+          <li><math><mn displaystyle="true">0</mn></math>を中心に左右対称（<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">></mo><mn displaystyle="true">1</mn></math>で平均<math><mn displaystyle="true">0</mn></math>）、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">></mo><mn displaystyle="true">2</mn></math>で分散<math><mfrac displaystyle="true"><mi>𝑛</mi><mrow><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow></mfrac></math></li>
+          <li><math><mi displaystyle="true">𝑛</mi><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">∞</mi></math>で<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>に近づく</li>
+          <li>
+            <p>正規母集団からの標本について、<strong><strong>スチューデントの<math><mi displaystyle="true">𝑡</mi></math>統計量</strong></strong></p>
+            <math display="block">
+              <mi>𝑇</mi>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                    <mi>𝑋</mi>
+                  </mstyle>
+                  <mo>−</mo>
+                  <mi>𝜇</mi>
+                </mrow>
+                <mrow>
+                  <mi>𝑈</mi>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <msqrt>
+                    <mi>𝑛</mi>
+                  </msqrt>
+                </mrow>
+              </mfrac>
+              <mo>∼</mo>
+              <mi>𝑡</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </math>
+          </li>
+          <li><math><mi displaystyle="true">𝑇</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>なら<math><msup displaystyle="true"><mi>𝑇</mi><mn>2</mn></msup><mo displaystyle="true">∼</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math></li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><math><mi displaystyle="true">𝑍</mi></math>統計量<math><mfrac displaystyle="true"><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle><mo>−</mo><mi>𝜇</mi></mrow><mrow><mi>𝜎</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><msqrt><mi>𝑛</mi></msqrt></mrow></mfrac></math>の<strong><strong><math><mi displaystyle="true">𝜎</mi></math>を<math><mi displaystyle="true">𝑈</mi></math>に置き換えたもの</strong></strong>が<math><mi displaystyle="true">𝑡</mi></math>統計量。 推定した<math><mi displaystyle="true">𝑈</mi></math>がぶれるぶん、<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>より<strong><strong>裾が重い</strong></strong>（極端な値が出やすい）。</li>
+          <li>そのため同じ有意水準でも<math><msub displaystyle="true"><mi>𝑡</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow><mo displaystyle="true">></mo><mi displaystyle="true">𝑧</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>。例：<math><msub displaystyle="true"><mi>𝑡</mi><mn>15</mn></msub><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">2.131</mn><mo displaystyle="true">></mo><mn displaystyle="true">1.960</mn><mo displaystyle="true">≈</mo><mi displaystyle="true">𝑧</mi><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow></math>。</li>
+          <li>左右対称なので下側の点は<math><mo displaystyle="true">−</mo><msub displaystyle="true"><mi>𝑡</mi><mi>𝑛</mi></msub><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>でよい。</li>
+          <li>自由度が<math><mn displaystyle="true">30</mn></math>程度を超えると、ほぼ正規分布として扱える。</li>
+        </ul>
+      </div>
+      <h2 id="loc-5">5. <math><mi displaystyle="true">𝐹</mi></math>分布</h2>
+      <div style="border-left: 4px solid #0891b2; background-color: #0891b21f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #0891b2; margin: .5em 0;">動機：2つのばらつきを比べたい</p>
+        <p>2つの母集団のばらつきが同じかどうかを調べたい。 分散の大きさを比べるなら、<strong><strong>差</strong></strong>より<strong><strong>比</strong></strong>のほうが自然である（単位に依存せず、「何倍か」で比べられる）。</p>
+        <p>正規母集団では<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⋅</mo><mfrac displaystyle="true"><mrow><msup><mi>𝜒</mi><mn>2</mn></msup><mrow><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow></mfrac></math>、<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">⋅</mo><mfrac displaystyle="true"><mrow><msup><mi>𝜒</mi><mn>2</mn></msup><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow></mfrac></math>と書けるので、比をとると</p>
+        <math display="block">
+          <mfrac>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <msubsup>
+              <mi>𝑈</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>1</mn>
+              <mn>2</mn>
+            </msubsup>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>2</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mfrac>
+          <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo>
+          <mfrac>
+            <mrow>
+              <msup>
+                <mi>𝜒</mi>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑚</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑚</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mrow>
+              <msup>
+                <mi>𝜒</mi>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+        </math>
+        <p>となる。<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>なら未知の分散は約分されて消え、<strong><strong>「<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math> / 自由度」同士の比</strong></strong>だけが残る。 そこでこの比の分布を<math><mi displaystyle="true">𝐹</mi></math>分布と定義する。</p>
+        <p>各<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>を自由度で割っておくのは、どちらも平均がおよそ<math><mn displaystyle="true">1</mn></math>になり、「比が<math><mn displaystyle="true">1</mn></math>に近いか」で判断できるようにするため。 分散分析で「群間のばらつき」と「群内のばらつき」を比べるのも同じ発想で、名前の<math><mi displaystyle="true">𝐹</mi></math>は分散分析を考案したフィッシャー（Fisher）に由来する。</p>
+      </div>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義</p>
+        <p>独立な<math><mi displaystyle="true">𝑋</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑚</mi><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑌</mi><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>について、</p>
+        <math display="block">
+          <mi>𝐹</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mi>𝑋</mi>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑚</mi>
+            </mrow>
+            <mrow>
+              <mi>𝑌</mi>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑛</mi>
+            </mrow>
+          </mfrac>
+        </math>
+        <p>が従う分布を自由度<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>の<strong><strong><math><mi displaystyle="true">𝐹</mi></math>分布</strong></strong>といい、<math><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>で表す。 上側<math><mn displaystyle="true">100</mn><mi displaystyle="true">𝛼</mi><mi displaystyle="true">%</mi></math>点を<math><msubsup displaystyle="true"><mi>𝐹</mi><mi>𝑛</mi><mi>𝑚</mi></msubsup><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>と書く。</p>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理：性質</p>
+        <ul>
+          <li>必ず<math><mn displaystyle="true">0</mn></math>以上で、右に裾が長い</li>
+          <li><math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">∼</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>なら<math><mfrac displaystyle="true"><mn>1</mn><mi>𝐹</mi></mfrac><mo displaystyle="true">∼</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>,</mo><mi>𝑚</mi></mrow><mo>)</mo></mrow></math></li>
+          <li>
+            <p>上の性質から</p>
+            <math display="block">
+              <msubsup>
+                <mi>𝐹</mi>
+                <mi>𝑛</mi>
+                <mi>𝑚</mi>
+              </msubsup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>−</mo>
+                  <mi>𝛼</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mo>=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mrow>
+                  <msubsup>
+                    <mi>𝐹</mi>
+                    <mi>𝑚</mi>
+                    <mi>𝑛</mi>
+                  </msubsup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mi>𝛼</mi>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+              </mfrac>
+            </math>
+          </li>
+          <li>
+            <p>正規母集団からの2標本について</p>
+            <math display="block">
+              <mfrac>
+                <mrow>
+                  <msubsup>
+                    <mi>𝑈</mi>
+                    <mn>1</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <msubsup>
+                    <mi>𝜎</mi>
+                    <mn>1</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                </mrow>
+                <mrow>
+                  <msubsup>
+                    <mi>𝑈</mi>
+                    <mn>2</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <msubsup>
+                    <mi>𝜎</mi>
+                    <mn>2</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                </mrow>
+              </mfrac>
+              <mo>∼</mo>
+              <mi>𝐹</mi>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑚</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </math>
+          </li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><strong><strong>「分散の比」の分布</strong></strong>。<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>なら<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></math>は<math><mn displaystyle="true">1</mn></math>の近くに来るはず。</li>
+          <li>自由度は<strong><strong>（分子の自由度, 分母の自由度）</strong></strong>の順。分子と分母をひっくり返したら、自由度もひっくり返る。</li>
+          <li>分布表には上側の点しか載っていないことが多い。下側の点は「逆数をとって自由度を入れ替える」で求める。</li>
+          <li><math><msup displaystyle="true"><mrow><mi>𝑡</mi><mrow><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></mrow><mn>2</mn></msup><mo displaystyle="true">=</mo><mi displaystyle="true">𝐹</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>：<math><mi displaystyle="true">𝑡</mi></math>統計量の2乗は分子の自由度<math><mn displaystyle="true">1</mn></math>の<math><mi displaystyle="true">𝐹</mi></math>統計量。回帰の<math><mi displaystyle="true">𝑡</mi></math>検定と<math><mi displaystyle="true">𝐹</mi></math>検定が一致する理由になる。</li>
+        </ul>
+      </div>
+      <h2 id="loc-6">6. どの検定でどの分布を使うか</h2>
+      <table>
+        <tr>
+          <td><strong><strong>分布</strong></strong></td>
+          <td><strong><strong>使う検定</strong></strong></td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math></td>
+          <td><a href="../mean-test/">母平均の検定</a>（分散既知）、<a href="../proportion-test/">母比率の検定</a>、<a href="../mean-difference-test/">母平均の差の検定</a>（分散既知）、<a href="../proportion-difference-test/">母比率の差の検定</a></td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">𝑡</mi></math>分布</td>
+          <td><a href="../mean-test/">母平均の検定</a>（分散未知）、<a href="../mean-difference-test/">母平均の差の検定</a>（分散未知）、<a href="../regression-estimation/">回帰係数の推定</a>、<a href="../regression-test/">回帰係数の検定</a></td>
+        </tr>
+        <tr>
+          <td><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布</td>
+          <td><a href="../variance-test/">母分散の検定</a>、<a href="../goodness-of-fit-test/">適合度検定</a>、<a href="../independence-test/">独立性の検定</a></td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">𝐹</mi></math>分布</td>
+          <td><a href="../variance-ratio-test/">母分散の比の検定</a>、<a href="../anova/">一元配置分散分析</a>、<a href="../regression-test/">回帰式全体の検定</a></td>
+        </tr>
+      </table>
+    </main>
+  </body>
+</html>

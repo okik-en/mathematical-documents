@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>母分散の検定</title>
+    <meta property="og:title" content="母分散の検定">
+    <meta name="description" content="1つの正規母集団の母分散に関するchi^2検定をまとめたページ。">
+    <meta property="og:description" content="1つの正規母集団の母分散に関するchi^2検定をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/variance-test></code></nav>
+      <h1>母分散の検定</h1>
+      <p>Keywords: #統計検定, #仮説検定</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 検定統計量</a></li>
+        </ol>
+      </nav>
+      <p>正規母集団<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝜇</mi><mo>,</mo><msup><mi>𝜎</mi><mn>2</mn></msup></mrow><mo>)</mo></mrow></math>（<math><mi displaystyle="true">𝜇</mi></math>も未知）から大きさ<math><mi displaystyle="true">𝑛</mi></math>の無作為標本をとり、母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>について</p>
+      <math display="block">
+        <msub>
+          <mi>𝐻</mi>
+          <mn>0</mn>
+        </msub>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <msup>
+          <mi>𝜎</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <msubsup>
+          <mi>𝜎</mi>
+          <mn>0</mn>
+          <mn>2</mn>
+        </msubsup>
+      </math>
+      <p>を検定する。</p>
+      <h2 id="loc-1">1. 検定統計量</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math>のもとで</p>
+        <math display="block">
+          <msup>
+            <mi>𝜒</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <msup>
+                <mi>𝑈</mi>
+                <mn>2</mn>
+              </msup>
+            </mrow>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>0</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mfrac>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <msubsup>
+                <mo lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑖</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </msubsup>
+              <msup>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <msub>
+                      <mi>𝑋</mi>
+                      <mi>𝑖</mi>
+                    </msub>
+                    <mo>−</mo>
+                    <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                      <mi>𝑋</mi>
+                    </mstyle>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+                <mn>2</mn>
+              </msup>
+            </mrow>
+            <msubsup>
+              <mi>𝜎</mi>
+              <mn>0</mn>
+              <mn>2</mn>
+            </msubsup>
+          </mfrac>
+          <mo>∼</mo>
+          <msup>
+            <mi>𝜒</mi>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <p>有意水準<math><mi displaystyle="true">𝛼</mi></math>の棄却域は次のとおり。</p>
+      <dl>
+        <dt>両側検定</dt>
+        <dd><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>または<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">≠</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+        <dt>右側検定</dt>
+        <dd><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+        <dt>左側検定</dt>
+        <dd><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math></dd>
+      </dl>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>分子は<strong><strong>偏差平方和</strong></strong><math><mo lspace="0em" displaystyle="true">∑</mo><msup displaystyle="true"><mrow><mo>(</mo><mrow><msub><mi>𝑋</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle></mrow><mo>)</mo></mrow><mn>2</mn></msup><mo displaystyle="true">=</mo><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>。これを仮説の分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math>で割る。</li>
+          <li><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>が正しければ<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup><mo displaystyle="true">≈</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup></math>なので、<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>はだいたい自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>（<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布の平均）くらいになる。 それより極端に大きい・小さいと<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>が疑わしい。</li>
+          <li><math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup></math>分布は左右非対称なので、両側検定の下側の点は<math><msubsup displaystyle="true"><mi>𝜒</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac></mrow><mo>)</mo></mrow></math>を<strong><strong>分布表から別に読む</strong></strong>（<math><mi displaystyle="true">𝑡</mi></math>分布のようにマイナスをつけるだけでは求まらない）。</li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        正規母集団から<math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">10</mn>
+        </math>の標本をとったところ、不偏分散が<math>
+          <msup displaystyle="true">
+            <mi>𝑢</mi>
+            <mn>2</mn>
+          </msup>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">2.5</mn>
+        </math>だった。 <math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>0</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msup displaystyle="true">
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">1.5</mn>
+        </math>、<math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>1</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msup displaystyle="true">
+            <mi>𝜎</mi>
+            <mn>2</mn>
+          </msup>
+          <mo displaystyle="true">></mo>
+          <mn displaystyle="true">1.5</mn>
+        </math>を有意水準<math>
+          <mn displaystyle="true">5</mn>
+          <mi displaystyle="true">%</mi>
+        </math>で検定せよ。
+      </div>
+      <math display="block">
+        <msup>
+          <mi>𝜒</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mn>9</mn>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+            <mn>2.5</mn>
+          </mrow>
+          <mn>1.5</mn>
+        </mfrac>
+        <mo>=</mo>
+        <mn>15.0</mn>
+      </math>
+      <p>自由度<math><mn displaystyle="true">9</mn></math>の上側<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>点は<math><msubsup displaystyle="true"><mi>𝜒</mi><mn>9</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">16.92</mn></math>で、<math><mn displaystyle="true">15.0</mn><mo displaystyle="true">&lt;</mo><mn displaystyle="true">16.92</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却しない（<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">0.091</mn></math>）。</p>
+      <p>なお両側検定（有意水準<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>）なら、棄却域は<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">&lt;</mo><msubsup displaystyle="true"><mi>𝜒</mi><mn>9</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.975</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">2.70</mn></math>または<math><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝜒</mi><mn>9</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">19.02</mn></math>である。</p>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        <ul>
+          <li>母平均<math><mi displaystyle="true">𝜇</mi></math>が<strong><strong>既知</strong></strong>の場合は、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>の代わりに<math><mi displaystyle="true">𝜇</mi></math>を使って<math><mo lspace="0em" displaystyle="true">∑</mo><msup displaystyle="true"><mrow><mo>(</mo><mrow><msub><mi>𝑋</mi><mi>𝑖</mi></msub><mo>−</mo><mi>𝜇</mi></mrow><mo>)</mo></mrow><mn>2</mn></msup><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><msubsup displaystyle="true"><mi>𝜎</mi><mn>0</mn><mn>2</mn></msubsup><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mi>𝑛</mi><mo>)</mo></mrow></math>となり、自由度は<math><mi displaystyle="true">𝑛</mi></math>になる。</li>
+          <li>この検定は母集団が正規分布であることに強く依存する。正規分布から外れていると結果が大きく狂うので注意。</li>
+        </ul>
+      </div>
+      <p>関連：<a href="../variance-ratio-test/">母分散の比の検定</a>、<a href="../distributions/">標本分布のまとめ</a></p>
+    </main>
+  </body>
+</html>

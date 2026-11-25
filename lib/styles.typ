@@ -3,7 +3,7 @@
 #let style(doc-type: "article", body) = context {
   set text(
     lang: "ja",
-    font: "Noto Sans JP",
+    font: "Noto Sans CJK JP",
     cjk-latin-spacing: auto,
     top-edge: "ascender",
     bottom-edge: "descender",

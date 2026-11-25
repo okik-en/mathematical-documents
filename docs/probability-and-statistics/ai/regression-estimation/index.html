@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>回帰係数の推定</title>
+    <meta property="og:title" content="回帰係数の推定">
+    <meta name="description" content="回帰係数の点推定・標準誤差・信頼区間と、自由度が大きいときの正規近似をまとめたページ。">
+    <meta property="og:description" content="回帰係数の点推定・標準誤差・信頼区間と、自由度が大きいときの正規近似をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/regression-estimation></code></nav>
+      <h1>回帰係数の推定</h1>
+      <p>Keywords: #統計検定, #推定, #回帰分析</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> モデルと推定量</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 推定量の分布</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> 誤差分散の推定と標準誤差</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> 信頼区間</a></li>
+          <li><a href="#loc-5"><span class="prefix">5.</span> 自由度が大きいときの正規近似</a></li>
+          <li><a href="#loc-6"><span class="prefix">6.</span> 重回帰の場合</a></li>
+        </ol>
+      </nav>
+      <p>最小二乗法で求めた回帰係数は、データから計算した<strong><strong>推定値</strong></strong>であり、標本が変われば値も変わる。 このページでは、その推定値がどのくらいぶれるか（分布・標準誤差）と、信頼区間の作り方をまとめる。 導出の詳細は<a href="../../least-squares-method/">線形単回帰と最小二乗法</a>を参照のこと。</p>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意：記号について</p>
+        <p>元のページでは回帰直線を<math><mi displaystyle="true">𝑦</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝛼</mi><mi displaystyle="true">𝑥</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝛽</mi></math>と書いているが、このページでは有意水準の<math><mi displaystyle="true">𝛼</mi></math>と区別するため</p>
+        <math display="block">
+          <mi>𝑦</mi>
+          <mo>=</mo>
+          <msub>
+            <mi>𝛽</mi>
+            <mn>0</mn>
+          </msub>
+          <mo>+</mo>
+          <msub>
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+          <mi>𝑥</mi>
+        </math>
+        <p>と書く。元のページの<math><mi displaystyle="true">𝛼</mi></math>（傾き）が<math><msub displaystyle="true"><mi>𝛽</mi><mn>1</mn></msub></math>、<math><mi displaystyle="true">𝛽</mi></math>（切片）が<math><msub displaystyle="true"><mi>𝛽</mi><mn>0</mn></msub></math>に対応する。</p>
+      </div>
+      <h2 id="loc-1">1. モデルと推定量</h2>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義：単回帰モデル</p>
+        <math display="block">
+          <msub>
+            <mi>𝑌</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>=</mo>
+          <msub>
+            <mi>𝛽</mi>
+            <mn>0</mn>
+          </msub>
+          <mo>+</mo>
+          <msub>
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+          <msub>
+            <mi>𝑥</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>+</mo>
+          <msub>
+            <mi>𝜀</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo rspace="0em">,</mo>
+          <mspace width="2em"/>
+          <msub>
+            <mi>𝜀</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>∼</mo>
+          <mi>𝑁</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mspace width="0.2222em"/>
+          <mtext>（独立）</mtext>
+          <mspace width="1em"/>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑖</mi>
+              <mo>=</mo>
+              <mn>1</mn>
+              <mo>,</mo>
+              <mi>…</mi>
+              <mo>,</mo>
+              <mi>𝑛</mi>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p><math><msub displaystyle="true"><mi>𝑥</mi><mi>𝑖</mi></msub></math>は確率変数ではなく、与えられた値とみなす。</p>
+      </div>
+      <p><math><msub displaystyle="true"><mi>𝑆</mi><mrow><mi>𝑥</mi><mi>𝑥</mi></mrow></msub><mo displaystyle="true">=</mo><mo form="prefix" lspace="0em" displaystyle="true">∑</mo><msup displaystyle="true"><mrow><mo>(</mo><mrow><msub><mi>𝑥</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑥</mi></mstyle></mrow><mo>)</mo></mrow><mn>2</mn></msup></math>、<math><msub displaystyle="true"><mi>𝑆</mi><mrow><mi>𝑥</mi><mi>𝑦</mi></mrow></msub><mo displaystyle="true">=</mo><mo form="prefix" lspace="0em" rspace="0em" displaystyle="true">∑</mo><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝑥</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑥</mi></mstyle></mrow><mo>)</mo></mrow><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝑦</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑦</mi></mstyle></mrow><mo>)</mo></mrow></math>とおくと、最小二乗推定量は</p>
+      <math display="block">
+        <msub>
+          <mover accent="true">
+            <mi>𝛽</mi>
+            <mo>̂</mo>
+          </mover>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <mfrac>
+          <msub>
+            <mi>𝑆</mi>
+            <mrow>
+              <mi>𝑥</mi>
+              <mi>𝑦</mi>
+            </mrow>
+          </msub>
+          <msub>
+            <mi>𝑆</mi>
+            <mrow>
+              <mi>𝑥</mi>
+              <mi>𝑥</mi>
+            </mrow>
+          </msub>
+        </mfrac>
+        <mo rspace="0em">,</mo>
+        <mspace width="2em"/>
+        <msub>
+          <mover accent="true">
+            <mi>𝛽</mi>
+            <mo>̂</mo>
+          </mover>
+          <mn>0</mn>
+        </msub>
+        <mo>=</mo>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑦</mi>
+        </mstyle>
+        <mo>−</mo>
+        <msub>
+          <mover accent="true">
+            <mi>𝛽</mi>
+            <mo>̂</mo>
+          </mover>
+          <mn>1</mn>
+        </msub>
+        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+          <mi>𝑥</mi>
+        </mstyle>
+      </math>
+      <p>である。</p>
+      <h2 id="loc-2">2. 推定量の分布</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <ol>
+          <li><math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>0</mn></msub></math>はそれぞれ<math><msub displaystyle="true"><mi>𝛽</mi><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mi>𝛽</mi><mn>0</mn></msub></math>の<strong><strong>不偏推定量</strong></strong>である。</li>
+          <li>
+            <p>分散は</p>
+            <math display="block">
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mn>1</mn>
+                </msub>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <mfrac>
+                <msup>
+                  <mi>𝜎</mi>
+                  <mn>2</mn>
+                </msup>
+                <msub>
+                  <mi>𝑆</mi>
+                  <mrow>
+                    <mi>𝑥</mi>
+                    <mi>𝑥</mi>
+                  </mrow>
+                </msub>
+              </mfrac>
+              <mo rspace="0em">,</mo>
+              <mspace width="2em"/>
+              <mtext>Var</mtext>
+              <mrow>
+                <mo>[</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mn>0</mn>
+                </msub>
+                <mo>]</mo>
+              </mrow>
+              <mo>=</mo>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mfrac>
+                    <mn>1</mn>
+                    <mi>𝑛</mi>
+                  </mfrac>
+                  <mo>+</mo>
+                  <mfrac>
+                    <msup>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑥</mi>
+                      </mstyle>
+                      <mn>2</mn>
+                    </msup>
+                    <msub>
+                      <mi>𝑆</mi>
+                      <mrow>
+                        <mi>𝑥</mi>
+                        <mi>𝑥</mi>
+                      </mrow>
+                    </msub>
+                  </mfrac>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </math>
+          </li>
+          <li><math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>1</mn></msub></math>、<math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>0</mn></msub></math>は正規分布に従う。</li>
+        </ol>
+      </div>
+      <p><math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>1</mn></msub></math>が<math><msub displaystyle="true"><mi>𝑌</mi><mi>𝑖</mi></msub></math>（したがって<math><msub displaystyle="true"><mi>𝜀</mi><mi>𝑖</mi></msub></math>）の<strong><strong>1次式</strong></strong>で書けることから、正規分布の再生性によって正規分布に従う。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>1</mn></msub></math>の分散は<math><mfrac displaystyle="true"><msup><mi>𝜎</mi><mn>2</mn></msup><msub><mi>𝑆</mi><mrow><mi>𝑥</mi><mi>𝑥</mi></mrow></msub></mfrac></math>。 <strong><strong>誤差が小さい</strong></strong>（<math><mi displaystyle="true">𝜎</mi></math>が小さい）ほど、<strong><strong><math><mi displaystyle="true">𝑥</mi></math>が広く散らばっている</strong></strong>（<math><msub displaystyle="true"><mi>𝑆</mi><mrow><mi>𝑥</mi><mi>𝑥</mi></mrow></msub></math>が大きい）ほど、傾きは安定する。 実験で<math><mi displaystyle="true">𝑥</mi></math>を選べるなら、なるべく広い範囲にとるとよい。</li>
+          <li><math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>0</mn></msub></math>の分散は、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑥</mi></mstyle></math>が<math><mn displaystyle="true">0</mn></math>から遠いほど大きい。 切片は<math><mi displaystyle="true">𝑥</mi><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>での値なので、データの中心から遠いところへ延長するほど不確かになる。</li>
+        </ul>
+      </div>
+      <h2 id="loc-3">3. 誤差分散の推定と標準誤差</h2>
+      <p><math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>は未知なので、残差<math><msub displaystyle="true"><mi>𝑒</mi><mi>𝑖</mi></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑦</mi><mi>𝑖</mi></msub><mo displaystyle="true">−</mo><msub displaystyle="true"><mover accent="true"><mi>𝑦</mi><mo>̂</mo></mover><mi>𝑖</mi></msub></math>から推定する。</p>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <math display="block">
+          <msup>
+            <mi>𝑠</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>2</mn>
+            </mrow>
+          </mfrac>
+          <munderover>
+            <mo form="prefix">∑</mo>
+            <mrow>
+              <mi>𝑖</mi>
+              <mo lspace="0em" rspace="0em">=</mo>
+              <mn>1</mn>
+            </mrow>
+            <mi>𝑛</mi>
+          </munderover>
+          <msubsup>
+            <mi>𝑒</mi>
+            <mi>𝑖</mi>
+            <mn>2</mn>
+          </msubsup>
+        </math>
+        <p>は<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の不偏推定量であり、<math><mfrac displaystyle="true"><mrow><mrow><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow><mo>)</mo></mrow><msup><mi>𝑠</mi><mn>2</mn></msup></mrow><msup><mi>𝜎</mi><mn>2</mn></msup></mfrac><mo displaystyle="true">∼</mo><msup displaystyle="true"><mi>𝜒</mi><mn>2</mn></msup><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>2</mn></mrow><mo>)</mo></mrow></math>。 また<math><msup displaystyle="true"><mi>𝑠</mi><mn>2</mn></msup></math>は<math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>0</mn></msub></math>、<math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>1</mn></msub></math>と独立である。</p>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">−</mo>
+          <mn displaystyle="true">2</mn>
+        </math>で割るのは、<math>
+          <msub displaystyle="true">
+            <mi>𝛽</mi>
+            <mn>0</mn>
+          </msub>
+        </math>と<math>
+          <msub displaystyle="true">
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+        </math>の<strong><strong>2つのパラメータを推定した</strong></strong>から。 標本分散を<math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">−</mo>
+          <mn displaystyle="true">1</mn>
+        </math>で割るのと同じ理由（推定したパラメータの数だけ自由度が減る）。
+      </div>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義：標準誤差</p>
+        <p>分散の式の<math><mi displaystyle="true">𝜎</mi></math>を<math><mi displaystyle="true">𝑠</mi></math>で置き換えたものを<strong><strong>標準誤差</strong></strong>という。</p>
+        <math display="block">
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+          <mo>=</mo>
+          <mfrac>
+            <mi>𝑠</mi>
+            <msqrt>
+              <msub>
+                <mi>𝑆</mi>
+                <mrow>
+                  <mi>𝑥</mi>
+                  <mi>𝑥</mi>
+                </mrow>
+              </msub>
+            </msqrt>
+          </mfrac>
+          <mo rspace="0em">,</mo>
+          <mspace width="2em"/>
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>0</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+          <mo>=</mo>
+          <mi>𝑠</mi>
+          <msqrt>
+            <mfrac>
+              <mn>1</mn>
+              <mi>𝑛</mi>
+            </mfrac>
+            <mo>+</mo>
+            <mfrac>
+              <msup>
+                <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                  <mi>𝑥</mi>
+                </mstyle>
+                <mn>2</mn>
+              </msup>
+              <msub>
+                <mi>𝑆</mi>
+                <mrow>
+                  <mi>𝑥</mi>
+                  <mi>𝑥</mi>
+                </mrow>
+              </msub>
+            </mfrac>
+          </msqrt>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <math display="block">
+          <mi>𝑇</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <msub>
+                <mover accent="true">
+                  <mi>𝛽</mi>
+                  <mo>̂</mo>
+                </mover>
+                <mn>1</mn>
+              </msub>
+              <mo>−</mo>
+              <msub>
+                <mi>𝛽</mi>
+                <mn>1</mn>
+              </msub>
+            </mrow>
+            <mrow>
+              <mtext>se</mtext>
+              <mrow>
+                <mo>(</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mn>1</mn>
+                </msub>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑡</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>2</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>（<math><msub displaystyle="true"><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mn>0</mn></msub></math>についても同様。）</p>
+      </div>
+      <p>これは、母平均の推定で<math><mfrac displaystyle="true"><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle><mo>−</mo><mi>𝜇</mi></mrow><mrow><mi>𝑈</mi><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><msqrt><mi>𝑛</mi></msqrt></mrow></mfrac><mo displaystyle="true">∼</mo><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>となるのとまったく同じ構造である。</p>
+      <h2 id="loc-4">4. 信頼区間</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝛽</mi><mn>1</mn></msub></math>の<math><mn displaystyle="true">100</mn><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mi displaystyle="true">%</mi></math>信頼区間は</p>
+        <math display="block">
+          <msub>
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+          <mo>−</mo>
+          <msub>
+            <mi>𝑡</mi>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mn>2</mn>
+            </mrow>
+          </msub>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mi>𝛼</mi>
+              <mn>2</mn>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mspace width="0.2222em"/>
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+          <mo>≤</mo>
+          <msub>
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>≤</mo>
+          <msub>
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+          <mo>+</mo>
+          <msub>
+            <mi>𝑡</mi>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mn>2</mn>
+            </mrow>
+          </msub>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mi>𝛼</mi>
+              <mn>2</mn>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mspace width="0.2222em"/>
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <strong><strong>「推定値 ± <math><mi displaystyle="true">𝑡</mi></math>の点 × 標準誤差」</strong></strong>。どの信頼区間もこの形。
+      </div>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">12</mn>
+        </math>組のデータで単回帰を行ったところ、<math>
+          <msub displaystyle="true">
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">0.8</mn>
+        </math>、<math>
+          <mtext displaystyle="true">se</mtext>
+          <mrow displaystyle="true">
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">0.3</mn>
+        </math>だった。 <math>
+          <msub displaystyle="true">
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+        </math>の<math>
+          <mn displaystyle="true">95</mn>
+          <mi displaystyle="true">%</mi>
+        </math>信頼区間を求めよ。
+      </div>
+      <p>自由度<math><mn displaystyle="true">10</mn></math>で<math><msub displaystyle="true"><mi>𝑡</mi><mn>10</mn></msub><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">2.228</mn></math>なので</p>
+      <math display="block">
+        <mn>0.8</mn>
+        <mo>±</mo>
+        <mn>2.228</mn>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+        <mn>0.3</mn>
+        <mo>=</mo>
+        <mn>0.8</mn>
+        <mo>±</mo>
+        <mn>0.668</mn>
+      </math>
+      <p>より、<math><mn displaystyle="true">95</mn><mi displaystyle="true">%</mi></math>信頼区間は<math><mrow displaystyle="true"><mo>[</mo><mrow><mn>0.132</mn><mo>,</mo><mn>1.468</mn></mrow><mo>]</mo></mrow></math>。</p>
+      <p>この区間は<math><mn displaystyle="true">0</mn></math>を含まないので、有意水準<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>の両側検定で<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msub displaystyle="true"><mi>𝛽</mi><mn>1</mn></msub><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>は棄却される（<a href="../regression-test/">回帰係数の検定</a>を参照）。</p>
+      <h2 id="loc-5">5. 自由度が大きいときの正規近似</h2>
+      <p><math><mi displaystyle="true">𝑡</mi></math>分布は自由度が大きくなると標準正規分布に近づく。 そのため、<strong><strong>残差の自由度<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">2</mn></math>（重回帰なら<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mi displaystyle="true">𝑝</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>）が十分大きい</strong></strong>ときは、<math><mi displaystyle="true">𝑡</mi></math>分布の点の代わりに正規分布の点を使ってよい。</p>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p>自由度<math><mi displaystyle="true">𝜈</mi><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">∞</mi></math>のとき<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mi>𝜈</mi><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">→</mo><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>。したがって<math><mi displaystyle="true">𝜈</mi></math>が大きければ近似的に</p>
+        <math display="block">
+          <mfrac>
+            <mrow>
+              <msub>
+                <mover accent="true">
+                  <mi>𝛽</mi>
+                  <mo>̂</mo>
+                </mover>
+                <mn>1</mn>
+              </msub>
+              <mo>−</mo>
+              <msub>
+                <mi>𝛽</mi>
+                <mn>1</mn>
+              </msub>
+            </mrow>
+            <mrow>
+              <mtext>se</mtext>
+              <mrow>
+                <mo>(</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mn>1</mn>
+                </msub>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑁</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>であり、<math><mn displaystyle="true">95</mn><mi displaystyle="true">%</mi></math>信頼区間は</p>
+        <math display="block">
+          <msub>
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+          <mo>±</mo>
+          <mn>1.96</mn>
+          <mspace width="0.2222em"/>
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>で近似できる。</p>
+      </div>
+      <p><math><mi displaystyle="true">𝑡</mi></math>分布の上側点が<math><mi displaystyle="true">𝑧</mi></math>の値にどのくらい近づくかを見ると、次のとおり。</p>
+      <table>
+        <tr>
+          <td><strong><strong>自由度</strong></strong></td>
+          <td><strong><strong><math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow></math></strong></strong></td>
+          <td><strong><strong><math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow></math></strong></strong></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">5</mn></math></td>
+          <td><math><mn displaystyle="true">2.571</mn></math></td>
+          <td><math><mn displaystyle="true">2.015</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">10</mn></math></td>
+          <td><math><mn displaystyle="true">2.228</mn></math></td>
+          <td><math><mn displaystyle="true">1.812</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">20</mn></math></td>
+          <td><math><mn displaystyle="true">2.086</mn></math></td>
+          <td><math><mn displaystyle="true">1.725</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">30</mn></math></td>
+          <td><math><mn displaystyle="true">2.042</mn></math></td>
+          <td><math><mn displaystyle="true">1.697</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">60</mn></math></td>
+          <td><math><mn displaystyle="true">2.000</mn></math></td>
+          <td><math><mn displaystyle="true">1.671</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mn displaystyle="true">120</mn></math></td>
+          <td><math><mn displaystyle="true">1.980</mn></math></td>
+          <td><math><mn displaystyle="true">1.658</mn></math></td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">∞</mi></math>（正規分布）</td>
+          <td><math><mn displaystyle="true">1.960</mn></math></td>
+          <td><math><mn displaystyle="true">1.645</mn></math></td>
+        </tr>
+      </table>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">102</mn>
+        </math>組のデータで単回帰を行ったところ、<math>
+          <msub displaystyle="true">
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">0.5</mn>
+        </math>、<math>
+          <mtext displaystyle="true">se</mtext>
+          <mrow displaystyle="true">
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mn>1</mn>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">0.2</mn>
+        </math>だった。 正規近似を用いて<math>
+          <msub displaystyle="true">
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+        </math>の<math>
+          <mn displaystyle="true">95</mn>
+          <mi displaystyle="true">%</mi>
+        </math>信頼区間を求め、<math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>0</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msub displaystyle="true">
+            <mi>𝛽</mi>
+            <mn>1</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">0</mn>
+        </math>を有意水準<math>
+          <mn displaystyle="true">5</mn>
+          <mi displaystyle="true">%</mi>
+        </math>で両側検定せよ。
+      </div>
+      <p>自由度は<math><mn displaystyle="true">100</mn></math>と大きいので正規近似を用いる。</p>
+      <math display="block">
+        <mn>0.5</mn>
+        <mo>±</mo>
+        <mn>1.96</mn>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+        <mn>0.2</mn>
+        <mo>=</mo>
+        <mn>0.5</mn>
+        <mo>±</mo>
+        <mn>0.392</mn>
+      </math>
+      <p>より、<math><mn displaystyle="true">95</mn><mi displaystyle="true">%</mi></math>信頼区間は<math><mrow displaystyle="true"><mo>[</mo><mrow><mn>0.108</mn><mo>,</mo><mn>0.892</mn></mrow><mo>]</mo></mrow></math>。</p>
+      <p>検定統計量は<math><mi displaystyle="true">𝑧</mi><mo displaystyle="true">=</mo><mn displaystyle="true">0.5</mn><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mn displaystyle="true">0.2</mn><mo displaystyle="true">=</mo><mn displaystyle="true">2.5</mn><mo displaystyle="true">></mo><mn displaystyle="true">1.96</mn></math>なので、<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却する（<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">0.012</mn></math>）。</p>
+      <p>参考：<math><mi displaystyle="true">𝑡</mi><mrow displaystyle="true"><mo>(</mo><mn>100</mn><mo>)</mo></mrow></math>を正確に使うと<math><msub displaystyle="true"><mi>𝑡</mi><mn>100</mn></msub><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">1.984</mn></math>で、信頼区間は<math><mrow displaystyle="true"><mo>[</mo><mrow><mn>0.103</mn><mo>,</mo><mn>0.897</mn></mrow><mo>]</mo></mrow></math>。ほとんど変わらない。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>自由度が<strong><strong><math><mn displaystyle="true">30</mn></math>を超えたら</strong></strong><math><mi displaystyle="true">𝑡</mi><mo displaystyle="true">≈</mo><mi displaystyle="true">𝑧</mi></math>とみなしてよい、というのが目安（<math><mn displaystyle="true">100</mn></math>以上ならほぼ確実）。</li>
+          <li>正規近似を使うと、<strong><strong><math><mi displaystyle="true">𝑡</mi></math>分布表を引かずに</strong></strong><math><mn displaystyle="true">1.96</mn></math>（両側<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>）、<math><mn displaystyle="true">2.576</mn></math>（両側<math><mn displaystyle="true">1</mn><mi displaystyle="true">%</mi></math>）で判断できる。</li>
+          <li>「<math><mo stretchy="false" displaystyle="true">|</mo><mi displaystyle="true">𝑡</mi><mo lspace="0em" rspace="0em" displaystyle="true">|</mo><mo displaystyle="true">></mo><mn displaystyle="true">2</mn></math>なら大体<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>有意」という経験則も、自由度が大きいときの正規近似から来ている。</li>
+          <li>自由度が小さいとき（例えば<math><mn displaystyle="true">10</mn></math>）に<math><mn displaystyle="true">1.96</mn></math>を使うと、区間が狭くなりすぎ、有意になりやすくなる（第1種の過誤が増える）ので注意。</li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        正規近似は誤差項<math>
+          <msub displaystyle="true">
+            <mi>𝜀</mi>
+            <mi>𝑖</mi>
+          </msub>
+        </math>が正規分布に従わない場合にも役立つ。 <math>
+          <mi displaystyle="true">𝑛</mi>
+        </math>が大きければ、中心極限定理により<math>
+          <msub displaystyle="true">
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mn>1</mn>
+          </msub>
+        </math>は近似的に正規分布に従うので、<math>
+          <mfrac displaystyle="true">
+            <mrow>
+              <msub>
+                <mover accent="true">
+                  <mi>𝛽</mi>
+                  <mo>̂</mo>
+                </mover>
+                <mn>1</mn>
+              </msub>
+              <mo>−</mo>
+              <msub>
+                <mi>𝛽</mi>
+                <mn>1</mn>
+              </msub>
+            </mrow>
+            <mrow>
+              <mtext>se</mtext>
+              <mrow>
+                <mo>(</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mn>1</mn>
+                </msub>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+        </math>を<math>
+          <mi displaystyle="true">𝑁</mi>
+          <mrow displaystyle="true">
+            <mo>(</mo>
+            <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>で近似できる。
+      </div>
+      <h2 id="loc-6">6. 重回帰の場合</h2>
+      <p>説明変数が<math><mi displaystyle="true">𝑝</mi></math>個の重回帰</p>
+      <math display="block">
+        <msub>
+          <mi>𝑌</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mo>=</mo>
+        <msub>
+          <mi>𝛽</mi>
+          <mn>0</mn>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝛽</mi>
+          <mn>1</mn>
+        </msub>
+        <msub>
+          <mi>𝑥</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mn>1</mn>
+          </mrow>
+        </msub>
+        <mo>+</mo>
+        <mi>⋯</mi>
+        <mo>+</mo>
+        <msub>
+          <mi>𝛽</mi>
+          <mi>𝑝</mi>
+        </msub>
+        <msub>
+          <mi>𝑥</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mi>𝑝</mi>
+          </mrow>
+        </msub>
+        <mo>+</mo>
+        <msub>
+          <mi>𝜀</mi>
+          <mi>𝑖</mi>
+        </msub>
+      </math>
+      <p>でも、同じ形が成り立つ。</p>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <math display="block">
+          <msup>
+            <mi>𝑠</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <mfrac>
+            <mn>1</mn>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mi>𝑝</mi>
+              <mo>−</mo>
+              <mn>1</mn>
+            </mrow>
+          </mfrac>
+          <mo form="prefix">∑</mo>
+          <msubsup>
+            <mi>𝑒</mi>
+            <mi>𝑖</mi>
+            <mn>2</mn>
+          </msubsup>
+          <mo rspace="0em">,</mo>
+          <mspace width="2em"/>
+          <mfrac>
+            <mrow>
+              <msub>
+                <mover accent="true">
+                  <mi>𝛽</mi>
+                  <mo>̂</mo>
+                </mover>
+                <mi>𝑗</mi>
+              </msub>
+              <mo>−</mo>
+              <msub>
+                <mi>𝛽</mi>
+                <mi>𝑗</mi>
+              </msub>
+            </mrow>
+            <mrow>
+              <mtext>se</mtext>
+              <mrow>
+                <mo>(</mo>
+                <msub>
+                  <mover accent="true">
+                    <mi>𝛽</mi>
+                    <mo>̂</mo>
+                  </mover>
+                  <mi>𝑗</mi>
+                </msub>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑡</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mi>𝑝</mi>
+              <mo>−</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p><math><msub displaystyle="true"><mi>𝛽</mi><mi>𝑗</mi></msub></math>の<math><mn displaystyle="true">100</mn><mrow displaystyle="true"><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mi>𝛼</mi></mrow><mo>)</mo></mrow><mi displaystyle="true">%</mi></math>信頼区間は</p>
+        <math display="block">
+          <msub>
+            <mover accent="true">
+              <mi>𝛽</mi>
+              <mo>̂</mo>
+            </mover>
+            <mi>𝑗</mi>
+          </msub>
+          <mo>±</mo>
+          <msub>
+            <mi>𝑡</mi>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mi>𝑝</mi>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mn>1</mn>
+            </mrow>
+          </msub>
+          <mrow>
+            <mo>(</mo>
+            <mfrac>
+              <mi>𝛼</mi>
+              <mn>2</mn>
+            </mfrac>
+            <mo>)</mo>
+          </mrow>
+          <mspace width="0.2222em"/>
+          <mtext>se</mtext>
+          <mrow>
+            <mo>(</mo>
+            <msub>
+              <mover accent="true">
+                <mi>𝛽</mi>
+                <mo>̂</mo>
+              </mover>
+              <mi>𝑗</mi>
+            </msub>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>であり、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mi displaystyle="true">𝑝</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>が大きければ<math><msub displaystyle="true"><mi>𝑡</mi><mrow><mi>𝑛</mi><mo lspace="0em" rspace="0em">−</mo><mi>𝑝</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mrow displaystyle="true"><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></math>を<math><mi displaystyle="true">𝑧</mi><mrow displaystyle="true"><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow></math>で置き換えてよい。</p>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>自由度は「データ数 − 推定した係数の数（切片を含めて<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">+</mo><mn displaystyle="true">1</mn></math>個）」。</li>
+          <li><math><mtext displaystyle="true">se</mtext><mrow displaystyle="true"><mo>(</mo><msub><mover accent="true"><mi>𝛽</mi><mo>̂</mo></mover><mi>𝑗</mi></msub><mo>)</mo></mrow></math>は手計算せず、ソフトウェアの出力（Std. Error）を使うのが普通。 出力の読み方は<a href="../regression-test/">回帰係数の検定</a>を参照。</li>
+        </ul>
+      </div>
+      <p>関連：<a href="../regression-test/">回帰係数の検定</a>、<a href="../mean-test/">母平均の検定</a>（同じ構造の<math><mi displaystyle="true">𝑡</mi></math>統計量）、<a href="../distributions/">標本分布のまとめ</a></p>
+    </main>
+  </body>
+</html>

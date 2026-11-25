@@ -25,7 +25,7 @@
 #let previewer(document-config) = body => if is-preview {
   set document(..document-config)
   set page(height: auto)
-  set text(font: "Noto Sans JP", lang: "ja")
+  set text(font: "Noto Sans CJK JP", lang: "ja")
   show math.equation: set text(font: "Noto Sans Math")
 
   title()

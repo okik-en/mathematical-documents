@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>独立性の検定</title>
+    <meta property="og:title" content="独立性の検定">
+    <meta name="description" content="クロス表から2つの属性の独立性を調べるchi^2検定をまとめたページ。">
+    <meta property="og:description" content="クロス表から2つの属性の独立性を調べるchi^2検定をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/independence-test></code></nav>
+      <h1>独立性の検定</h1>
+      <p>Keywords: #統計検定, #仮説検定</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> クロス表と期待度数</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 検定統計量</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> 2×2表の簡便公式</a></li>
+        </ol>
+      </nav>
+      <p>2つの属性<math><mi displaystyle="true">𝐴</mi></math>（<math><mi displaystyle="true">𝑘</mi></math>個のカテゴリ<math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐴</mi><mi>𝑘</mi></msub></math>）と<math><mi displaystyle="true">𝐵</mi></math>（<math><mi displaystyle="true">𝑙</mi></math>個のカテゴリ<math><msub displaystyle="true"><mi>𝐵</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝐵</mi><mi>𝑙</mi></msub></math>）について、</p>
+      <math display="block">
+        <msub>
+          <mi>𝐻</mi>
+          <mn>0</mn>
+        </msub>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <mi>𝐴</mi>
+        <mspace width="0.2222em"/>
+        <mtext>と</mtext>
+        <mspace width="0.2222em"/>
+        <mi>𝐵</mi>
+        <mspace width="0.2222em"/>
+        <mtext>は独立である</mtext>
+      </math>
+      <p>を検定する。データは<math><mi displaystyle="true">𝑘</mi><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><mi displaystyle="true">𝑙</mi></math>の<strong><strong>クロス表</strong></strong>（分割表）で与えられる。</p>
+      <h2 id="loc-1">1. クロス表と期待度数</h2>
+      <p><math><msub displaystyle="true"><mi>𝐴</mi><mi>𝑖</mi></msub></math>かつ<math><msub displaystyle="true"><mi>𝐵</mi><mi>𝑗</mi></msub></math>に入った観測度数を<math><msub displaystyle="true"><mi>𝑂</mi><mrow><mi>𝑖</mi><mi>𝑗</mi></mrow></msub></math>、行和を<math><msub displaystyle="true"><mi>𝑂</mi><mrow><mi>𝑖</mi><mo form="infix" lspace="0em" rspace="0em">⋅</mo></mrow></msub></math>、列和を<math><msub displaystyle="true"><mi>𝑂</mi><mrow><mo form="infix" lspace="0em" rspace="0em">⋅</mo><mi>𝑗</mi></mrow></msub></math>、総数を<math><mi displaystyle="true">𝑛</mi></math>とする。</p>
+      <table>
+        <tr>
+          <td></td>
+          <td><math><msub displaystyle="true"><mi>𝐵</mi><mn>1</mn></msub></math></td>
+          <td><math><mi displaystyle="true">⋯</mi></math></td>
+          <td><strong><strong>計</strong></strong></td>
+        </tr>
+        <tr>
+          <td><math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub></math></td>
+          <td><math><msub displaystyle="true"><mi>𝑂</mi><mrow><mn>1</mn><mn>1</mn></mrow></msub></math></td>
+          <td><math><mi displaystyle="true">⋯</mi></math></td>
+          <td><math><msub displaystyle="true"><mi>𝑂</mi><mrow><mn>1</mn><mo form="infix" lspace="0em" rspace="0em">⋅</mo></mrow></msub></math></td>
+        </tr>
+        <tr>
+          <td><math><mi displaystyle="true">⋮</mi></math></td>
+          <td><math><mi displaystyle="true">⋮</mi></math></td>
+          <td></td>
+          <td><math><mi displaystyle="true">⋮</mi></math></td>
+        </tr>
+        <tr>
+          <td><strong><strong>計</strong></strong></td>
+          <td><math><msub displaystyle="true"><mi>𝑂</mi><mrow><mo form="infix" lspace="0em" rspace="0em">⋅</mo><mn>1</mn></mrow></msub></math></td>
+          <td><math><mi displaystyle="true">⋯</mi></math></td>
+          <td><math><mi displaystyle="true">𝑛</mi></math></td>
+        </tr>
+      </table>
+      <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>（独立）のもとでは<math><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝐴</mi><mi>𝑖</mi></msub><mo>∩</mo><msub><mi>𝐵</mi><mi>𝑗</mi></msub></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><msub><mi>𝐴</mi><mi>𝑖</mi></msub><mo>)</mo></mrow><mi displaystyle="true">𝑃</mi><mrow displaystyle="true"><mo>(</mo><msub><mi>𝐵</mi><mi>𝑗</mi></msub><mo>)</mo></mrow></math>なので、期待度数は</p>
+      <math display="block">
+        <msub>
+          <mi>𝐸</mi>
+          <mrow>
+            <mi>𝑖</mi>
+            <mi>𝑗</mi>
+          </mrow>
+        </msub>
+        <mo>=</mo>
+        <mi>𝑛</mi>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+        <mfrac>
+          <msub>
+            <mi>𝑂</mi>
+            <mrow>
+              <mi>𝑖</mi>
+              <mo form="infix" lspace="0em" rspace="0em">⋅</mo>
+            </mrow>
+          </msub>
+          <mi>𝑛</mi>
+        </mfrac>
+        <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+        <mfrac>
+          <msub>
+            <mi>𝑂</mi>
+            <mrow>
+              <mo form="infix" lspace="0em" rspace="0em">⋅</mo>
+              <mi>𝑗</mi>
+            </mrow>
+          </msub>
+          <mi>𝑛</mi>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>𝑂</mi>
+              <mrow>
+                <mi>𝑖</mi>
+                <mo form="infix" lspace="0em" rspace="0em">⋅</mo>
+              </mrow>
+            </msub>
+            <msub>
+              <mi>𝑂</mi>
+              <mrow>
+                <mo form="infix" lspace="0em" rspace="0em">⋅</mo>
+                <mi>𝑗</mi>
+              </mrow>
+            </msub>
+          </mrow>
+          <mi>𝑛</mi>
+        </mfrac>
+      </math>
+      <p>となる。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        期待度数は<strong><strong>「行の合計 × 列の合計 ÷ 総数」</strong></strong>。
+      </div>
+      <h2 id="loc-2">2. 検定統計量</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>のもとで、<math><mi displaystyle="true">𝑛</mi></math>が十分大きければ近似的に</p>
+        <math display="block">
+          <msup>
+            <mi>𝜒</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <munderover>
+            <mo form="prefix" lspace="0em">∑</mo>
+            <mrow>
+              <mi>𝑖</mi>
+              <mo lspace="0em" rspace="0em">=</mo>
+              <mn>1</mn>
+            </mrow>
+            <mi>𝑘</mi>
+          </munderover>
+          <munderover>
+            <mo form="prefix" lspace="0em">∑</mo>
+            <mrow>
+              <mi>𝑗</mi>
+              <mo lspace="0em" rspace="0em">=</mo>
+              <mn>1</mn>
+            </mrow>
+            <mi>𝑙</mi>
+          </munderover>
+          <mfrac>
+            <msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msub>
+                    <mi>𝑂</mi>
+                    <mrow>
+                      <mi>𝑖</mi>
+                      <mi>𝑗</mi>
+                    </mrow>
+                  </msub>
+                  <mo>−</mo>
+                  <msub>
+                    <mi>𝐸</mi>
+                    <mrow>
+                      <mi>𝑖</mi>
+                      <mi>𝑗</mi>
+                    </mrow>
+                  </msub>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mn>2</mn>
+            </msup>
+            <msub>
+              <mi>𝐸</mi>
+              <mrow>
+                <mi>𝑖</mi>
+                <mi>𝑗</mi>
+              </mrow>
+            </msub>
+          </mfrac>
+          <mo>∼</mo>
+          <msup>
+            <mi>𝜒</mi>
+            <mn>2</mn>
+          </msup>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑙</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <p>有意水準<math><mi displaystyle="true">𝛼</mi></math>の棄却域は</p>
+      <math display="block">
+        <msup>
+          <mi>𝜒</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>></mo>
+        <msubsup>
+          <mi>𝜒</mi>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑘</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑙</mi>
+                <mo lspace="0em" rspace="0em">−</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mn>2</mn>
+        </msubsup>
+        <mrow>
+          <mo>(</mo>
+          <mi>𝛼</mi>
+          <mo>)</mo>
+        </mrow>
+        <mo stretchy="false">⟹</mo>
+        <mi>𝐴</mi>
+        <mspace width="0.2222em"/>
+        <mtext>と</mtext>
+        <mspace width="0.2222em"/>
+        <mi>𝐵</mi>
+        <mspace width="0.2222em"/>
+        <mtext>は独立でない（関連がある）</mtext>
+      </math>
+      <p>である（<strong><strong>右側検定のみ</strong></strong>）。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>統計量の形は<a href="../goodness-of-fit-test/">適合度検定</a>と同じ「（観測 − 期待）² ÷ 期待」の和。</li>
+          <li>自由度は<strong><strong>（行数 − 1）×（列数 − 1）</strong></strong>。行和と列和が固定されているので、自由に決められるマスは<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑘</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑙</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math>個しかない。</li>
+          <li>2×2表なら自由度は<math><mn displaystyle="true">1</mn></math>で、<math><msubsup displaystyle="true"><mi>𝜒</mi><mn>1</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">3.841</mn></math>（<math><mo form="infix" lspace="0em" displaystyle="true">=</mo><msup displaystyle="true"><mn>1.96</mn><mn>2</mn></msup></math>）。</li>
+        </ul>
+      </div>
+      <h2 id="loc-3">3. 2×2表の簡便公式</h2>
+      <table>
+        <tr>
+          <td></td>
+          <td><math><msub displaystyle="true"><mi>𝐵</mi><mn>1</mn></msub></math></td>
+          <td><math><msub displaystyle="true"><mi>𝐵</mi><mn>2</mn></msub></math></td>
+        </tr>
+        <tr>
+          <td><math><msub displaystyle="true"><mi>𝐴</mi><mn>1</mn></msub></math></td>
+          <td><math><mi displaystyle="true">𝑎</mi></math></td>
+          <td><math><mi displaystyle="true">𝑏</mi></math></td>
+        </tr>
+        <tr>
+          <td><math><msub displaystyle="true"><mi>𝐴</mi><mn>2</mn></msub></math></td>
+          <td><math><mi displaystyle="true">𝑐</mi></math></td>
+          <td><math><mi displaystyle="true">𝑑</mi></math></td>
+        </tr>
+      </table>
+      <p>のとき、<math><mi displaystyle="true">𝑛</mi><mo displaystyle="true">=</mo><mi displaystyle="true">𝑎</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑏</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑐</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑑</mi></math>として</p>
+      <math display="block">
+        <msup>
+          <mi>𝜒</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mi>𝑛</mi>
+            <msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑎</mi>
+                  <mi>𝑑</mi>
+                  <mo>−</mo>
+                  <mi>𝑏</mi>
+                  <mi>𝑐</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑎</mi>
+                <mo>+</mo>
+                <mi>𝑏</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑐</mi>
+                <mo>+</mo>
+                <mi>𝑑</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑎</mi>
+                <mo>+</mo>
+                <mi>𝑐</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mi>𝑏</mi>
+                <mo>+</mo>
+                <mi>𝑑</mi>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+        </mfrac>
+      </math>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <p>ある講習の受講の有無と試験の合否を調べたところ、次の結果になった。 受講と合否は独立か、有意水準<math><mn displaystyle="true">5</mn><mi displaystyle="true">%</mi></math>で検定せよ。</p>
+        <table>
+          <tr>
+            <td></td>
+            <td>合格</td>
+            <td>不合格</td>
+            <td>計</td>
+          </tr>
+          <tr>
+            <td>受講</td>
+            <td>30</td>
+            <td>20</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>未受講</td>
+            <td>20</td>
+            <td>30</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>計</td>
+            <td>50</td>
+            <td>50</td>
+            <td>100</td>
+          </tr>
+        </table>
+      </div>
+      <p>期待度数はすべて<math><mn displaystyle="true">50</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em" displaystyle="true">×</mo><mn displaystyle="true">50</mn><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mn displaystyle="true">100</mn><mo displaystyle="true">=</mo><mn displaystyle="true">25</mn></math>なので</p>
+      <math display="block">
+        <msup>
+          <mi>𝜒</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <msup>
+              <mn>5</mn>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mn>5</mn>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mn>5</mn>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <mn>5</mn>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <mn>25</mn>
+        </mfrac>
+        <mo>=</mo>
+        <mn>4.0</mn>
+      </math>
+      <p>簡便公式でも<math><mfrac displaystyle="true"><mrow><mn>100</mn><msup><mrow><mo>(</mo><mrow><mn>30</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>30</mn><mo>−</mo><mn>20</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>20</mn></mrow><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mn>50</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>50</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>50</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>50</mn></mrow></mfrac><mo displaystyle="true">=</mo><mn displaystyle="true">4.0</mn></math>となる。</p>
+      <p>自由度<math><mn displaystyle="true">1</mn></math>で<math><msubsup displaystyle="true"><mi>𝜒</mi><mn>1</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">3.841</mn></math>。<math><mn displaystyle="true">4.0</mn><mo displaystyle="true">></mo><mn displaystyle="true">3.841</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却し、受講と合否には関連があると判断する（<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">0.046</mn></math>）。</p>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        <ul>
+          <li>各期待度数が<math><mn displaystyle="true">5</mn></math>以上あることが目安。</li>
+          <li>2×2表で度数が少ないときは、<math><mrow displaystyle="true"><mo>|</mo><mrow><mi>𝑎</mi><mi>𝑑</mi><mo>−</mo><mi>𝑏</mi><mi>𝑐</mi></mrow><mo>|</mo></mrow></math>から<math><mi displaystyle="true">𝑛</mi><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mn displaystyle="true">2</mn></math>を引いてから2乗する<strong><strong>イェーツの補正</strong></strong>を使うことがある。</li>
+          <li>「独立でない」とわかっても、<strong><strong>因果関係</strong></strong>があるとは限らない。</li>
+        </ul>
+      </div>
+      <p>関連：<a href="../proportion-difference-test/">母比率の差の検定</a>（2×2表では同じ結論になる）</p>
+    </main>
+  </body>
+</html>

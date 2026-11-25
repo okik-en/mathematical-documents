@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>母平均の差の検定</title>
+    <meta property="og:title" content="母平均の差の検定">
+    <meta name="description" content="2つの正規母集団の母平均の差に関する検定（分散既知・等分散・ウェルチ・対応あり）をまとめたページ。">
+    <meta property="og:description" content="2つの正規母集団の母平均の差に関する検定（分散既知・等分散・ウェルチ・対応あり）をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/mean-difference-test></code></nav>
+      <h1>母平均の差の検定</h1>
+      <p>Keywords: #統計検定, #仮説検定</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 母分散が既知のとき</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 母分散が未知で等しいとき</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> 母分散が未知で等しいとは限らないとき（ウェルチの検定）</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> 対応のある2標本</a></li>
+        </ol>
+      </nav>
+      <p>2つの正規母集団<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>、<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>から、それぞれ大きさ<math><mi displaystyle="true">𝑚</mi></math>、<math><mi displaystyle="true">𝑛</mi></math>の独立な標本<math><msub displaystyle="true"><mi>𝑋</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑚</mi></msub></math>と<math><msub displaystyle="true"><mi>𝑌</mi><mn>1</mn></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑌</mi><mi>𝑛</mi></msub></math>をとる。 標本平均を<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle></math>、<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>、不偏分散を<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>1</mn><mn>2</mn></msubsup></math>、<math><msubsup displaystyle="true"><mi>𝑈</mi><mn>2</mn><mn>2</mn></msubsup></math>とし、</p>
+      <math display="block">
+        <msub>
+          <mi>𝐻</mi>
+          <mn>0</mn>
+        </msub>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <msub>
+          <mi>𝜇</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <msub>
+          <mi>𝜇</mi>
+          <mn>2</mn>
+        </msub>
+      </math>
+      <p>を検定する。</p>
+      <p>使う統計量は、<strong><strong>母分散について何がわかっているか</strong></strong>で3通りに分かれる。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方：場合分け</p>
+        <ol>
+          <li>母分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">,</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>が<strong><strong>既知</strong></strong> → <math><mi displaystyle="true">𝑍</mi></math>検定</li>
+          <li>母分散は未知だが<strong><strong>等しい</strong></strong>（<math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>） → プールした分散による<math><mi displaystyle="true">𝑡</mi></math>検定</li>
+          <li>母分散は未知で<strong><strong>等しいとは限らない</strong></strong> → ウェルチの<math><mi displaystyle="true">𝑡</mi></math>検定</li>
+        </ol>
+        <p>どれも形は<math><mfrac displaystyle="true"><mrow><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑋</mi></mstyle><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑌</mi></mstyle></mrow><mtext>標準誤差</mtext></mfrac></math>で、分母の作り方だけが違う。</p>
+      </div>
+      <p>棄却域はいずれも、統計量を<math><mi displaystyle="true">𝑆</mi></math>、その分布の上側点を<math><mi displaystyle="true">𝑐</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>として</p>
+      <dl>
+        <dt>両側検定</dt>
+        <dd><math><mrow displaystyle="true"><mo>|</mo><mi>𝑆</mi><mo>|</mo></mrow><mo displaystyle="true">></mo><mi displaystyle="true">𝑐</mi><mrow displaystyle="true"><mo>(</mo><mfrac><mi>𝛼</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">≠</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+        <dt>右側検定</dt>
+        <dd><math><mi displaystyle="true">𝑆</mi><mo displaystyle="true">></mo><mi displaystyle="true">𝑐</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">></mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+        <dt>左側検定</dt>
+        <dd><math><mi displaystyle="true">𝑆</mi><mo displaystyle="true">&lt;</mo><mo form="prefix" displaystyle="true">−</mo><mi displaystyle="true">𝑐</mi><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow><mo stretchy="false" displaystyle="true">⟹</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">&lt;</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math></dd>
+      </dl>
+      <p>の形になる。</p>
+      <h2 id="loc-1">1. 母分散が既知のとき</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>のもとで</p>
+        <math display="block">
+          <mi>𝑍</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑋</mi>
+              </mstyle>
+              <mo>−</mo>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑌</mi>
+              </mstyle>
+            </mrow>
+            <msqrt>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mn>1</mn>
+                <mn>2</mn>
+              </msubsup>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑚</mi>
+              <mo>+</mo>
+              <msubsup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+                <mn>2</mn>
+              </msubsup>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑛</mi>
+            </msqrt>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑁</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <p><math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑋</mi></mstyle><mo displaystyle="true">−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑌</mi></mstyle></math>は正規分布の再生性から<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mn>1</mn></msub><mo>−</mo><msub><mi>𝜇</mi><mn>2</mn></msub><mo>,</mo><msubsup><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mi>𝑚</mi><mo>+</mo><msubsup><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup><mspace width="0.2222em"/><mtext>/</mtext><mspace width="0.2222em"/><mi>𝑛</mi></mrow><mo>)</mo></mrow></math>に従う。 独立な確率変数の差の分散は<strong><strong>分散の和</strong></strong>になることに注意。</p>
+      <h2 id="loc-2">2. 母分散が未知で等しいとき</h2>
+      <p>共通の母分散<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>を、2つの標本をまとめて推定する。</p>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義：プールした分散</p>
+        <math display="block">
+          <msup>
+            <mi>𝑈</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑚</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <msubsup>
+                <mi>𝑈</mi>
+                <mn>1</mn>
+                <mn>2</mn>
+              </msubsup>
+              <mo>+</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo>−</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <msubsup>
+                <mi>𝑈</mi>
+                <mn>2</mn>
+                <mn>2</mn>
+              </msubsup>
+            </mrow>
+            <mrow>
+              <mi>𝑚</mi>
+              <mo>+</mo>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>2</mn>
+            </mrow>
+          </mfrac>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msubsup displaystyle="true"><mi>𝜎</mi><mn>1</mn><mn>2</mn></msubsup><mo displaystyle="true">=</mo><msubsup displaystyle="true"><mi>𝜎</mi><mn>2</mn><mn>2</mn></msubsup></math>かつ<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>のもとで</p>
+        <math display="block">
+          <mi>𝑇</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑋</mi>
+              </mstyle>
+              <mo>−</mo>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑌</mi>
+              </mstyle>
+            </mrow>
+            <mrow>
+              <mi>𝑈</mi>
+              <msqrt>
+                <mfrac>
+                  <mn>1</mn>
+                  <mi>𝑚</mi>
+                </mfrac>
+                <mo>+</mo>
+                <mfrac>
+                  <mn>1</mn>
+                  <mi>𝑛</mi>
+                </mfrac>
+              </msqrt>
+            </mrow>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑡</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑚</mi>
+              <mo>+</mo>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>2</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>は2つの不偏分散を<strong><strong>自由度で重みづけした平均</strong></strong>。</li>
+          <li>自由度は<math><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo displaystyle="true">+</mo><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑛</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow><mo displaystyle="true">=</mo><mi displaystyle="true">𝑚</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">2</mn></math>。各標本で平均を<math><mn displaystyle="true">1</mn></math>つずつ推定したぶん、<math><mn displaystyle="true">2</mn></math>減る。</li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <math>
+          <mi displaystyle="true">𝑚</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">10</mn>
+        </math>、<math>
+          <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true">
+            <mi>𝑥</mi>
+          </mstyle>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">23.0</mn>
+        </math>、<math>
+          <msubsup displaystyle="true">
+            <mi>𝑢</mi>
+            <mn>1</mn>
+            <mn>2</mn>
+          </msubsup>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">4.0</mn>
+        </math>と、<math>
+          <mi displaystyle="true">𝑛</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">12</mn>
+        </math>、<math>
+          <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true">
+            <mi>𝑦</mi>
+          </mstyle>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">21.0</mn>
+        </math>、<math>
+          <msubsup displaystyle="true">
+            <mi>𝑢</mi>
+            <mn>2</mn>
+            <mn>2</mn>
+          </msubsup>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">5.0</mn>
+        </math>の2標本がある。 母分散が等しいと仮定して、<math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>0</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mn>1</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mn>2</mn>
+          </msub>
+        </math>を有意水準<math>
+          <mn displaystyle="true">5</mn>
+          <mi displaystyle="true">%</mi>
+        </math>で両側検定せよ。
+      </div>
+      <math display="block">
+        <msup>
+          <mi>𝑢</mi>
+          <mn>2</mn>
+        </msup>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mn>9</mn>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+            <mn>4.0</mn>
+            <mo>+</mo>
+            <mn>11</mn>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+            <mn>5.0</mn>
+          </mrow>
+          <mn>20</mn>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+          <mn>91</mn>
+          <mn>20</mn>
+        </mfrac>
+        <mo>=</mo>
+        <mn>4.55</mn>
+      </math>
+      <math display="block">
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mrow>
+            <mn>23.0</mn>
+            <mo>−</mo>
+            <mn>21.0</mn>
+          </mrow>
+          <mrow>
+            <msqrt>
+              <mn>4.55</mn>
+            </msqrt>
+            <msqrt>
+              <mfrac>
+                <mn>1</mn>
+                <mn>10</mn>
+              </mfrac>
+              <mo>+</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mn>12</mn>
+              </mfrac>
+            </msqrt>
+          </mrow>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+          <mn>2.0</mn>
+          <mrow>
+            <mn>2.133</mn>
+            <mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo>
+            <mn>0.428</mn>
+          </mrow>
+        </mfrac>
+        <mo>≈</mo>
+        <mn>2.19</mn>
+      </math>
+      <p><math><msub displaystyle="true"><mi>𝑡</mi><mn>20</mn></msub><mrow displaystyle="true"><mo>(</mo><mn>0.025</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">2.086</mn></math>で、<math><mn displaystyle="true">2.19</mn><mo displaystyle="true">></mo><mn displaystyle="true">2.086</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却する（<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">0.041</mn></math>）。</p>
+      <h2 id="loc-3">3. 母分散が未知で等しいとは限らないとき（ウェルチの検定）</h2>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msub displaystyle="true"><mi>𝜇</mi><mn>1</mn></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝜇</mi><mn>2</mn></msub></math>のもとで、近似的に</p>
+        <math display="block">
+          <mi>𝑇</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑋</mi>
+              </mstyle>
+              <mo>−</mo>
+              <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                <mi>𝑌</mi>
+              </mstyle>
+            </mrow>
+            <msqrt>
+              <msubsup>
+                <mi>𝑈</mi>
+                <mn>1</mn>
+                <mn>2</mn>
+              </msubsup>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑚</mi>
+              <mo>+</mo>
+              <msubsup>
+                <mi>𝑈</mi>
+                <mn>2</mn>
+                <mn>2</mn>
+              </msubsup>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <mi>𝑛</mi>
+            </msqrt>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑡</mi>
+          <mrow>
+            <mo>(</mo>
+            <mi>𝑘</mi>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>ここで<math><mi displaystyle="true">𝑘</mi></math>は次の<math><mi displaystyle="true">𝑐</mi></math>に最も近い整数である。</p>
+        <math display="block">
+          <mi>𝑐</mi>
+          <mo>=</mo>
+          <mfrac>
+            <msup>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <msubsup>
+                    <mi>𝑈</mi>
+                    <mn>1</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <mi>𝑚</mi>
+                  <mo>+</mo>
+                  <msubsup>
+                    <mi>𝑈</mi>
+                    <mn>2</mn>
+                    <mn>2</mn>
+                  </msubsup>
+                  <mspace width="0.2222em"/>
+                  <mtext>/</mtext>
+                  <mspace width="0.2222em"/>
+                  <mi>𝑛</mi>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+              <mn>2</mn>
+            </msup>
+            <mrow>
+              <mfrac>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msubsup>
+                        <mi>𝑈</mi>
+                        <mn>1</mn>
+                        <mn>2</mn>
+                      </msubsup>
+                      <mspace width="0.2222em"/>
+                      <mtext>/</mtext>
+                      <mspace width="0.2222em"/>
+                      <mi>𝑚</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+                <mrow>
+                  <mi>𝑚</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </mfrac>
+              <mo>+</mo>
+              <mfrac>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msubsup>
+                        <mi>𝑈</mi>
+                        <mn>2</mn>
+                        <mn>2</mn>
+                      </msubsup>
+                      <mspace width="0.2222em"/>
+                      <mtext>/</mtext>
+                      <mspace width="0.2222em"/>
+                      <mi>𝑛</mi>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mo lspace="0em" rspace="0em">−</mo>
+                  <mn>1</mn>
+                </mrow>
+              </mfrac>
+            </mrow>
+          </mfrac>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>分子・分母は「分散既知の<math><mi displaystyle="true">𝑍</mi></math>検定」の<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>を<math><msup displaystyle="true"><mi>𝑈</mi><mn>2</mn></msup></math>に置き換えただけ。</li>
+          <li>自由度<math><mi displaystyle="true">𝑐</mi></math>の式は覚えにくいが、試験では「与えられた式に代入する」形で出ることが多い。 <math><mi displaystyle="true">𝑐</mi></math>は<math><mo lspace="0em" rspace="0em" displaystyle="true">min</mo><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑚</mi><mo>,</mo><mi>𝑛</mi></mrow><mo>)</mo></mrow><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>以上<math><mi displaystyle="true">𝑚</mi><mo displaystyle="true">+</mo><mi displaystyle="true">𝑛</mi><mo displaystyle="true">−</mo><mn displaystyle="true">2</mn></math>以下に収まる。</li>
+          <li>実務では、等分散かどうかわからないときはウェルチの検定を使うのが一般的。</li>
+        </ul>
+      </div>
+      <p>上の例題のデータにウェルチの検定を使うと、</p>
+      <math display="block">
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>2.0</mn>
+          <msqrt>
+            <mn>4.0</mn>
+            <mspace width="0.2222em"/>
+            <mtext>/</mtext>
+            <mspace width="0.2222em"/>
+            <mn>10</mn>
+            <mo>+</mo>
+            <mn>5.0</mn>
+            <mspace width="0.2222em"/>
+            <mtext>/</mtext>
+            <mspace width="0.2222em"/>
+            <mn>12</mn>
+          </msqrt>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+          <mn>2.0</mn>
+          <mn>0.904</mn>
+        </mfrac>
+        <mo>≈</mo>
+        <mn>2.21</mn>
+        <mo rspace="0em">,</mo>
+        <mspace width="2em"/>
+        <mi>𝑐</mi>
+        <mo>≈</mo>
+        <mn>19.87</mn>
+      </math>
+      <p>より自由度<math><mn displaystyle="true">20</mn></math>の<math><mi displaystyle="true">𝑡</mi></math>分布を使い、<math><mn displaystyle="true">2.21</mn><mo displaystyle="true">></mo><mn displaystyle="true">2.086</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却する。</p>
+      <h2 id="loc-4">4. 対応のある2標本</h2>
+      <p>同じ人の「薬の投与前と投与後」のように、2つの標本が<strong><strong>ペアになっている</strong></strong>場合は、ペアごとの差<math><msub displaystyle="true"><mi>𝐷</mi><mi>𝑖</mi></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑋</mi><mi>𝑖</mi></msub><mo displaystyle="true">−</mo><msub displaystyle="true"><mi>𝑌</mi><mi>𝑖</mi></msub></math>（<math><mi displaystyle="true">𝑖</mi><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><mi displaystyle="true">𝑛</mi></math>）をとり、1標本の<a href="../mean-test/">母平均の検定</a>に帰着させる。</p>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p>差<math><msub displaystyle="true"><mi>𝐷</mi><mi>𝑖</mi></msub></math>が正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>𝜇</mi><mi>𝐷</mi></msub><mo>,</mo><msubsup><mi>𝜎</mi><mi>𝐷</mi><mn>2</mn></msubsup></mrow><mo>)</mo></mrow></math>に従うとき、<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo><msub displaystyle="true"><mi>𝜇</mi><mi>𝐷</mi></msub><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>のもとで</p>
+        <math display="block">
+          <mi>𝑇</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+              <mi>𝐷</mi>
+            </mstyle>
+            <mrow>
+              <msub>
+                <mi>𝑈</mi>
+                <mi>𝐷</mi>
+              </msub>
+              <mspace width="0.2222em"/>
+              <mtext>/</mtext>
+              <mspace width="0.2222em"/>
+              <msqrt>
+                <mi>𝑛</mi>
+              </msqrt>
+            </mrow>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝑡</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑛</mi>
+              <mo>−</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+        <p>ここで<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝐷</mi></mstyle></math>、<math><msubsup displaystyle="true"><mi>𝑈</mi><mi>𝐷</mi><mn>2</mn></msubsup></math>は差<math><msub displaystyle="true"><mi>𝐷</mi><mi>𝑖</mi></msub></math>の標本平均と不偏分散。</p>
+      </div>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <math>
+          <mn displaystyle="true">9</mn>
+        </math>人について投与前後の値の差をとったところ、<math>
+          <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true">
+            <mi>𝑑</mi>
+          </mstyle>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">1.5</mn>
+        </math>、<math>
+          <msub displaystyle="true">
+            <mi>𝑢</mi>
+            <mi>𝐷</mi>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">2.0</mn>
+        </math>だった。 効果があるか（<math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>1</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mi>𝐷</mi>
+          </msub>
+          <mo displaystyle="true">></mo>
+          <mn displaystyle="true">0</mn>
+        </math>）、有意水準<math>
+          <mn displaystyle="true">5</mn>
+          <mi displaystyle="true">%</mi>
+        </math>で検定せよ。
+      </div>
+      <math display="block">
+        <mi>𝑡</mi>
+        <mo>=</mo>
+        <mfrac>
+          <mn>1.5</mn>
+          <mrow>
+            <mn>2.0</mn>
+            <mspace width="0.2222em"/>
+            <mtext>/</mtext>
+            <mspace width="0.2222em"/>
+            <msqrt>
+              <mn>9</mn>
+            </msqrt>
+          </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mn>2.25</mn>
+      </math>
+      <p><math><msub displaystyle="true"><mi>𝑡</mi><mn>8</mn></msub><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">1.860</mn></math>で、<math><mn displaystyle="true">2.25</mn><mo displaystyle="true">></mo><mn displaystyle="true">1.860</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却し、効果があると判断する。</p>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        対応のあるデータを、対応のない2標本として検定してはいけない。 個人差が分散に含まれてしまい、検出力が大きく下がる。 「同じ対象を2回測っているか」を必ず確認すること。
+      </div>
+      <p>関連：<a href="../variance-ratio-test/">母分散の比の検定</a>（等分散かどうかの確認）、<a href="../../sampling-distribution/">標本分布</a>（2標本問題の導出）</p>
+    </main>
+  </body>
+</html>

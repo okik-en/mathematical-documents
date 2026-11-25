@@ -1,4 +1,5 @@
 #import "/lib/styles.typ": nav, style, styled
+#import "/lib/appendix.typ": roots
 
 #set document(title: "mdocs")
 
@@ -6,9 +7,7 @@
 
 #title()
 
-#let appendix = yaml("/appendix.yaml")
-
-#list(..appendix.map(e => link("./" + e.keys().first(), e.keys().first())))
+#list(..roots.map(n => link("./" + n, n)))
 
 #divider()
 

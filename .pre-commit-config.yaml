@@ -7,8 +7,6 @@ repos:
     hooks:
       - id: build
         name: Build Typst HTML
-        entry: uv run scripts/build.py
-        language: python
+        entry: make
+        language: system
         pass_filenames: false
-        additional_dependencies:
-          - pyyaml

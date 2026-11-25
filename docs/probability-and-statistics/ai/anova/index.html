@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>一元配置分散分析</title>
+    <meta property="og:title" content="一元配置分散分析">
+    <meta name="description" content="3群以上の母平均の差をF比で検定する一元配置分散分析をまとめたページ。">
+    <meta property="og:description" content="3群以上の母平均の差をF比で検定する一元配置分散分析をまとめたページ。">
+    <meta property="og:image" content="https://raw.githubusercontent.com/okik-en/mathematical-documents/master/okik-en.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="mdocs">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&amp;family=Noto+Sans:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans+Math&amp;family=Noto+Sans+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <style>
+      body{font-family: 'Noto Sans', 'Noto Emoji', sans-serif; text-autospace: normal; overflow-wrap: anywhere; word-break: normal; line-break: strict;}
+      p{text-align: justify;}
+      math{font-family: 'Noto Sans Math', 'Noto Emoji', math; padding: 1pt;}
+      math[display='block']{flex-grow: 1; flex-shrink: 1; overflow-x: auto;}
+      mtable, mrow{width: max-content;}
+      code{font-family: 'Noto Sans Mono', 'Noto Emoji', monospace;}
+      math, pre{overflow-x: auto; overflow-y: hidden; max-width: 100%;}
+      a{text-decoration: none; display: inline-block; border-bottom: 1pt currentColor solid;}
+      li{overflow-x: auto;}
+      li p:first-child{display: inline;}
+      ol{list-style-type: none; counter-reset: dec;}
+      ol > li{counter-increment: dec;}
+      ol > li:before{content: '(' counter(dec, decimal) ') ';}
+      ol ol{list-style-type: none; counter-reset: llt;}
+      ol ol > li{counter-increment: llt;}
+      ol ol > li:before{content: '(' counter(llt, lower-latin) ') ';}
+      ol div, ul div{display: inline-block;}
+      nav li:before{content: '' !important;}
+      figure{text-align: center;}
+    </style>
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><code>mdocs:<a href="../../../">~</a>/<a href="../../">probability-and-statistics</a>/<a href="../">ai</a>/anova></code></nav>
+      <h1>一元配置分散分析</h1>
+      <p>Keywords: #統計検定, #仮説検定, #実験計画</p>
+      <nav role="doc-toc">
+        <h2>目次</h2>
+        <ol style="list-style-type: none">
+          <li><a href="#loc-1"><span class="prefix">1.</span> 設定</a></li>
+          <li><a href="#loc-2"><span class="prefix">2.</span> 平方和の分解</a></li>
+          <li><a href="#loc-3"><span class="prefix">3.</span> <math><mi displaystyle="true">𝐹</mi></math>検定と分散分析表</a></li>
+          <li><a href="#loc-4"><span class="prefix">4.</span> 実験計画の用語</a></li>
+        </ol>
+      </nav>
+      <p>3つ以上の群（処理）の母平均に差があるかを、まとめて検定する方法。 1つの要因（因子）の水準だけを変える実験を<strong><strong>一元配置実験</strong></strong>という。</p>
+      <h2 id="loc-1">1. 設定</h2>
+      <p><math><mi displaystyle="true">𝑘</mi></math>個の群があり、第<math><mi displaystyle="true">𝑖</mi></math>群から<math><msub displaystyle="true"><mi>𝑛</mi><mi>𝑖</mi></msub></math>個のデータ<math><msub displaystyle="true"><mi>𝑦</mi><mrow><mi>𝑖</mi><mn>1</mn></mrow></msub><mo displaystyle="true">,</mo><mi displaystyle="true">…</mi><mo displaystyle="true">,</mo><msub displaystyle="true"><mi>𝑦</mi><mrow><mi>𝑖</mi><msub><mi>𝑛</mi><mi>𝑖</mi></msub></mrow></msub></math>をとる。総数を<math><mi displaystyle="true">𝑁</mi><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑛</mi><mn>1</mn></msub><mo displaystyle="true">+</mo><mi displaystyle="true">⋯</mi><mo displaystyle="true">+</mo><msub displaystyle="true"><mi>𝑛</mi><mi>𝑘</mi></msub></math>とする。</p>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義：モデル</p>
+        <math display="block">
+          <msub>
+            <mi>𝑦</mi>
+            <mrow>
+              <mi>𝑖</mi>
+              <mi>𝑗</mi>
+            </mrow>
+          </msub>
+          <mo>=</mo>
+          <msub>
+            <mi>𝜇</mi>
+            <mi>𝑖</mi>
+          </msub>
+          <mo>+</mo>
+          <msub>
+            <mi>𝜀</mi>
+            <mrow>
+              <mi>𝑖</mi>
+              <mi>𝑗</mi>
+            </mrow>
+          </msub>
+          <mo rspace="0em">,</mo>
+          <mspace width="2em"/>
+          <msub>
+            <mi>𝜀</mi>
+            <mrow>
+              <mi>𝑖</mi>
+              <mi>𝑗</mi>
+            </mrow>
+          </msub>
+          <mo>∼</mo>
+          <mi>𝑁</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>0</mn>
+              <mo>,</mo>
+              <msup>
+                <mi>𝜎</mi>
+                <mn>2</mn>
+              </msup>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+          <mspace width="0.2222em"/>
+          <mtext>（独立）</mtext>
+        </math>
+        <p>各群の分散は等しいと仮定する。</p>
+      </div>
+      <p>検定する仮説は</p>
+      <math display="block">
+        <msub>
+          <mi>𝐻</mi>
+          <mn>0</mn>
+        </msub>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <msub>
+          <mi>𝜇</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>=</mo>
+        <msub>
+          <mi>𝜇</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>=</mo>
+        <mi>⋯</mi>
+        <mo>=</mo>
+        <msub>
+          <mi>𝜇</mi>
+          <mi>𝑘</mi>
+        </msub>
+        <mspace width="2em"/>
+        <msub>
+          <mi>𝐻</mi>
+          <mn>1</mn>
+        </msub>
+        <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">:</mo>
+        <mtext>少なくとも1組の</mtext>
+        <mspace width="0.2222em"/>
+        <msub>
+          <mi>𝜇</mi>
+          <mi>𝑖</mi>
+        </msub>
+        <mspace width="0.2222em"/>
+        <mtext>が異なる</mtext>
+      </math>
+      <p>である。</p>
+      <h2 id="loc-2">2. 平方和の分解</h2>
+      <p>第<math><mi displaystyle="true">𝑖</mi></math>群の平均を<math><msub displaystyle="true"><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>𝑦</mi></mstyle><mi>𝑖</mi></msub></math>、全体の平均を<math><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;" displaystyle="true"><mi>𝑦</mi></mstyle></math>とする。</p>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理：変動の分解</p>
+        <math display="block">
+          <munder>
+            <munder accentunder="true">
+              <mrow>
+                <munder>
+                  <mo lspace="0em">∑</mo>
+                  <mrow>
+                    <mi>𝑖</mi>
+                    <mo rspace="0em">,</mo>
+                    <mi>𝑗</mi>
+                  </mrow>
+                </munder>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑦</mi>
+                        <mrow>
+                          <mi>𝑖</mi>
+                          <mi>𝑗</mi>
+                        </mrow>
+                      </msub>
+                      <mo>−</mo>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑦</mi>
+                      </mstyle>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mo>⏟</mo>
+            </munder>
+            <mrow>
+              <msub>
+                <mi>𝑆</mi>
+                <mi>𝑇</mi>
+              </msub>
+              <mspace width="0.2222em"/>
+              <mtext>（総平方和）</mtext>
+            </mrow>
+          </munder>
+          <mo>=</mo>
+          <munder>
+            <munder accentunder="true">
+              <mrow>
+                <munder>
+                  <mo lspace="0em">∑</mo>
+                  <mi>𝑖</mi>
+                </munder>
+                <msub>
+                  <mi>𝑛</mi>
+                  <mi>𝑖</mi>
+                </msub>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                          <mi>𝑦</mi>
+                        </mstyle>
+                        <mi>𝑖</mi>
+                      </msub>
+                      <mo>−</mo>
+                      <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                        <mi>𝑦</mi>
+                      </mstyle>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mo>⏟</mo>
+            </munder>
+            <mrow>
+              <msub>
+                <mi>𝑆</mi>
+                <mi>𝐴</mi>
+              </msub>
+              <mspace width="0.2222em"/>
+              <mtext>（群間平方和）</mtext>
+            </mrow>
+          </munder>
+          <mo>+</mo>
+          <munder>
+            <munder accentunder="true">
+              <mrow>
+                <munder>
+                  <mo lspace="0em">∑</mo>
+                  <mrow>
+                    <mi>𝑖</mi>
+                    <mo rspace="0em">,</mo>
+                    <mi>𝑗</mi>
+                  </mrow>
+                </munder>
+                <msup>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <msub>
+                        <mi>𝑦</mi>
+                        <mrow>
+                          <mi>𝑖</mi>
+                          <mi>𝑗</mi>
+                        </mrow>
+                      </msub>
+                      <mo>−</mo>
+                      <msub>
+                        <mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;">
+                          <mi>𝑦</mi>
+                        </mstyle>
+                        <mi>𝑖</mi>
+                      </msub>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mn>2</mn>
+                </msup>
+              </mrow>
+              <mo>⏟</mo>
+            </munder>
+            <mrow>
+              <msub>
+                <mi>𝑆</mi>
+                <mi>𝐸</mi>
+              </msub>
+              <mspace width="0.2222em"/>
+              <mtext>（群内平方和）</mtext>
+            </mrow>
+          </munder>
+        </math>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li>全体のばらつき ＝ <strong><strong>群の違いによるばらつき</strong></strong> ＋ <strong><strong>群の中の誤差によるばらつき</strong></strong>。</li>
+          <li>群間の差が誤差に比べて大きければ、「群によって平均が違う」と考えられる。</li>
+        </ul>
+      </div>
+      <h2 id="loc-3">3. <math><mi displaystyle="true">𝐹</mi></math>検定と分散分析表</h2>
+      <p>各平方和を自由度で割ったものを<strong><strong>平均平方</strong></strong>（不偏分散）という。</p>
+      <table>
+        <tr>
+          <td><strong><strong>要因</strong></strong></td>
+          <td><strong><strong>平方和</strong></strong></td>
+          <td><strong><strong>自由度</strong></strong></td>
+          <td><strong><strong>平均平方</strong></strong></td>
+          <td><strong><strong><math><mi displaystyle="true">𝐹</mi></math>比</strong></strong></td>
+        </tr>
+        <tr>
+          <td>群間</td>
+          <td><math><msub displaystyle="true"><mi>𝑆</mi><mi>𝐴</mi></msub></math></td>
+          <td><math><mi displaystyle="true">𝑘</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math></td>
+          <td><math><msub displaystyle="true"><mi>𝑉</mi><mi>𝐴</mi></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑆</mi><mi>𝐴</mi></msub><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑘</mi><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></math></td>
+          <td><math><msub displaystyle="true"><mi>𝑉</mi><mi>𝐴</mi></msub><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><msub displaystyle="true"><mi>𝑉</mi><mi>𝐸</mi></msub></math></td>
+        </tr>
+        <tr>
+          <td>群内（誤差）</td>
+          <td><math><msub displaystyle="true"><mi>𝑆</mi><mi>𝐸</mi></msub></math></td>
+          <td><math><mi displaystyle="true">𝑁</mi><mo displaystyle="true">−</mo><mi displaystyle="true">𝑘</mi></math></td>
+          <td><math><msub displaystyle="true"><mi>𝑉</mi><mi>𝐸</mi></msub><mo displaystyle="true">=</mo><msub displaystyle="true"><mi>𝑆</mi><mi>𝐸</mi></msub><mspace width="0.2222em"/><mtext displaystyle="true">/</mtext><mspace width="0.2222em"/><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝑁</mi><mo>−</mo><mi>𝑘</mi></mrow><mo>)</mo></mrow></math></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>全体</td>
+          <td><math><msub displaystyle="true"><mi>𝑆</mi><mi>𝑇</mi></msub></math></td>
+          <td><math><mi displaystyle="true">𝑁</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <div style="border-left: 4px solid #059669; background-color: #0596691f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #059669; margin: .5em 0;">定理</p>
+        <p><math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>のもとで</p>
+        <math display="block">
+          <mi>𝐹</mi>
+          <mo>=</mo>
+          <mfrac>
+            <msub>
+              <mi>𝑉</mi>
+              <mi>𝐴</mi>
+            </msub>
+            <msub>
+              <mi>𝑉</mi>
+              <mi>𝐸</mi>
+            </msub>
+          </mfrac>
+          <mo>∼</mo>
+          <mi>𝐹</mi>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mi>𝑘</mi>
+              <mo>−</mo>
+              <mn>1</mn>
+              <mo>,</mo>
+              <mi>𝑁</mi>
+              <mo>−</mo>
+              <mi>𝑘</mi>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+      <p><math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">></mo><msubsup displaystyle="true"><mi>𝐹</mi><mrow><mi>𝑁</mi><mo lspace="0em" rspace="0em">−</mo><mi>𝑘</mi></mrow><mrow><mi>𝑘</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msubsup><mrow displaystyle="true"><mo>(</mo><mi>𝛼</mi><mo>)</mo></mrow></math>なら<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却する（<strong><strong>右側検定のみ</strong></strong>）。</p>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方</p>
+        <ul>
+          <li><math><msub displaystyle="true"><mi>𝑉</mi><mi>𝐸</mi></msub></math>は<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>が正しくても間違っていても<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の推定量。<math><msub displaystyle="true"><mi>𝑉</mi><mi>𝐴</mi></msub></math>は<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>が正しいときだけ<math><msup displaystyle="true"><mi>𝜎</mi><mn>2</mn></msup></math>の推定量になり、平均に差があると大きくなる。 だから<strong><strong><math><mi displaystyle="true">𝐹</mi></math>比が大きいときだけ</strong></strong>棄却する。</li>
+          <li>自由度：群間は「群の数 − 1」、群内は「総数 − 群の数」。足すと全体の<math><mi displaystyle="true">𝑁</mi><mo displaystyle="true">−</mo><mn displaystyle="true">1</mn></math>になる。</li>
+          <li>分散分析表は、空欄を埋める問題が定番。<strong><strong>平方和も自由度も足し算が成り立つ</strong></strong>ことを使う。</li>
+        </ul>
+      </div>
+      <div style="border-left: 4px solid #7c3aed; background-color: #7c3aed1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #7c3aed; margin: .5em 0;">例題</p>
+        <math>
+          <mn displaystyle="true">3</mn>
+        </math>つの群に各<math>
+          <mn displaystyle="true">5</mn>
+        </math>人ずつ（<math>
+          <mi displaystyle="true">𝑁</mi>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">15</mn>
+        </math>）の実験を行い、<math>
+          <msub displaystyle="true">
+            <mi>𝑆</mi>
+            <mi>𝐴</mi>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">40</mn>
+        </math>、<math>
+          <msub displaystyle="true">
+            <mi>𝑆</mi>
+            <mi>𝐸</mi>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <mn displaystyle="true">60</mn>
+        </math>を得た。 有意水準<math>
+          <mn displaystyle="true">5</mn>
+          <mi displaystyle="true">%</mi>
+        </math>で<math>
+          <msub displaystyle="true">
+            <mi>𝐻</mi>
+            <mn>0</mn>
+          </msub>
+          <mo lspace="0.2777777777777778em" rspace="0.2777777777777778em" displaystyle="true">:</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mn>1</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mn>2</mn>
+          </msub>
+          <mo displaystyle="true">=</mo>
+          <msub displaystyle="true">
+            <mi>𝜇</mi>
+            <mn>3</mn>
+          </msub>
+        </math>を検定せよ。
+      </div>
+      <table>
+        <tr>
+          <td><strong><strong>要因</strong></strong></td>
+          <td><strong><strong>平方和</strong></strong></td>
+          <td><strong><strong>自由度</strong></strong></td>
+          <td><strong><strong>平均平方</strong></strong></td>
+          <td><strong><strong><math><mi displaystyle="true">𝐹</mi></math>比</strong></strong></td>
+        </tr>
+        <tr>
+          <td>群間</td>
+          <td><math><mn displaystyle="true">40</mn></math></td>
+          <td><math><mn displaystyle="true">2</mn></math></td>
+          <td><math><mn displaystyle="true">20</mn></math></td>
+          <td><math><mn displaystyle="true">4.0</mn></math></td>
+        </tr>
+        <tr>
+          <td>群内</td>
+          <td><math><mn displaystyle="true">60</mn></math></td>
+          <td><math><mn displaystyle="true">12</mn></math></td>
+          <td><math><mn displaystyle="true">5</mn></math></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>全体</td>
+          <td><math><mn displaystyle="true">100</mn></math></td>
+          <td><math><mn displaystyle="true">14</mn></math></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <p><math><msubsup displaystyle="true"><mi>𝐹</mi><mn>12</mn><mn>2</mn></msubsup><mrow displaystyle="true"><mo>(</mo><mn>0.05</mn><mo>)</mo></mrow><mo displaystyle="true">≈</mo><mn displaystyle="true">3.885</mn></math>で、<math><mn displaystyle="true">4.0</mn><mo displaystyle="true">></mo><mn displaystyle="true">3.885</mn></math>なので<math><msub displaystyle="true"><mi>𝐻</mi><mn>0</mn></msub></math>を棄却する（<math><mi displaystyle="true">𝑝</mi><mo displaystyle="true">≈</mo><mn displaystyle="true">0.047</mn></math>）。</p>
+      <h2 id="loc-4">4. 実験計画の用語</h2>
+      <div style="border-left: 4px solid #2563eb; background-color: #2563eb1f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #2563eb; margin: .5em 0;">定義</p>
+        <dl>
+          <dt>処理群・対照群</dt>
+          <dd>処理を施す群と、比較のために処理を施さない群</dd>
+          <dt>反復</dt>
+          <dd>同じ条件で複数回測定すること。誤差の大きさを評価できるようになる</dd>
+          <dt>無作為化</dt>
+          <dd>処理の割り付けをランダムに行うこと。偏りを防ぐ</dd>
+          <dt>局所管理（ブロック化）</dt>
+          <dd>条件の似た実験単位をまとめたブロックの中で比較すること。ブロック間の差を誤差から取り除ける</dd>
+        </dl>
+      </div>
+      <div style="border-left: 4px solid #d97706; background-color: #d977061f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #d97706; margin: .5em 0;">覚え方：フィッシャーの3原則</p>
+        <strong><strong>反復・無作為化・局所管理</strong></strong>。
+      </div>
+      <div style="border-left: 4px solid #dc2626; background-color: #dc26261f; border-radius: 4px; padding: .25em 1em; margin: 1em 0;">
+        <p style="font-weight: bold; color: #dc2626; margin: .5em 0;">注意</p>
+        <ul>
+          <li>2群の<math><mi displaystyle="true">𝑡</mi></math>検定を何度も繰り返して3群以上を比べると、どれかで誤って有意になる確率（第1種の過誤）が<math><mi displaystyle="true">𝛼</mi></math>より大きくなる。そのため分散分析でまとめて検定する。</li>
+          <li>群が<math><mn displaystyle="true">2</mn></math>つの場合、一元配置分散分析は等分散を仮定した2標本<math><mi displaystyle="true">𝑡</mi></math>検定と一致する（<math><mi displaystyle="true">𝐹</mi><mo displaystyle="true">=</mo><msup displaystyle="true"><mi>𝑇</mi><mn>2</mn></msup></math>）。</li>
+        </ul>
+      </div>
+      <p>関連：<a href="../regression-test/">回帰係数の検定</a>、<a href="../mean-difference-test/">母平均の差の検定</a></p>
+    </main>
+  </body>
+</html>

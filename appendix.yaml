@@ -11,6 +11,20 @@
   - m-m-1
   - sampling-distribution
   - unbiased-variance
+  - ai:
+    - distributions
+    - hypothesis-testing
+    - mean-test
+    - variance-test
+    - proportion-test
+    - mean-difference-test
+    - variance-ratio-test
+    - proportion-difference-test
+    - goodness-of-fit-test
+    - independence-test
+    - regression-estimation
+    - regression-test
+    - anova
 - utils:
   - integral
   - sqrt-n
