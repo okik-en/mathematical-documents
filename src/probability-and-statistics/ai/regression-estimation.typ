@@ -170,4 +170,4 @@ $ Y_i = beta_0 + beta_1 x_(i 1) + dots.c + beta_p x_(i p) + epsilon_i $
     出力の読み方は#link("../regression-test/")[回帰係数の検定]を参照。
 ]
 
-関連：#link("../regression-test/")[回帰係数の検定]、#link("../mean-test/")[母平均の検定]（同じ構造の$t$統計量）、#link("../distributions/")[標本分布のまとめ]
+関連：#link("../regression-test/")[回帰係数の検定]、#link("../mean-test/")[母平均の検定]（同じ構造の$t$統計量）、#link("../sampling-distributions/")[標本分布のまとめ]

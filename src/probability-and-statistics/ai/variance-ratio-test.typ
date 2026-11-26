@@ -53,4 +53,4 @@ $0.26 < 2.67 < 3.44$なので$H_0$を棄却しない。
   - 正規性からのずれに弱い検定である。
 ]
 
-関連：#link("../variance-test/")[母分散の検定]、#link("../mean-difference-test/")[母平均の差の検定]、#link("../distributions/")[標本分布のまとめ]
+関連：#link("../variance-test/")[母分散の検定]、#link("../mean-difference-test/")[母平均の差の検定]、#link("../sampling-distributions/")[標本分布のまとめ]

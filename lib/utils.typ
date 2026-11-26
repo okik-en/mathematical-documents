@@ -27,6 +27,8 @@
   set page(height: auto)
   set text(font: "Noto Sans CJK JP", lang: "ja")
   show math.equation: set text(font: "Noto Sans Math")
+  // HTML 出力（lib/styles.typ）と同じく、横書きの分数を「(分子/分母)」で表示する
+  show math.frac.where(style: "horizontal"): it => math.paren.l + it.num + math.slash + it.denom + math.paren.r
 
   title()
   keywords()

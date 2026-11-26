@@ -12,7 +12,10 @@
   - sampling-distribution
   - unbiased-variance
   - ai:
-    - distributions
+    - probability-distributions
+    - poisson-exponential
+    - sampling-distributions
+    - distribution-mandala
     - hypothesis-testing
     - mean-test
     - variance-test

@@ -12,6 +12,7 @@
 
 #link("../../sampling-distribution/")[標本分布]のページに登場する4つの分布について、定義・性質・覚え方を短くまとめる。
 導出の詳細は元のページを参照のこと。
+二項分布や指数分布など基本的な確率分布は#link("../probability-distributions/")[確率分布のまとめ]に、分布どうしの関係は#link("../distribution-mandala/")[分布の曼陀羅]にまとめてある。
 
 = 全体像
 
