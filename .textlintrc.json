@@ -1,0 +1,32 @@
+{
+  "plugins": {
+    "typst-math": true
+  },
+  "filters": {
+    "comments": true
+  },
+  "rules": {
+    "preset-ja-technical-writing": {
+      "no-mix-dearu-desumasu": {
+        "preferInBody": "である",
+        "preferInHeader": "",
+        "preferInList": "",
+        "strict": false
+      },
+      "arabic-kanji-numbers": false,
+      "max-kanji-continuous-len": {
+        "max": 8
+      },
+      "no-doubled-joshi": {
+        "min_interval": 1,
+        "allow": [
+          "も",
+          "か",
+          "ても"
+        ]
+      },
+      "no-exclamation-question-mark": false
+    },
+    "preset-ai-writing": true
+  }
+}

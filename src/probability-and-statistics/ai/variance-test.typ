@@ -50,4 +50,4 @@ $ chi^2 = frac(9 times 2.5, 1.5) = 15.0 $
   - この検定は母集団が正規分布であることに強く依存する。正規分布から外れていると結果が大きく狂うので注意。
 ]
 
-関連：#link("../variance-ratio-test/")[母分散の比の検定]、#link("../sampling-distributions/")[標本分布のまとめ]
+#link("../variance-ratio-test/")[母分散の比の検定]、#link("../sampling-distributions/")[標本分布のまとめ]も参照。

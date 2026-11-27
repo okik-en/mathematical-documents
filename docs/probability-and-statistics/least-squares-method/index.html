@@ -214,7 +214,7 @@
           <mo>)</mo>
         </mrow>
       </math>
-      <p>よりよい説明のためには、残差が最小であることが望ましい。その基準として残差の分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mi>𝛿</mi><mn>2</mn></msubsup></math>を最小化することが考えられる。</p>
+      <p>よりよい説明のためには、残差は小さいほど望ましい。その基準として残差の分散<math><msubsup displaystyle="true"><mi>𝜎</mi><mi>𝛿</mi><mn>2</mn></msubsup></math>を最小化することが考えられる。</p>
       <math display="block">
         <msubsup>
           <mi>𝜎</mi>
@@ -1782,7 +1782,7 @@
           <mn>2</mn>
         </msup>
       </math>
-      <p>とかけて、とくに<math><msubsup displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi></mrow><mn>2</mn></msubsup><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>のときは<math><munder displaystyle="true"><mo lspace="0em">∑</mo><mi>𝑖</mi></munder><msubsup displaystyle="true"><mi>𝛿</mi><mi>𝑖</mi><mn>2</mn></msubsup><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>となって、すべての観測値は回帰直線によって完全に決定されることが読み取れる。</p>
+      <p>とかけて、とくに<math><msubsup displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi></mrow><mn>2</mn></msubsup><mo displaystyle="true">=</mo><mn displaystyle="true">1</mn></math>のときは<math><munder displaystyle="true"><mo lspace="0em">∑</mo><mi>𝑖</mi></munder><msubsup displaystyle="true"><mi>𝛿</mi><mi>𝑖</mi><mn>2</mn></msubsup><mo displaystyle="true">=</mo><mn displaystyle="true">0</mn></math>となって、すべての観測値が回帰直線上に乗ることが読み取れる。</p>
       <h2 id="loc-7">3. 擬相関</h2>
       <p>有名な例を挙げよう。一般に、アイスクリームへの支出が増えると水難事故も増えることが知られている。しかし、これはアイスクリームが水難事故を引き起こしているのではなく、夏になって気温が上昇することでアイスクリームへの支出が増えると同時に海や川での水難事故が増えることによる。 このように、ある変量<math><mi displaystyle="true">𝑥</mi></math>と<math><mi displaystyle="true">𝑦</mi></math>との間に認められる相関関係が、第三の変量<math><mi displaystyle="true">𝑧</mi></math>によるものであるとき、これを<strong><strong>見かけの相関</strong></strong>、あるいは<strong><strong>擬相関</strong></strong>と呼ぶ。</p>
       <p>例えば、アメリカのあるスーパーにおけるビールの売り上げと赤ちゃん用おむつの売り上げには相関が見つかったという。一体なぜだろうか？（もちろん、アメリカの赤ちゃんがビールを嗜む、というわけではない。）</p>
@@ -1863,7 +1863,7 @@
           <mo>̂</mo>
         </mover>
       </math>
-      <p>による相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><msup><mi>𝑥</mi><mo>′</mo></msup><msup><mi>𝑦</mi><mo>′</mo></msup></mrow></msub></math>を考える。これを<strong><strong>偏相関係数</strong></strong>といって<math><msub displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi><mo lspace="0em" rspace="0em">∙</mo><mi>𝑧</mi></mrow></msub></math>と表すものとする。</p>
+      <p>による相関係数<math><msub displaystyle="true"><mi>𝜌</mi><mrow><msup><mi>𝑥</mi><mo>′</mo></msup><msup><mi>𝑦</mi><mo>′</mo></msup></mrow></msub></math>を考える。これを<strong><strong>偏相関係数</strong></strong>といい、<math><msub displaystyle="true"><mi>𝜌</mi><mrow><mi>𝑥</mi><mi>𝑦</mi><mo lspace="0em" rspace="0em">∙</mo><mi>𝑧</mi></mrow></msub></math>で表す。</p>
       <p><a href="#line">式 [4]</a>と同様にして</p>
       <math display="block">
         <msubsup>
@@ -2549,7 +2549,7 @@
           <mi>𝑖</mi>
         </msub>
       </math>
-      <p>と表されるものとする。 このとき、最小二乗法によって得られた回帰係数の点推定値<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>および<math><mover accent="true" displaystyle="true"><mi>𝛽</mi><mo>̂</mo></mover></math>を考える（以下では主に<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>について議論を行う）。</p>
+      <p>と表されるものとする。 このとき、最小二乗法によって得られた回帰係数の点推定値<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>および<math><mover accent="true" displaystyle="true"><mi>𝛽</mi><mo>̂</mo></mover></math>を考える（以下では主に<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>について議論する）。</p>
       <h3 id="loc-10">4.1. 回帰係数<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>の分布</h3>
       <p>以下、<math><msub displaystyle="true"><mi>𝑇</mi><mrow><mo form="infix" lspace="0em" rspace="0em">○</mo><mi>●</mi></mrow></msub><mo displaystyle="true">≔</mo><munder displaystyle="true"><mo form="prefix" lspace="0em" rspace="0em">∑</mo><mi>𝑖</mi></munder><mrow displaystyle="true"><mo>(</mo><mrow><msub><mo form="infix" lspace="0em" rspace="0.2222222222222222em">○</mo><mi>𝑖</mi></msub><mo form="prefix">−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mo lspace="0em" rspace="0em">○</mo></mstyle></mrow><mo>)</mo></mrow><mrow displaystyle="true"><mo>(</mo><mrow><msub><mi>●</mi><mi>𝑖</mi></msub><mo>−</mo><mstyle style="border-top: 1pt solid currentColor; padding: 2pt 1pt 0pt;"><mi>●</mi></mstyle></mrow><mo>)</mo></mrow></math>と書くものとする。</p>
       <p><math><mi displaystyle="true">𝑥</mi></math>と<math><mi displaystyle="true">𝑦</mi></math>の偏差の積の和は</p>
@@ -4699,7 +4699,7 @@
           </mtr>
         </mtable>
       </math>
-      <p>であることをを用いるとよい。</p>
+      <p>であることを用いるとよい。</p>
       <h3 id="loc-14">4.4. 統計量</h3>
       <p>ここで二つの統計量を導入する。</p>
       <p>まず、回帰係数<math><mover accent="true" displaystyle="true"><mi>𝛼</mi><mo>̂</mo></mover></math>は正規分布<math><mi displaystyle="true">𝑁</mi><mrow displaystyle="true"><mo>(</mo><mrow><mi>𝛼</mi><mo>,</mo><mfrac><msup><mi>𝜎</mi><mn>2</mn></msup><msub><mi>𝑇</mi><mrow><mi>𝑥</mi><mi>𝑥</mi></mrow></msub></mfrac></mrow><mo>)</mo></mrow></math>に従うのであったから、これを標準化した統計量</p>

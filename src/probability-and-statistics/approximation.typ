@@ -29,7 +29,6 @@ $
   a_(n + 1) = 2 tilde(N) + frac(N - tilde(N)^2, a_n) wide "for" n in NN
 $
 を満たす数列$(a_n)$を考えよう。$a_0 > 1$のとき$forall n in NN : a_n > 1$であり
-
 $
   abs(a_(n + 1) - (sqrt(N) + tilde(N))) & = abs(frac(N - tilde(N)^2, a_n) - (sqrt(N) - tilde(N))) \
                                         & = frac(sqrt(N) - tilde(N), a_n) abs((sqrt(N) + tilde(N)) - a_n) \
@@ -64,11 +63,11 @@ $
 
 Newton法は、$f(x) = 0$の根$x = alpha$の付近で、$(a_n, f(a_n))$における接線
 $ y - f(a_n) = f'(a_n)(x - a_n) $
-と$x$軸、すなわち直線$y = 0$との交点の座標$(a_(n + 1), 0)$における$x$成分$a_(n + 1)$がもとの$a_n$より根$alpha$に近づくことを利用した近似法であり、端的に言えば
+と$x$軸、すなわち直線$y = 0$との交点の座標$(a_(n + 1), 0)$における$x$成分$a_(n + 1)$がもとの$a_n$より根$alpha$に近づくことを利用した近似法である。端的に言えば
 $ 0 - f(a_n) = f'(a_n)(a_(n + 1) - a_n) $
 すなわち漸化式
 $ a_(n + 1) = a_n - frac(f(a_n), f'(a_n)) $
-を用いて近似を行う方法である。
+を用いて近似する方法である。
 
 例えば$f(x) = x^2 - N$とおくと、$f'(x) = 2x$であるから、$sqrt(N)$の近傍で
 $ a_(n + 1) = a_n - frac(a_n^2 - N, 2 a_n) = 1/2 (a_n + N / a_n) $
@@ -98,19 +97,19 @@ $
   &= epsilon_n - [epsilon_n - 1/2 beta epsilon_n^2 - (1/2 beta^2 + 1/3 gamma) epsilon_n^3 + O(epsilon_n^4)] \
   &= 1/2 beta epsilon_n^2 + (1/2 beta^2 + 1/3 gamma) epsilon_n^3 + O(epsilon_n^4)
 $
-とかけるため、とくに$f'(alpha) != 0$を仮定すると、Newton法は$f''(alpha) != 0$であるとき$2$次収束し、$f''(alpha) = 0$であるとき$3$次収束する。
+とかける。とくに$f'(alpha) != 0$を仮定すると、Newton法は$f''(alpha) != 0$のとき$2$次収束し、$f''(alpha) = 0$のとき$3$次収束する。
 
 == Aitkenの$delta^2$加速法
 
-Richardsonの加速法とは、ある数列$(a_n)$とその収束値$lim_(n -> infinity) a_n = alpha$について、その誤差が収束率$gamma$と係数$C$を用いて
+Richardsonの加速法は次のような方法である。ある数列$(a_n)$とその収束値$lim_(n -> infinity) a_n = alpha$について、その誤差が収束率$gamma$と係数$C$を用いて
 $ a_n - alpha approx C gamma^n $
-と表せるとき、すなわち数列$(a_n)$が等比的であるとき、$a_(n + 1) - gamma a_n$を用いることによって$C$を消去して
+と表せる、すなわち数列$(a_n)$が等比的であるとする。このとき$a_(n + 1) - gamma a_n$を用いて$C$を消去すると
 $ a_(n + 1) - gamma a_n approx alpha(1 - gamma) $
 すなわち
 $ alpha approx frac(a_(n + 1) - gamma a_n, 1 - gamma) $
-と書けることを利用して、新たに$(hat(a)_n)$を
+と書けるので、新たに$(hat(a)_n)$を
 $ hat(a)_n = frac(a_(n + 1) - gamma a_n, 1 - gamma) $
-と定義する方法である。
+と定義する。
 
 ここで実際には
 $ a_n - alpha = C gamma^n + epsilon_n $
@@ -199,7 +198,7 @@ $
   root(n, e) = 1 + fr(2, 2n - 1 + fr(1, 6n + cancel(cross: #true, fr(1, 10n + dots.down)))) approx 1 + fr(2, 2n - 1 + fr(1, 6n)) = frac(12n^2 + 6n + 1, 12n^2 - 6n + 1) eq.delta f(n)
 $
 
-これを用いて計算を行うと、以下のように高精度の近似が得られる。
+これを用いて計算すると、以下のように高精度の近似が得られる。
 
 #figure(
   caption: [$n$と$f(n)$の対応],
@@ -223,7 +222,7 @@ $
   e^n = 1 + fr(2 n, 2 - n + fr(n^2, 6 + fr(n^2, 10 + fr(n^2, 14 + fr(n^2, 18 + fr(n^2, 22 + dots.down))))))
 $
 
-精度の高い近似を行うには、指数$n$に対して最低でも$4 n + 6$の項までを残す必要がある。
+高い精度で近似するには、指数$n$に対して最低でも$4 n + 6$の項までを残す必要がある。
 
 #figure(
   caption: [$n$と$f_(4n + 6) (n)$の対応],
@@ -246,7 +245,7 @@ $f(x) = e^x$について$f = f^((1)) = f^((2)) = dots.c$であるから、その
 $
   f(x) = sum_(n = 0)^(infinity) frac(x^n, n!)
 $
-とかけて、しかもd#{ sym.acute }Alembertの公式によりその収束半径$r$は
+とかけて、しかもd'Alembertの公式によりその収束半径$r$は
 $
   r = lim_(n -> infinity) abs(frac(a_n, a_(n + 1))) = lim_(n -> infinity) frac((n + 1)!, n!) = lim_(n -> infinity) (n + 1) = infinity
 $
@@ -315,5 +314,5 @@ $
   ),
 )
 
-とくに$x$が大きくなると、$f_n (x)$は$e^x$に近づくのが遅くなることがわかる。
+とくに$x$が大きいほど、$f_n (x)$は$e^x$にゆっくり近づくことがわかる。
 ゆえに特に大きい$x$に対しては向いていない。

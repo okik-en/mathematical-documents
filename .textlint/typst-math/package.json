@@ -1,0 +1,8 @@
+{
+  "name": "textlint-plugin-typst-math",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "peerDependencies": { "textlint-plugin-typst": "*" }
+}

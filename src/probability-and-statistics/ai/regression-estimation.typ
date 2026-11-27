@@ -89,7 +89,7 @@ $sigma^2$は未知なので、残差$e_i = y_i - hat(y)_i$から推定する。
 ]
 
 #example[
-  $n = 12$組のデータで単回帰を行ったところ、$hat(beta)_1 = 0.8$、$se(hat(beta)_1) = 0.3$だった。
+  $n = 12$組のデータで単回帰したところ、$hat(beta)_1 = 0.8$、$se(hat(beta)_1) = 0.3$だった。
   $beta_1$の$95%$信頼区間を求めよ。
 ]
 
@@ -127,7 +127,7 @@ $t$分布の上側点が$z$の値にどのくらい近づくかを見ると、�
 )
 
 #example[
-  $n = 102$組のデータで単回帰を行ったところ、$hat(beta)_1 = 0.5$、$se(hat(beta)_1) = 0.2$だった。
+  $n = 102$組のデータで単回帰したところ、$hat(beta)_1 = 0.5$、$se(hat(beta)_1) = 0.2$だった。
   正規近似を用いて$beta_1$の$95%$信頼区間を求め、$H_0 : beta_1 = 0$を有意水準$5%$で両側検定せよ。
 ]
 
@@ -170,4 +170,4 @@ $ Y_i = beta_0 + beta_1 x_(i 1) + dots.c + beta_p x_(i p) + epsilon_i $
     出力の読み方は#link("../regression-test/")[回帰係数の検定]を参照。
 ]
 
-関連：#link("../regression-test/")[回帰係数の検定]、#link("../mean-test/")[母平均の検定]（同じ構造の$t$統計量）、#link("../sampling-distributions/")[標本分布のまとめ]
+#link("../regression-test/")[回帰係数の検定]、#link("../mean-test/")[母平均の検定]（同じ構造の$t$統計量）、#link("../sampling-distributions/")[標本分布のまとめ]も参照。

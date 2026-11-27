@@ -240,7 +240,6 @@ $
 == 方法2：微分方程式（別解）
 
 時刻$t$から$t + Delta t$の間に何回起こるかで場合分けする。独立性と稀少性から
-
 $
   P_0 (t + Delta t) & = P_0 (t) (1 - lambda Delta t) + o(Delta t) \
   P_k (t + Delta t) & = P_k (t) (1 - lambda Delta t) + P_(k - 1) (t) lambda Delta t + o(Delta t) wide (k >= 1)
@@ -321,7 +320,7 @@ $
 
 #theorem[
   最初の事象までの時間$T$は指数分布$Ex(lambda)$に従う。
-  独立性・定常性から、ある事象から次の事象までの間隔$T_1, T_2, dots$も、互いに独立にそれぞれ$Ex(lambda)$に従う。
+  独立性・定常性から、ある事象から次の事象までの間隔$T_1, T_2, dots$も互いに独立で、それぞれ$Ex(lambda)$に従う。
 ]
 
 #theorem(title: "無記憶性")[

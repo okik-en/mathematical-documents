@@ -34,7 +34,7 @@ $ f(x; lambda) = lambda e^(-lambda x) wide (x > 0) $
 これをパラメータ$alpha > 0$により拡張した次の確率密度関数で与えられる分布を*$Gamma$分布*といい、$Gamma(alpha, lambda)$で表す。
 $ f(x; alpha, lambda) = frac(lambda^alpha, Gamma(alpha)) x^(alpha - 1) e^(-lambda x) wide (x > 0) $
 
-ただし、$alpha -> 1$とすれば指数分布に一致することに留意せよ。
+なお、$alpha = 1$とすれば指数分布と一致する。
 
 == $Gamma$分布の再生性
 
@@ -53,18 +53,18 @@ $
 $
 と書ける。
 
-この式から、$X_1$および$X_2$が独立であれば
+この式から、独立な$X_1$、$X_2$について
 $
   X_1 tilde.op Gamma(alpha_1, lambda) and X_2 tilde.op Gamma(alpha_2, lambda) ==> X_1 + X_2 tilde.op Gamma(alpha_1 + alpha_2, lambda)
 $
-が成り立つことがわかる。
+が成り立つ。
 この性質を$Gamma$分布の*再生性*という。
 
 = $chi^2$分布
 
 == $chi^2$分布の定義
 
-独立な標本$Z_1, dots, Z_n$がそれぞれ標準正規分布$N(0, 1)$に従うととする。
+独立な標本$Z_1, dots, Z_n$がそれぞれ標準正規分布$N(0, 1)$に従うとする。
 このとき、新たな確率変数$X = sum_(i = 1)^n Z_i^2$の従う分布を自由度$n$の*$chi^2$分布*（chi-squared distribution）といい、$chi^2(n)$で表す。
 
 また、自由度$n$の$chi^2$分布について、その上側$alpha$点を$chi_n (alpha)$で表すものとする。
@@ -129,7 +129,7 @@ $ sum_(i = 1)^n (X_i - overline(X)) = sum_(i = 1)^n X_n - n overline(X) = 0 $
 
 標本$X_1, dots, X_n$について、これらを標準化した変量
 $ Z_i = frac(X_i - mu, sigma) quad (i = 1, dots, n) $
-を考えると、それぞれ$Z_i tilde.op N(0, 1)$であるから、統計量$W$を
+を考えると、それぞれ$Z_i tilde.op N(0, 1)$である。そこで統計量$W$を
 $ W = sum_(i = 1)^n Z_i^2 $
 で定義すれば、$W$は自由度$n$の$chi^2$分布に従う。
 
@@ -199,7 +199,7 @@ $
 
 === 母分散が未知で等しいとき
 
-それぞれの$chi^2$統計量$frac((m - 1) U_1^2, sigma^2)$と$frac((n - 1) U_2^2, sigma^2)$はそれぞれ独立に$chi^2(m - 1)$および$chi^2(n - 1)$に従うため、$chi^2$分布の再生性より
+2つの$chi^2$統計量$frac((m - 1) U_1^2, sigma^2)$と$frac((n - 1) U_2^2, sigma^2)$は互いに独立で、それぞれ$chi^2(m - 1)$、$chi^2(n - 1)$に従う。したがって$chi^2$分布の再生性より
 $
   Y = frac((m - 1) U_1^2, sigma^2) + frac((n - 1) U_2^2, sigma^2) = frac(m + n - 2, sigma^2) dot underbracket(frac((m - 1) U_1^2 + (n - 1) U_2^2, m + n - 2), eq.delta U^2) = frac((m + n - 2) U^2, sigma^2)
 $
@@ -212,7 +212,7 @@ $
 
 === 母分散が未知で等しくないとき
 
-$sigma_1^2$の代わりに$U_1^2$、$sigma_2^2$の代わりに$U_2^2$を用いるという*ウェルチの近似法*（Welch's approximation）により、統計量
+$sigma_1^2$、$sigma_2^2$の代わりにそれぞれ$U_1^2$、$U_2^2$を用いる*ウェルチの近似法*（Welch's approximation）を考える。このとき統計量
 $
   T_0 = frac(overline(D) - (mu_1 - mu_2), sqrt(frac(U_1^2, m, style: "horizontal") + frac(U_2^2, n, style: "horizontal")))
 $
@@ -224,7 +224,7 @@ $
 
 === 母平均が未知で母分散が既知のとき
 
-それぞれの$chi^2$統計量$frac((m - 1) U_1^2, sigma_1^2)$と$frac((n - 1) U_2^2, sigma_2^2)$はそれぞれ独立に$chi^2(m - 1)$および$chi^2(n - 1)$に従うため、$F$分布の定義より
+2つの$chi^2$統計量$frac((m - 1) U_1^2, sigma_1^2)$と$frac((n - 1) U_2^2, sigma_2^2)$は互いに独立で、それぞれ$chi^2(m - 1)$、$chi^2(n - 1)$に従う。したがって$F$分布の定義より
 $
   F = frac(frac(frac((m - 1) U_1^2, sigma_1^2), (m - 1), style: "horizontal"), frac(frac((n - 1) U_2^2, sigma_2^2), (n - 1), style: "horizontal")) = frac(frac(U_1^2, sigma_1^2, style: "horizontal"), frac(U_2^2, sigma_2^2, style: "horizontal"))
 $
@@ -264,11 +264,11 @@ $ T in {t mid(|) t > chi^2_(k - 1) (alpha)} ==> exists i in {1, dots, k} colon P
 $ P(A_i) approx q_i = 1/n sum_(i = 1)^l n_(i, j), wide P(B_j) approx r_j = 1/n sum_(j = 1)^k n_(i, j) $
 とおけば、性質の独立性より
 $ P(A_i inter B_j) approx p_(i j) = q_i r_j $
-であり、十分大きい$n$についてピアソンの$chi^2$統計量
+である。十分大きい$n$についてピアソンの$chi^2$統計量
 $
   T = sum_(i = 1)^k sum_(j = 1)^l frac((n_(i j) - n p_(i j))^2, n p_(i j))
 $
-は自由度$(k - 1)(l - 1)$の$chi^2$分布に従い、とくに有意水準を$alpha$とすれば
+は自由度$(k - 1)(l - 1)$の$chi^2$分布に従う。とくに有意水準を$alpha$とすれば
 $
   T in {t mid(|) t > chi^2_((k - 1)(l - 1)) (alpha)} ==> A "と" B "は独立でない"
 $
@@ -290,7 +290,7 @@ $ T = frac(overline(X) - mu_0, frac(U, sqrt(n), style: "horizontal")) $
 
 この手法は、サイズがともに$n$である2つの標本を比較する場合にも応用できる。
 
-平均$mu_1$、$mu_2$、分散$sigma_1^2$、$sigma_2^2$がともに未知である正規分布$N(mu_1, sigma_1^2)$および$N(mu_2, sigma_2^2)$の母平均$mu_1$と$mu_2$の検定を考えると、$mu = mu_1 - mu_2$とすることで等平均の検定を行うことができる。
+平均$mu_1$、$mu_2$、分散$sigma_1^2$、$sigma_2^2$がともに未知である正規分布$N(mu_1, sigma_1^2)$および$N(mu_2, sigma_2^2)$の母平均$mu_1$と$mu_2$の検定を考えると、$mu = mu_1 - mu_2$とすることで等平均の検定に帰着できる。
 
 === 等平均の検定（母分散未知）
 

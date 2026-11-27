@@ -10,3 +10,8 @@ repos:
         entry: make
         language: system
         pass_filenames: false
+      - id: textlint
+        name: Lint Japanese text
+        entry: mise exec -- npx --no-install textlint
+        language: system
+        files: ^src/.*\.typ$

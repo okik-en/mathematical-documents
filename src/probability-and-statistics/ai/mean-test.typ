@@ -92,4 +92,4 @@ $ overline(X) - t_(n - 1) (alpha/2) U/sqrt(n) <= mu <= overline(X) + t_(n - 1) (
   区間推定の問題と検定の問題は、同じ式の裏表である（#link("../../confidence-interval/")[信頼区間]も参照）。
 ]
 
-関連：#link("../hypothesis-testing/")[仮説検定の基礎]、#link("../mean-difference-test/")[母平均の差の検定]
+#link("../hypothesis-testing/")[仮説検定の基礎]、#link("../mean-difference-test/")[母平均の差の検定]も参照。

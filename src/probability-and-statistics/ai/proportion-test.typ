@@ -57,4 +57,4 @@ $abs(z) = 2.0 > 1.96$なので$H_0$を棄却し、公正とはいえないと判
   とする。$n$が大きければ影響は小さい。
 ]
 
-関連：#link("../proportion-difference-test/")[母比率の差の検定]、#link("../../approximation/")[近似]
+#link("../proportion-difference-test/")[母比率の差の検定]、#link("../../approximation/")[近似]も参照。

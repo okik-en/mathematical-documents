@@ -22,7 +22,7 @@ $ hat(y_i) = alpha x_i + beta $
 
 $ y_i = alpha x_i + beta + delta_i thick (= hat(y_i) + delta_i) $
 
-よりよい説明のためには、残差が最小であることが望ましい。その基準として残差の分散$sigma_delta^2$を最小化することが考えられる。
+よりよい説明のためには、残差は小さいほど望ましい。その基準として残差の分散$sigma_delta^2$を最小化することが考えられる。
 
 $ sigma_delta^2 = 1/n sum_i delta_i^2 = 1/n sum_i (y_i - hat(y_i))^2 = 1/n sum_i (alpha x_i + beta - y_i)^2 $
 
@@ -155,7 +155,7 @@ $
 $
   sum_i delta_i^2 = (1 - rho_(x y)^2) sum_i (y_i - overline(y))^2
 $
-とかけて、とくに$rho_(x y)^2 = 1$のときは$sum_i delta_i^2 = 0$となって、すべての観測値は回帰直線によって完全に決定されることが読み取れる。
+とかけて、とくに$rho_(x y)^2 = 1$のときは$sum_i delta_i^2 = 0$となって、すべての観測値が回帰直線上に乗ることが読み取れる。
 
 = 擬相関
 
@@ -174,7 +174,7 @@ $
 $
   x'_i := x_i - hat(x_i), quad y'_i := y_i - hat(y_i)
 $
-による相関係数$rho_(x' y')$を考える。これを*偏相関係数*といって$rho_(x y bullet.op z)$と表すものとする。
+による相関係数$rho_(x' y')$を考える。これを*偏相関係数*といい、$rho_(x y bullet.op z)$で表す。
 
 #[@line]と同様にして
 $
@@ -204,7 +204,7 @@ $
   y_i = alpha x_i + beta + epsilon_i
 $
 と表されるものとする。
-このとき、最小二乗法によって得られた回帰係数の点推定値$hat(alpha)$および$hat(beta)$を考える（以下では主に$hat(alpha)$について議論を行う）。
+このとき、最小二乗法によって得られた回帰係数の点推定値$hat(alpha)$および$hat(beta)$を考える（以下では主に$hat(alpha)$について議論する）。
 
 == 回帰係数$hat(alpha)$の分布
 
@@ -311,7 +311,7 @@ $
   = & T_(y y) - T_(x y)/T_(x x) dot T_(x y) \
   = & T_(y y) - hat(alpha) T_(x y)
 $
-であることをを用いるとよい。
+であることを用いるとよい。
 
 == 統計量
 

@@ -75,7 +75,7 @@ $
 $
   integral frac(d x, sqrt(x^2 + a^2)) = integral frac(1/2 (1 + a^2/t^2), 1/2 (t + a^2/t)) d t = integral frac(d t, t) = log (x + sqrt(x^2 + a^2)) + C
 $
-と得られる。
+が得られる。
 
 = Weierstrass置換
 
